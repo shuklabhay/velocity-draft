@@ -6,7 +6,6 @@ import Home from "./components/Home.js";
 import NotFound from "./components/NotFound.js";
 import Calculator from "./components/Calculator.js";
 
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -36,6 +35,5 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
-
   );
 }
