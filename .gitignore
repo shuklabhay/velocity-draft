@@ -1,0 +1,5 @@
+
+# backend
+backend/node_modules
+backend/serviceAccountKey.json
+frontend/src/firebaseConfig.js
