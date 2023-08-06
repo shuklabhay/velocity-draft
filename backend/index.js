@@ -9,12 +9,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-
 app.get("/", (req, res) => {
-    //Code to fecth data from the database will go here
+  //Code to fecth data from the database will go here
 });
 
-
 app.listen(5000, () => {
-    console.log('Server is running on port 5000');
+  console.log("Server is running on port 5000");
 });
