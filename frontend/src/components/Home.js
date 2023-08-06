@@ -9,8 +9,6 @@ export default function Home() {
   let navigate = useNavigate();
 
   return (
-
-
     <Grid container rowSpacing={1} direction="column" columns={{ xs: 5 }}>
       <Grid item xs={6}>
         <Typography variant="h2" color="secondary.main">
@@ -26,4 +24,3 @@ export default function Home() {
     </Grid>
   );
 }
-
