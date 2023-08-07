@@ -9,10 +9,17 @@ import Calculator from "./components/Calculator.js";
 import AppBar from "./components/SiteAppBar";
 
 const theme = createTheme({
+  typography: {
+    fontFamily: "Arial, Helvetica, sans-serif",
+    button: {
+      textTransform: "none",
+    },
+  },
+
   palette: {
     primary: {
       light: "#fffff", // White
-      main: "#ffffff", // White
+      main: "#06075c", // White
       dark: "#BFBFBF", // Dark Gray
       contrastText: "#00000", // Black
     },
