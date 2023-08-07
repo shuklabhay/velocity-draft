@@ -3,14 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import "firebase/compat/firestore";
-import credentials from "./firebaseConfig.js";
 
 export var url = "https://localhost:3000";
-
-firebase.initializeApp(credentials);
 
 export function regularRequest(handler, method, body, callback) {
   const http = new XMLHttpRequest();
