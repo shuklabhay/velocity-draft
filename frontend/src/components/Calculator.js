@@ -23,6 +23,8 @@ import { useEffect } from "react";
 import db from "../firestore.js";
 import { onSnapshot, collection } from "firebase/firestore";
 
+import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
+
 const logoPath = "frontend/public/rocket_logo_full.png";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -49,19 +51,6 @@ export default function Calculator() {
     []
   );
 
-  let dateEvents = [
-    { title: "event 1", start: "2023-08-01", allDay: true },
-    {
-      title: "event 2",
-      start: new Date(
-        "Thu Sep 07 2023 00:00:00 GMT-0700 (Pacific Daylight Time)"
-      ),
-      end: new Date(
-        "Thu Sep 07 2023 00:00:00 GMT-0700 (Pacific Daylight Time)"
-      ),
-    },
-  ];
-
   function setChosenColleges(event, newSelectedColleges) {
     console.log(selectedColleges);
     setSelectedColleges(newSelectedColleges);
@@ -85,6 +74,27 @@ export default function Calculator() {
 
   const [revisionAmt, setRevisionAmt] = useState(""); // Number revisions on each essay (1 reivision per day)
 
+  // Handle Submit
+  var calenderEvents = [];
+  function handleSubmit() {
+    calenderEvents = scheduleInputsOnCalender(
+      userWritingSpeed,
+      selectedColleges,
+      startDate.$d,
+      checkingLength,
+      revisionAmt
+    );
+    console.log(
+      scheduleInputsOnCalender(
+        userWritingSpeed,
+        selectedColleges,
+        startDate.$d,
+        checkingLength,
+        revisionAmt
+      )
+    );
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ flexGrow: 1, marginTop: 2 }}>
@@ -93,7 +103,7 @@ export default function Calculator() {
             <FullCalendar
               plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
-              events={dateEvents}
+              events={calenderEvents}
             />
           </Grid>
           <Grid item md={6} xs={12}>
@@ -182,9 +192,8 @@ export default function Calculator() {
               </Grid>
               <Grid xs={6}>
                 <Typography>
-                  <Button color="secondary">
-                    Dump to google calender (button that pops up aksing for api
-                    key and then dumps to cal)
+                  <Button color="primary" onClick={handleSubmit}>
+                    Submit
                   </Button>
                 </Typography>
               </Grid>

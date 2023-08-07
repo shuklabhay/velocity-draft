@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
