@@ -15,6 +15,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import Checkbox from "@mui/material/Checkbox";
+import { useEffect } from "react";
+import db from "../firestore.js";
+import { onSnapshot, collection } from "firebase/firestore";
 
 const logoPath = "frontend/public/rocket_logo_full.png";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -29,17 +32,19 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 //   color: theme.palette.text.secondary,
 // }));
 
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-];
-
 export default function Calculator() {
+  const [colleges, setColleges] = useState([]);
+
+  console.log(colleges);
+
+  useEffect(
+    () =>
+      onSnapshot(collection(db, "colleges"), (snapshot) => {
+        setColleges(snapshot.docs.map((doc) => doc.data()));
+      }),
+    []
+  );
+
   return (
     <Box sx={{ flexGrow: 1, marginTop: 2 }}>
       <Grid container spacing={1}>
@@ -62,9 +67,9 @@ export default function Calculator() {
           <Autocomplete
             multiple
             id="checkboxes-tags-demo"
-            options={top100Films}
+            options={colleges}
             disableCloseOnSelect
-            getOptionLabel={(option) => option.title}
+            getOptionLabel={(option) => option.college}
             renderOption={(props, option, { selected }) => (
               <li {...props}>
                 <Checkbox
@@ -73,7 +78,7 @@ export default function Calculator() {
                   style={{ marginRight: 8 }}
                   checked={selected}
                 />
-                {option.title}
+                {option.college}
               </li>
             )}
             style={{ width: 500 }}
