@@ -118,6 +118,13 @@ export default function Calculator() {
     setSelectedColleges(chosenColleges);
   }
 
+  const revsionChoices = Array.from({ length: 10 - 1 }, (x, i) => i + 2);
+  const minCheckingDays = 7;
+  const checkingLengthChoices = Array.from(
+    { length: 10 - (minCheckingDays - 1) },
+    (x, i) => i + minCheckingDays
+  );
+
   // USER INPUTS
   const [userWritingSpeed, setUserWritingSpeed] = useState([]); // this represents how many days it takes to write
 
@@ -142,20 +149,22 @@ export default function Calculator() {
           </Grid>
           <Grid item md={6} xs={12}>
             <button onClick={handleNew}>test</button>
-            <Autocomplete
-              multiple
-              label="Select Colleges"
-              options={colleges}
-              getOptionLabel={(option) => option.college}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Select Colleges"
-                  placeholder="Colleges"
-                />
-              )}
-              onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
-            />
+            <FormControl fullWidth>
+              <Autocomplete
+                multiple
+                label="Select Colleges"
+                options={colleges}
+                getOptionLabel={(option) => option.college}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Colleges"
+                    placeholder="Colleges"
+                  />
+                )}
+                onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
+              />
+            </FormControl>
             <FormControl fullWidth>
               <InputLabel>Writing Speed</InputLabel>
               <Select
@@ -176,42 +185,52 @@ export default function Calculator() {
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
               <Grid xs={6}>
-                <DatePicker
-                  label="Select Starting Date"
-                  onChange={(event, NewStartDate) => {
-                    setStartDate(event, NewStartDate);
-                  }}
-                  value={startDate}
-                />
+                <FormControl fullWidth>
+                  <DatePicker
+                    label="Select Starting Date"
+                    onChange={(event, NewStartDate) => {
+                      setStartDate(event, NewStartDate);
+                    }}
+                    value={startDate}
+                  />
+                </FormControl>
               </Grid>
               <Grid xs={6}>
-                <Typography>
-                  <TextField
+                <FormControl fullWidth>
+                  <InputLabel>Checking Period Length</InputLabel>
+                  <Select
+                    value={checkingLength}
                     label="Checking Period Length"
-                    id="fullwidth"
-                    type="number"
-                    placeholder="Enter Amount of Days"
-                    endAdornment={
-                      <InputAdornment position="end">days</InputAdornment>
-                    }
                     onChange={(e) => {
                       setCheckingLength(e.target.value);
                     }}
-                    value={checkingLength}
-                  />
-                </Typography>
+                  >
+                    {checkingLengthChoices.map((choiceNumber) => (
+                      <MenuItem value={choiceNumber}>
+                        {choiceNumber} Days
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid xs={6}>
-                <TextField
-                  label="Revision Amount"
-                  placeholder="Enter Amount of Revisions"
-                  id="fullwidth"
-                  type="number"
-                  onChange={(e) => {
-                    setRevisionAmt(e.target.value);
-                  }}
-                  value={revisionAmt}
-                />
+                <FormControl fullWidth>
+                  <InputLabel>Revisions For Each Essay</InputLabel>
+                  <Select
+                    value={revisionAmt}
+                    label="Revisions For Each Essay"
+                    onChange={(e) => {
+                      setRevisionAmt(e.target.value);
+                    }}
+                  >
+                    <MenuItem value={1}>1 Revision </MenuItem>
+                    {revsionChoices.map((choiceNumber) => (
+                      <MenuItem value={choiceNumber}>
+                        {choiceNumber} Revisions
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid xs={6}>
                 <Typography>
