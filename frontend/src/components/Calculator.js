@@ -114,26 +114,28 @@ export default function Calculator() {
     },
   ];
 
-  function setChosenColleges(event, chosenColleges) {
-    setSelectedColleges(chosenColleges);
+  function setChosenColleges(event, newSelectedColleges) {
+    console.log(selectedColleges);
+    setSelectedColleges(newSelectedColleges);
+    selectedColleges = newSelectedColleges; // removing this line might be necesarry later on if stuffs not adding up for this parameter
+    console.log(selectedColleges);
   }
 
   const revsionChoices = Array.from({ length: 10 - 1 }, (x, i) => i + 2);
-  const minCheckingDays = 7;
+  const minCheckingDays = 5;
   const checkingLengthChoices = Array.from(
     { length: 10 - (minCheckingDays - 1) },
     (x, i) => i + minCheckingDays
   );
 
   // USER INPUTS
-  const [userWritingSpeed, setUserWritingSpeed] = useState([]); // this represents how many days it takes to write
+  let [selectedColleges, setSelectedColleges] = useState([]); // List of json objects [{deadline: , college: }]
+  const [userWritingSpeed, setUserWritingSpeed] = useState([]); // Number days taken takes to write
 
-  const [selectedColleges, setSelectedColleges] = useState([]);
+  const [startDate, setStartDate] = useState(""); // do startDate.$d to access datetype
+  const [checkingLength, setCheckingLength] = useState(""); // Number length of checking period in days
 
-  const [startDate, setStartDate] = useState("");
-  const [checkingLength, setCheckingLength] = useState(""); // checkingLength represents how many revisions on each essay
-
-  const [revisionAmt, setRevisionAmt] = useState(""); // revisionAmt represents how many revisions on each essay
+  const [revisionAmt, setRevisionAmt] = useState(""); // Number revisions on each essay (1 reivision per day)
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
