@@ -1,10 +1,12 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import Home from "./components/Home.js";
 import NotFound from "./components/NotFound.js";
 import Calculator from "./components/Calculator.js";
+import AppBar from "./components/SiteAppBar";
 
 const theme = createTheme({
   palette: {
@@ -28,11 +30,15 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
+        <AppBar />
+
+        <Suspense>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </ThemeProvider>
   );
