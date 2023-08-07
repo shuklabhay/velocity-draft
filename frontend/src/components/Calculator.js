@@ -15,7 +15,10 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputAdornment from "@mui/material/InputAdornment";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { useEffect } from "react";
 import db from "../firestore.js";
@@ -126,93 +129,101 @@ export default function Calculator() {
   const [revisionAmt, setRevisionAmt] = useState(""); // revisionAmt represents how many revisions on each essay
 
   return (
-    <Box sx={{ flexGrow: 1, marginTop: 2 }}>
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item md={6} xs={12}>
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            weekends={false}
-            events={dateEvents}
-          />
-        </Grid>
-        <Grid item md={6} xs={12}>
-          <button onClick={handleNew}>test</button>
-          <Autocomplete
-            multiple
-            label="Select Colleges"
-            options={colleges}
-            getOptionLabel={(option) => option.college}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select Colleges"
-                placeholder="Colleges"
-              />
-            )}
-            onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
-          />
-          <FormControl fullWidth>
-            <InputLabel>Writing Speed</InputLabel>
-            <Select
-              value={userWritingSpeed}
-              label="Writing Speed"
-              onChange={(e) => {
-                setUserWritingSpeed(e.target.value);
-              }}
-            >
-              <MenuItem value={4}>Slow</MenuItem>
-              <MenuItem value={2}>Moderate</MenuItem>
-              <MenuItem value={1}>Fast</MenuItem>
-            </Select>
-          </FormControl>
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            <Grid xs={6}>
-              <Typography>DATE PICKER GOES HERE</Typography>{" "}
-            </Grid>
-            <Grid xs={6}>
-              <Typography>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Box sx={{ flexGrow: 1, marginTop: 2 }}>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item md={6} xs={12}>
+            <FullCalendar
+              plugins={[dayGridPlugin]}
+              initialView="dayGridMonth"
+              weekends={false}
+              events={dateEvents}
+            />
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <button onClick={handleNew}>test</button>
+            <Autocomplete
+              multiple
+              label="Select Colleges"
+              options={colleges}
+              getOptionLabel={(option) => option.college}
+              renderInput={(params) => (
                 <TextField
-                  label="Checking Period Length"
+                  {...params}
+                  label="Select Colleges"
+                  placeholder="Colleges"
+                />
+              )}
+              onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
+            />
+            <FormControl fullWidth>
+              <InputLabel>Writing Speed</InputLabel>
+              <Select
+                value={userWritingSpeed}
+                label="Writing Speed"
+                onChange={(e) => {
+                  setUserWritingSpeed(e.target.value);
+                }}
+              >
+                <MenuItem value={4}>Slow</MenuItem>
+                <MenuItem value={2}>Moderate</MenuItem>
+                <MenuItem value={1}>Fast</MenuItem>
+              </Select>
+            </FormControl>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              <Grid xs={6}>
+                <DatePicker
+                  label="Chose Starting Date"
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                  }}
+                  value={startDate}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <Typography>
+                  <TextField
+                    label="Checking Period Length"
+                    id="fullwidth"
+                    type="number"
+                    placeholder="Enter Amount of Days"
+                    endAdornment={
+                      <InputAdornment position="end">days</InputAdornment>
+                    }
+                    onChange={(e) => {
+                      setCheckingLength(e.target.value);
+                    }}
+                    value={checkingLength}
+                  />
+                </Typography>
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                  label="Revision Amount"
+                  placeholder="Enter Amount of Revisions"
                   id="fullwidth"
                   type="number"
-                  placeholder="Enter Amount of Days"
-                  endAdornment={
-                    <InputAdornment position="end">days</InputAdornment>
-                  }
                   onChange={(e) => {
-                    setCheckingLength(e.target.value);
+                    setRevisionAmt(e.target.value);
                   }}
-                  value={checkingLength}
+                  value={revisionAmt}
                 />
-              </Typography>
-            </Grid>
-            <Grid xs={6}>
-              <TextField
-                label="Revision Amount"
-                placeholder="Enter Amount of Revisions"
-                id="fullwidth"
-                type="number"
-                onChange={(e) => {
-                  setRevisionAmt(e.target.value);
-                }}
-                value={revisionAmt}
-              />
-            </Grid>
-            <Grid xs={6}>
-              <Typography>
-                <Button color="secondary">
-                  Days Unwilling to Work (this is a button)
-                </Button>
-              </Typography>
+              </Grid>
+              <Grid xs={6}>
+                <Typography>
+                  <Button color="secondary">
+                    Days Unwilling to Work (this is a button)
+                  </Button>
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </LocalizationProvider>
   );
 }

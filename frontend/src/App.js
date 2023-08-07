@@ -1,6 +1,8 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import Home from "./components/Home.js";
 import NotFound from "./components/NotFound.js";
@@ -24,9 +26,13 @@ const theme = createTheme({
   },
 });
 
-export default function App() {
+export default function App({ children }) {
   return (
     <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {children}
+      </LocalizationProvider>
+      ;
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
