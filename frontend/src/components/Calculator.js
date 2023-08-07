@@ -56,61 +56,16 @@ export default function Calculator() {
     []
   );
 
-  // test adding multiple universities
-  const handleNew = async () => {
-    const docRef = doc(db, "colleges", "Princeton University EA");
-    const payload = {
-      college: "Princeton University EA",
-      deadline: new Date("2023-11-01T23:59:00.000"), //EA
-      //deadline: new Date("2024-01-01T23:59:00.000"), //RD
-      //deadline: null,
-    };
-    await setDoc(docRef, payload);
-
-    const collectionRef = collection(
-      db,
-      "colleges",
-      "Princeton University EA",
-      "essays"
-    );
-    const essayPayload = {
-      essay:
-        "Briefly elaborate on an activity, organization, work experience, or hobby that has been particularly meaningful to you. (Please respond in about 150 words)",
-      maxWords: 150,
-    };
-    const essayPayload2 = {
-      essay:
-        "At Princeton, we value diverse perspectives and the ability to have respectful dialogue about difficult issues. Share a time when you had a conversation with a person or a group of people about a difficult topic. What insight did you gain, and how would you incorporate that knowledge into your thinking in the future?",
-      maxWords: 250,
-    };
-    const essayPayload3 = {
-      essay:
-        "Princeton has a longstanding commitment to service and civic engagement. Tell us how your story intersects (or will intersect) with these ideals.",
-      maxWords: 250,
-    };
-    const essayPayload4 = {
-      essay: "What song represents the soundtrack of your life at this moment?",
-      maxWords: 50,
-    };
-    const essayPayload5 = { essay: "What brings you joy? ", maxWords: 50 };
-    const essayPayload6 = {
-      essay: "What is a new skill you would like to learn in college? ",
-      maxWords: 50,
-    };
-
-    await addDoc(collectionRef, essayPayload);
-    await addDoc(collectionRef, essayPayload2);
-    await addDoc(collectionRef, essayPayload3);
-    await addDoc(collectionRef, essayPayload4);
-    await addDoc(collectionRef, essayPayload5);
-    await addDoc(collectionRef, essayPayload6);
-  };
   let dateEvents = [
     { title: "event 1", start: "2023-08-01", allDay: true },
     {
       title: "event 2",
-      start: "2023-08-09",
-      end: "2023-08-12",
+      start: new Date(
+        "Thu Sep 07 2023 00:00:00 GMT-0700 (Pacific Daylight Time)"
+      ),
+      end: new Date(
+        "Thu Sep 07 2023 00:00:00 GMT-0700 (Pacific Daylight Time)"
+      ),
     },
   ];
 
@@ -149,7 +104,6 @@ export default function Calculator() {
             />
           </Grid>
           <Grid item md={6} xs={12}>
-            <button onClick={handleNew}>test</button>
             <FormControl fullWidth>
               <Autocomplete
                 multiple
@@ -236,7 +190,8 @@ export default function Calculator() {
               <Grid xs={6}>
                 <Typography>
                   <Button color="secondary">
-                    Days Unwilling to Work (this is a button)
+                    Dump to google calender (button that pops up aksing for api
+                    key and then dumps to cal)
                   </Button>
                 </Typography>
               </Grid>
