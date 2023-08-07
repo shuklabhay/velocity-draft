@@ -111,16 +111,14 @@ export default function Calculator() {
     },
   ];
 
-  function setChosenColleges(chosenColleges) {
-    collegesSelected = chosenColleges.members.map(
-      (collegeInfo) => collegeInfo.college
-    );
-    console.log(collegesSelected);
+  function setChosenColleges(event, chosenColleges) {
+    setSelectedColleges(chosenColleges);
   }
 
   // USER INPUTS
-  let collegesSelected = []; // Names of colleges and types of application
-  let userSpeed; // Base number, this represents how many days it takes to write
+  const [userWritingSpeed, setUserWritingSpeed] = useState([]); // this represents how many days it takes to write
+
+  const [selectedColleges, setSelectedColleges] = useState([]);
 
   const [startDate, setStartDate] = useState("");
   const [checkingLength, setCheckingLength] = useState(""); // checkingLength represents how many revisions on each essay
@@ -152,11 +150,17 @@ export default function Calculator() {
                 placeholder="Colleges"
               />
             )}
-            onChange={(newValues) => setChosenColleges({ members: newValues })}
+            onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
           />
           <FormControl fullWidth>
             <InputLabel>Writing Speed</InputLabel>
-            <Select value={userSpeed} label="Writing Speed">
+            <Select
+              value={userWritingSpeed}
+              label="Writing Speed"
+              onChange={(e) => {
+                setUserWritingSpeed(e.target.value);
+              }}
+            >
               <MenuItem value={4}>Slow</MenuItem>
               <MenuItem value={2}>Moderate</MenuItem>
               <MenuItem value={1}>Fast</MenuItem>
