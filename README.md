@@ -4,8 +4,7 @@ An application that creates a schedule for writing college application essays
 
 ## Setup
 
-Create `firebaseConfig.js` in frontend/src folder with the necessary information. \
-Create `serviceAccountKey.json` in the backend folder with necessary information.
+Create `firestore.js` in frontend/src folder with the necessary information. \
 
 ## Available Scripts
 
