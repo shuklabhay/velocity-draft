@@ -14,7 +14,7 @@ export default function TestAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "black" }}>
         <Toolbar>
           <img
             src={logo}
@@ -22,13 +22,26 @@ export default function TestAppBar() {
             height="50"
             onClick={() => navigate("/")}
           ></img>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            color="common.white"
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, fontWeight: "medium" }}
+          >
             VelocityDraft
           </Typography>
-          <Button color="inherit" onClick={() => navigate("/")}>
+          <Button
+            color="inherit"
+            sx={{ color: "common.white", fontWeight: "medium" }}
+            onClick={() => navigate("/")}
+          >
             Home
           </Button>
-          <Button color="inherit" onClick={() => navigate("/calculator")}>
+          <Button
+            color="inherit"
+            sx={{ color: "common.white", fontWeight: "medium" }}
+            onClick={() => navigate("/calculator")}
+          >
             Scheduler
           </Button>
         </Toolbar>
