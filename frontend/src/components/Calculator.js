@@ -110,7 +110,7 @@ export default function Calculator() {
     {
       title: "event 2",
       start: "2023-08-09",
-      end: "2023-08-10T23:59:00",
+      end: "2023-08-12",
     },
   ];
 
@@ -145,7 +145,6 @@ export default function Calculator() {
             <FullCalendar
               plugins={[dayGridPlugin]}
               initialView="dayGridMonth"
-              weekends={false}
               events={dateEvents}
             />
           </Grid>
