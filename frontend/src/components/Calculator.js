@@ -177,9 +177,9 @@ export default function Calculator() {
             >
               <Grid xs={6}>
                 <DatePicker
-                  label="Chose Starting Date"
-                  onChange={(e) => {
-                    setStartDate(e.target.value);
+                  label="Select Starting Date"
+                  onChange={(event, NewStartDate) => {
+                    setStartDate(event, NewStartDate);
                   }}
                   value={startDate}
                 />
