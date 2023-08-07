@@ -129,7 +129,7 @@ export default function Calculator() {
   );
 
   // USER INPUTS
-  let [selectedColleges, setSelectedColleges] = useState([]); // List of json objects [{deadline: , college: }]
+  var [selectedColleges, setSelectedColleges] = useState([]); // List of json objects [{deadline: , college: }]
   const [userWritingSpeed, setUserWritingSpeed] = useState([]); // Number days taken takes to write
 
   const [startDate, setStartDate] = useState(""); // do startDate.$d to access datetype
