@@ -16,8 +16,8 @@ const theme = createTheme({
     },
     secondary: {
       light: "#d5f0f7", // Light Blue
-      main: "#5d94c4", // Middle Blue
-      dark: "#06075c", // Navy
+      main: "#06075c", // Navy
+      dark: "#5d94c4", // Middle Blue
       contrastText: "#ffffff",
     },
     mode: "light",

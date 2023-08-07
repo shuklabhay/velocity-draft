@@ -5,16 +5,18 @@ import { Typography } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import styled from "@mui/material/styles/styled";
 import { useState } from "react";
-import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputAdornment from "@mui/material/InputAdornment";
+import { DatePicker } from "@mui/x-date-pickers";
+
 import { useEffect } from "react";
 import db from "../firestore.js";
 import {
@@ -41,7 +43,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function Calculator() {
   const [colleges, setColleges] = useState([]);
 
-  console.log(colleges);
+  //console.log(colleges);
 
   useEffect(
     () =>
@@ -53,19 +55,19 @@ export default function Calculator() {
 
   // test adding multiple universities
   const handleNew = async () => {
-    const docRef = doc(db, "colleges", "Princeton University");
+    const docRef = doc(db, "colleges", "Princeton University EA");
     const payload = {
-      college: "Princeton University",
-      EA: new Date("2023-11-01T23:59:00.000"),
-      RD: new Date("2024-01-01T23:59:00.000"),
-      ED: null,
+      college: "Princeton University EA",
+      deadline: new Date("2023-11-01T23:59:00.000"), //EA
+      //deadline: new Date("2024-01-01T23:59:00.000"), //RD
+      //deadline: null,
     };
     await setDoc(docRef, payload);
 
     const collectionRef = collection(
       db,
       "colleges",
-      "Princeton University",
+      "Princeton University EA",
       "essays"
     );
     const essayPayload = {
@@ -100,53 +102,111 @@ export default function Calculator() {
     await addDoc(collectionRef, essayPayload5);
     await addDoc(collectionRef, essayPayload6);
   };
+  let dateEvents = [
+    { title: "event 1", start: "2023-08-01", allDay: true },
+    {
+      title: "event 2",
+      start: "2023-08-09",
+      end: "2023-08-10T23:59:00",
+    },
+  ];
+
+  function setChosenColleges(chosenColleges) {
+    collegesSelected = chosenColleges.members.map(
+      (collegeInfo) => collegeInfo.college
+    );
+    console.log(collegesSelected);
+  }
+
+  // USER INPUTS
+  let collegesSelected = []; // Names of colleges and types of application
+  let userSpeed; // Base number, this represents how many days it takes to write
+
+  const [startDate, setStartDate] = useState("");
+  const [checkingLength, setCheckingLength] = useState(""); // checkingLength represents how many revisions on each essay
+
+  const [revisionAmt, setRevisionAmt] = useState(""); // revisionAmt represents how many revisions on each essay
 
   return (
     <Box sx={{ flexGrow: 1, marginTop: 2 }}>
-      <Grid container spacing={1}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item md={6} xs={12}>
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             weekends={false}
-            events={[
-              { title: "event 1", start: "2023-08-01", allDay: true },
-              {
-                title: "event 2",
-                start: "2023-08-09",
-                end: "2023-08-10T23:59:00",
-              },
-            ]}
+            events={dateEvents}
           />
         </Grid>
         <Grid item md={6} xs={12}>
           <button onClick={handleNew}>test</button>
           <Autocomplete
             multiple
-            id="checkboxes-tags-demo"
+            label="Select Colleges"
             options={colleges}
-            disableCloseOnSelect
             getOptionLabel={(option) => option.college}
-            renderOption={(props, option, { selected }) => (
-              <li {...props}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.college}
-              </li>
-            )}
-            style={{ width: 500 }}
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Checkboxes"
-                placeholder="Favorites"
+                label="Select Colleges"
+                placeholder="Colleges"
               />
             )}
+            onChange={(newValues) => setChosenColleges({ members: newValues })}
           />
+          <FormControl fullWidth>
+            <InputLabel>Writing Speed</InputLabel>
+            <Select value={userSpeed} label="Writing Speed">
+              <MenuItem value={4}>Slow</MenuItem>
+              <MenuItem value={2}>Moderate</MenuItem>
+              <MenuItem value={1}>Fast</MenuItem>
+            </Select>
+          </FormControl>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Grid xs={6}>
+              <Typography>DATE PICKER GOES HERE</Typography>{" "}
+            </Grid>
+            <Grid xs={6}>
+              <Typography>
+                <TextField
+                  label="Checking Period Length"
+                  id="fullwidth"
+                  type="number"
+                  placeholder="Enter Amount of Days"
+                  endAdornment={
+                    <InputAdornment position="end">days</InputAdornment>
+                  }
+                  onChange={(e) => {
+                    setCheckingLength(e.target.value);
+                  }}
+                  value={checkingLength}
+                />
+              </Typography>
+            </Grid>
+            <Grid xs={6}>
+              <TextField
+                label="Revision Amount"
+                placeholder="Enter Amount of Revisions"
+                id="fullwidth"
+                type="number"
+                onChange={(e) => {
+                  setRevisionAmt(e.target.value);
+                }}
+                value={revisionAmt}
+              />
+            </Grid>
+            <Grid xs={6}>
+              <Typography>
+                <Button color="secondary">
+                  Days Unwilling to Work (this is a button)
+                </Button>
+              </Typography>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
