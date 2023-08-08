@@ -25,6 +25,8 @@ import { onSnapshot, collection } from "firebase/firestore";
 
 import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
 
+import dayjs from "dayjs";
+
 const logoPath = "frontend/public/rocket_logo_full.png";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -37,6 +39,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 //   textAlign: 'center',
 //   color: theme.palette.text.secondary,
 // }));
+
+let calenderEvents = [{ title: "sdfsdf", start: "2023-08-09", allday: true }];
+
 
 export default function Calculator() {
   const [colleges, setColleges] = useState([]);
@@ -75,8 +80,17 @@ export default function Calculator() {
   const [revisionAmt, setRevisionAmt] = useState(""); // Number revisions on each essay (1 reivision per day)
 
   // Handle Submit
-  var calenderEvents = [];
+
+
   function handleSubmit() {
+    // console.log(calenderEvents);
+    console.log(selectedColleges)
+    for (var i = 0; i < selectedColleges.length; i++) {
+      selectedColleges[i].deadline = new Date(selectedColleges[i].deadline.toDate().getTime());
+      console.log(selectedColleges[i]);
+
+    }
+
     calenderEvents = scheduleInputsOnCalender(
       userWritingSpeed,
       selectedColleges,
@@ -84,16 +98,15 @@ export default function Calculator() {
       checkingLength,
       revisionAmt
     );
-    console.log(
-      scheduleInputsOnCalender(
-        userWritingSpeed,
-        selectedColleges,
-        startDate.$d,
-        checkingLength,
-        revisionAmt
-      )
-    );
+
+    console.log(selectedColleges);
+    console.log(calenderEvents);
+
+
+
   }
+
+
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -192,7 +205,9 @@ export default function Calculator() {
               </Grid>
               <Grid xs={6}>
                 <Typography>
-                  <Button color="primary" onClick={handleSubmit}>
+                  <Button color="primary" onClick={
+                    handleSubmit
+                  }>
                     Submit
                   </Button>
                 </Typography>
