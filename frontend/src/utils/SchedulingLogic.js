@@ -48,5 +48,4 @@ function scheduleInputsOnCalender(
 
 export { scheduleInputsOnCalender };
 
-
 // console.log(scheduleInputsOnCalender(1, [{ deadline: new Date("2023-11-01T23:59:00.000"), essays: 6, college: 'Princeton University EA' }], dayjs().date(30), 5, 5));

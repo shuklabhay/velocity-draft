@@ -40,8 +40,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 //   color: theme.palette.text.secondary,
 // }));
 
-let calenderEvents = [{ title: "sdfsdf", start: "2023-08-09", allday: true }];
-
+let calenderEvents = [];
 
 export default function Calculator() {
   const [colleges, setColleges] = useState([]);
@@ -81,14 +80,14 @@ export default function Calculator() {
 
   // Handle Submit
 
-
   function handleSubmit() {
     // console.log(calenderEvents);
-    console.log(selectedColleges)
+    console.log(selectedColleges);
     for (var i = 0; i < selectedColleges.length; i++) {
-      selectedColleges[i].deadline = new Date(selectedColleges[i].deadline.toDate().getTime());
+      selectedColleges[i].deadline = new Date(
+        selectedColleges[i].deadline.toDate().getTime()
+      );
       console.log(selectedColleges[i]);
-
     }
 
     calenderEvents = scheduleInputsOnCalender(
@@ -101,12 +100,7 @@ export default function Calculator() {
 
     console.log(selectedColleges);
     console.log(calenderEvents);
-
-
-
   }
-
-
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -120,6 +114,20 @@ export default function Calculator() {
             />
           </Grid>
           <Grid item md={6} xs={12}>
+            <Typography
+              align="center"
+              variant="h5"
+              color="primary.contrast"
+              sx={{
+                fontWeight: "heavy",
+                alignContent: "center",
+                justifyContent: "center",
+                alignItems: "center",
+                fontFamily: "arial",
+              }}
+            >
+              Necessary Inputs
+            </Typography>
             <FormControl fullWidth>
               <Autocomplete
                 multiple
@@ -131,12 +139,13 @@ export default function Calculator() {
                     {...params}
                     label="Select Colleges"
                     placeholder="Colleges"
+                    required
                   />
                 )}
                 onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
               />
             </FormControl>
-            <FormControl fullWidth>
+            <FormControl required fullWidth sx={{ marginTop: 1 }}>
               <InputLabel>Writing Speed</InputLabel>
               <Select
                 value={userWritingSpeed}
@@ -153,10 +162,10 @@ export default function Calculator() {
             <Grid
               container
               rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              columnSpacing={{ xs: 1, sm: 2, md: 0 }}
             >
-              <Grid xs={6}>
-                <FormControl fullWidth>
+              <Grid xs={4}>
+                <FormControl fullWidth sx={{ marginTop: 2 }}>
                   <DatePicker
                     label="Select Starting Date"
                     onChange={(event, NewStartDate) => {
@@ -166,8 +175,8 @@ export default function Calculator() {
                   />
                 </FormControl>
               </Grid>
-              <Grid xs={6}>
-                <FormControl fullWidth>
+              <Grid xs={4}>
+                <FormControl required fullWidth sx={{ marginTop: 2 }}>
                   <InputLabel>Checking Period Length</InputLabel>
                   <Select
                     value={checkingLength}
@@ -184,8 +193,8 @@ export default function Calculator() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid xs={6}>
-                <FormControl fullWidth>
+              <Grid xs={4}>
+                <FormControl required fullWidth sx={{ marginTop: 2 }}>
                   <InputLabel>Revisions For Each Essay</InputLabel>
                   <Select
                     value={revisionAmt}
@@ -203,11 +212,14 @@ export default function Calculator() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid xs={6}>
+              <Grid xs={12}>
                 <Typography>
-                  <Button color="primary" onClick={
-                    handleSubmit
-                  }>
+                  <Button
+                    variant="contained"
+                    sx={{ marginTop: 1 }}
+                    fullWidth
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </Button>
                 </Typography>
