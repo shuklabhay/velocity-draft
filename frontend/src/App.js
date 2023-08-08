@@ -1,6 +1,8 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useNavigate } from "react-router-dom";
 
 import Home from "./components/Home.js";
@@ -25,17 +27,21 @@ const theme = createTheme({
     },
     secondary: {
       light: "#d5f0f7", // Light Blue
-      main: "#5d94c4", // Middle Blue
-      dark: "#06075c", // Navy
+      main: "#06075c", // Navy
+      dark: "#5d94c4", // Middle Blue
       contrastText: "#ffffff",
     },
     mode: "light",
   },
 });
 
-export default function App() {
+export default function App({ children }) {
   return (
     <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {children}
+      </LocalizationProvider>
+      ;
       <BrowserRouter>
         <AppBar />
 
