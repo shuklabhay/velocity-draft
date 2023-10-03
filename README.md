@@ -1,10 +1,10 @@
 # VelocityDraft
 
-An application that creates a schedule for writing college application essays
+An application that creates a schedule for writing college application essays.
 
 ## Setup
 
-Create `firestore.js` in frontend/src folder with the necessary information. \
+Create `firestore.js` in frontend/src folder with the necessary information.
 
 ## Available Scripts
 
@@ -17,7 +17,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### `npm install`
 
-Installs all packages listed in the `package.json` file in the directory you are in. Make sure to install for the `home`, `frontent`, and `backend` directories.
+Installs all packages listed in the `package.json` file in the directory you are in. Make sure to install for the `home`, `frontent` directories.
 
 ### `npm run format`
 
