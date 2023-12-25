@@ -63,7 +63,9 @@ export default function Calculator() {
     if (chosenColleges) {
       //Convert each date timestamp to date objects
       for (var i = 0; i < chosenColleges.length; i++) {
-        chosenColleges[i].deadline.toDate();
+        chosenColleges[i].deadline = new Date(
+          chosenColleges[i].deadline.toDate().getTime()
+        );
         console.log(chosenColleges[i]);
       }
 
