@@ -24,7 +24,7 @@ function scheduleInputsOnCalender(
     let timeBetweenEssays = Math.trunc(timeToFinishAll / essayCount);
 
     if (timeBetweenEssays >= 1) {
-      listOfEssays.map((essay, index) => {
+      listOfEssays.forEach((essay, index) => {
         calenderOutput.push({
           title: essay,
           start: dayjs(

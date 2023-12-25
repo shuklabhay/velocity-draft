@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
@@ -25,46 +24,28 @@ import { onSnapshot, collection } from "firebase/firestore";
 
 import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
 
-import dayjs from "dayjs";
-
-const logoPath = "frontend/public/rocket_logo_full.png";
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-//for testing grid visualization
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-// }));
-
-let calenderEvents = [];
-
 export default function Calculator() {
-  const [colleges, setColleges] = useState([]);
-
-  //console.log(colleges);
-  let chosenSchools;
-
+  //Get school info from db
+  const [schoolInfo, setSchoolInfo] = useState([]);
   useEffect(
     () =>
       onSnapshot(collection(db, "colleges"), (snapshot) => {
-        setColleges(snapshot.docs.map((doc) => doc.data()));
+        setSchoolInfo(snapshot.docs.map((doc) => doc.data()));
       }),
     []
   );
 
+  // UX VARIABLES/CONSTANTS
   const revsionChoices = Array.from({ length: 10 - 1 }, (x, i) => i + 2);
   const minCheckingDays = 5;
   const checkingLengthChoices = Array.from(
     { length: 10 - (minCheckingDays - 1) },
     (x, i) => i + minCheckingDays
   );
+  let calenderEvents = [];
 
   // USER INPUTS
-  var [selectedColleges, setSelectedColleges] = useState([]); // List of json objects [{deadline: , college: }]
+  let chosenColleges; // Colleges selected by user (Autocomplete is weird w/ useState)
   const [userWritingSpeed, setUserWritingSpeed] = useState([]); // Number days taken takes to write
 
   const [startDate, setStartDate] = useState(""); // do startDate.$d to access datetype
@@ -72,28 +53,33 @@ export default function Calculator() {
 
   const [revisionAmt, setRevisionAmt] = useState(""); // Number revisions on each essay (1 reivision per day)
 
-  // Handle Submit
+  // IMPORTANT FUNCTIONS
+  function setChosenColleges(newSelectedColleges) {
+    chosenColleges = newSelectedColleges;
+    console.log(chosenColleges);
+  }
 
   function handleSubmit() {
-    // console.log(calenderEvents);
-    console.log(selectedColleges);
-    for (var i = 0; i < selectedColleges.length; i++) {
-      selectedColleges[i].deadline = new Date(
-        selectedColleges[i].deadline.toDate().getTime()
+    if (chosenColleges) {
+      //Convert each date timestamp to date objects
+      for (var i = 0; i < chosenColleges.length; i++) {
+        chosenColleges[i].deadline.toDate();
+        console.log(chosenColleges[i]);
+      }
+
+      //Create Calender Schedule
+      calenderEvents = scheduleInputsOnCalender(
+        userWritingSpeed,
+        chosenColleges,
+        startDate.$d,
+        checkingLength,
+        revisionAmt
       );
-      console.log(selectedColleges[i]);
+    } else {
+      //no colleges are selected, tbh this check should be done otuside the funct
+      console.log("something broke");
+      console.log(chosenColleges, typeof chosenColleges);
     }
-
-    calenderEvents = scheduleInputsOnCalender(
-      userWritingSpeed,
-      selectedColleges,
-      startDate.$d,
-      checkingLength,
-      revisionAmt
-    );
-
-    console.log(selectedColleges);
-    console.log(calenderEvents);
   }
 
   return (
@@ -126,7 +112,7 @@ export default function Calculator() {
               <Autocomplete
                 multiple
                 label="Select Colleges"
-                options={colleges}
+                options={schoolInfo}
                 getOptionLabel={(option) => option.college}
                 renderInput={(params) => (
                   <TextField
@@ -137,14 +123,14 @@ export default function Calculator() {
                   />
                 )}
                 onChange={(e, value) => {
-                  chosenSchools = value;
-                  // try: setColleges(chosenSchools)
+                  setChosenColleges(value);
                 }}
               />
             </FormControl>
             <FormControl required fullWidth sx={{ marginTop: 1 }}>
               <InputLabel>Writing Speed</InputLabel>
               <Select
+                required
                 value={userWritingSpeed}
                 label="Writing Speed"
                 onChange={(e) => {
@@ -213,7 +199,7 @@ export default function Calculator() {
                 <Typography>
                   <Button
                     variant="contained"
-                    sx={{ marginTop: 1 }}
+                    sx={{ marginTop: 1, color: "white" }} //make the styling stuff better latrer
                     fullWidth
                     onClick={handleSubmit}
                   >
