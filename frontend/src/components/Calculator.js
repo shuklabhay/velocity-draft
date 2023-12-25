@@ -43,14 +43,12 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 let calenderEvents = [];
 
 export default function Calculator() {
-  const [colleges, setColleges] = useState([]);
-
-  //console.log(colleges);
-
+  //Get college info from db
+  const [collegeInfo, setCollegeInfo] = useState([]);
   useEffect(
     () =>
       onSnapshot(collection(db, "colleges"), (snapshot) => {
-        setColleges(snapshot.docs.map((doc) => doc.data()));
+        setCollegeInfo(snapshot.docs.map((doc) => doc.data()));
       }),
     []
   );
@@ -132,7 +130,7 @@ export default function Calculator() {
               <Autocomplete
                 multiple
                 label="Select Colleges"
-                options={colleges}
+                options={collegeInfo}
                 getOptionLabel={(option) => option.college}
                 renderInput={(params) => (
                   <TextField
