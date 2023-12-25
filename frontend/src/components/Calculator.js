@@ -46,6 +46,7 @@ export default function Calculator() {
   const [colleges, setColleges] = useState([]);
 
   //console.log(colleges);
+  let chosenSchools;
 
   useEffect(
     () =>
@@ -54,13 +55,6 @@ export default function Calculator() {
       }),
     []
   );
-
-  function setChosenColleges(event, newSelectedColleges) {
-    console.log(selectedColleges);
-    setSelectedColleges(newSelectedColleges);
-    selectedColleges = newSelectedColleges; // removing this line might be necesarry later on if stuffs not adding up for this parameter
-    console.log(selectedColleges);
-  }
 
   const revsionChoices = Array.from({ length: 10 - 1 }, (x, i) => i + 2);
   const minCheckingDays = 5;
@@ -142,7 +136,10 @@ export default function Calculator() {
                     required
                   />
                 )}
-                onChange={(e, value) => setChosenColleges(e.nativeEvent, value)}
+                onChange={(e, value) => {
+                  chosenSchools = value;
+                  // try: setColleges(chosenSchools)
+                }}
               />
             </FormControl>
             <FormControl required fullWidth sx={{ marginTop: 1 }}>
