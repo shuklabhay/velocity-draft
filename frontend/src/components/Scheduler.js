@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
@@ -8,8 +7,6 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -25,24 +22,9 @@ import { onSnapshot, collection } from "firebase/firestore";
 
 import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
 
-import dayjs from "dayjs";
-
-const logoPath = "frontend/public/rocket_logo_full.png";
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-//for testing grid visualization
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-// }));
-
 let calenderEvents = [];
 
-export default function Calculator() {
+export default function Scheduler() {
   //Get college info from db
   const [collegeInfo, setCollegeInfo] = useState([]);
   useEffect(
