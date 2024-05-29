@@ -25,20 +25,20 @@ export default function TestAppBar() {
             color="common.white"
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, fontWeight: "medium" }}
+            sx={{ flexGrow: 1 }}
           >
             VelocityDraft
           </Typography>
           <Button
             color="inherit"
-            sx={{ color: "common.white", fontWeight: "medium" }}
+            sx={{ color: "common.white" }}
             onClick={() => navigate("/")}
           >
             Home
           </Button>
           <Button
             color="inherit"
-            sx={{ color: "common.white", fontWeight: "medium" }}
+            sx={{ color: "common.white" }}
             onClick={() => navigate("/scheduler")}
           >
             Scheduler

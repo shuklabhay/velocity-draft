@@ -40,7 +40,6 @@ export default function App({ children }) {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         {children}
       </LocalizationProvider>
-      ;
       <BrowserRouter>
         <AppBar />
 
