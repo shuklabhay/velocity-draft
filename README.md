@@ -2,6 +2,12 @@
 
 An application that creates a schedule for writing college application essays.
 
+Recieved 3rd place submission at OneHacks III! For more details, view our project on [Devpost](https://devpost.com/software/velocitydraft)!
+
+<div align="center">
+    <img src="frontend/src/images/example_screen.jpg" alt="demo"/>
+</div>
+
 ## Setup
 
 Create `firestore.js` in frontend/src folder with the necessary information.
