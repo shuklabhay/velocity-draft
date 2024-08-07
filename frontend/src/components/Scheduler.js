@@ -7,8 +7,6 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -24,13 +22,15 @@ import { onSnapshot, collection } from "firebase/firestore";
 
 import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
 
-export default function Calculator() {
-  //Get school info from db
-  const [schoolInfo, setSchoolInfo] = useState([]);
+let calenderEvents = [];
+
+export default function Scheduler() {
+  //Get college info from db
+  const [collegeInfo, setCollegeInfo] = useState([]);
   useEffect(
     () =>
       onSnapshot(collection(db, "colleges"), (snapshot) => {
-        setSchoolInfo(snapshot.docs.map((doc) => doc.data()));
+        setCollegeInfo(snapshot.docs.map((doc) => doc.data()));
       }),
     []
   );
@@ -114,7 +114,7 @@ export default function Calculator() {
               <Autocomplete
                 multiple
                 label="Select Colleges"
-                options={schoolInfo}
+                options={collegeInfo}
                 getOptionLabel={(option) => option.college}
                 renderInput={(params) => (
                   <TextField
