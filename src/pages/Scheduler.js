@@ -17,8 +17,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { useEffect } from "react";
-import db from "../firestore.js";
-import { onSnapshot, collection } from "firebase/firestore";
 
 import { scheduleInputsOnCalender } from "../utils/SchedulingLogic.js";
 

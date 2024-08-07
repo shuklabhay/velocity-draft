@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 
-import bg from "../images/homebg.png";
-
 export default function Home() {
   let navigate = useNavigate();
 
@@ -16,12 +14,6 @@ export default function Home() {
       alignItems="center"
       justifyContent="center"
       alignContent="center"
-      sx={{
-        marginTop: 0,
-        backgroundImage: "url(" + bg + ")",
-        backgroundAttachment: "fixed",
-        backgroundSize: "cover",
-      }}
     >
       <Grid item xs={12} sx={{ marginTop: 40 }}>
         <Typography
