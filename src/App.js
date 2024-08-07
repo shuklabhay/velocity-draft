@@ -4,9 +4,9 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import Home from "./components/Home.js";
+import Home from "./pages/Home.js";
 import NotFound from "./components/NotFound.js";
-import Scheduler from "./components/Scheduler.js";
+import Scheduler from "./pages/Scheduler.js";
 import AppBar from "./components/SiteAppBar";
 
 const theme = createTheme({
