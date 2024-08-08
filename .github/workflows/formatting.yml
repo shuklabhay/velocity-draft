@@ -1,4 +1,4 @@
-name: Tests
+name: Formatting
 
 on:
   push:
@@ -21,6 +21,6 @@ jobs:
           node-version: 18
           cache: "npm"
       - name: Install Dependencies
-        run: npm ci
+        run: npm install prettier
       - name: Check Formatting
         run: npm run format-check

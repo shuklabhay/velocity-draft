@@ -1,22 +1,13 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import Home from "./pages/Home.js";
 import NotFound from "./components/NotFound.js";
 import Scheduler from "./pages/Scheduler.js";
-import AppBar from "./components/SiteAppBar";
+import AppBar from "./components/SiteAppBar.js";
 
 const theme = createTheme({
-  typography: {
-    fontFamily: "Arial, Helvetica, sans-serif",
-    button: {
-      textTransform: "none",
-    },
-  },
-
   palette: {
     primary: {
       light: "#fffff", // White
@@ -34,15 +25,11 @@ const theme = createTheme({
   },
 });
 
-export default function App({ children }) {
+export default function App({}) {
   return (
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {children}
-      </LocalizationProvider>
       <BrowserRouter>
         <AppBar />
-
         <Suspense>
           <Routes>
             <Route path="/" element={<Home />} />
