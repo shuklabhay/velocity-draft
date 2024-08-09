@@ -26,17 +26,11 @@ const theme = createTheme({
   },
 });
 
-const InfoBubbleContainer = styled("div")({
-  position: "absolute",
-  bottom: 16,
-  right: 16,
-});
-
 export default function App({}) {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <InfoBubbleContainer />
+        <InfoBubble />
         <Suspense>
           <Routes>
             <Route path="/" element={<Home />} />

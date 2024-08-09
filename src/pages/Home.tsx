@@ -1,15 +1,21 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { Divider, Stack, TextField, Typography, useTheme } from "@mui/material";
-import InfoBubble from "../components/InfoBubble";
+import {
+  Divider,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
 import { useEffect, useState } from "react";
 
 function Home() {
   const [showCursor, setShowCursor] = useState(true);
   const [name, setName] = useState("");
-  console.log(name.length);
   const theme = useTheme();
 
   const isNameEntered = name.length > 0;
@@ -70,7 +76,7 @@ function Home() {
               >
                 <TypeAnimation
                   sequence={["Flexible Application Essay Scheduler"]}
-                  speed={70}
+                  speed={65}
                   cursor={showCursor}
                   wrapper="div"
                   style={{
@@ -88,34 +94,34 @@ function Home() {
         </Grid>
 
         <Grid item>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
             <TextField
               color="primary"
               label="Enter your name here..."
               fullWidth
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
               InputLabelProps={{
                 shrink: false,
                 style: {
                   marginTop: "2px",
-                  opacity: isNameEntered ? 1 : 0,
+                  opacity: isNameEntered ? 0 : 1,
                 },
               }}
               InputProps={{
                 style: {
-                  borderRadius: "40px",
+                  borderRadius: 40,
                 },
               }}
             />
             <Button
               variant="contained"
-              sx={{
-                color: "white",
-                fontWeight: "medium",
-                fontSize: "20px",
-              }}
+              disabled={!isNameEntered}
+              sx={{ borderRadius: 40, minWidth: 0, aspectRatio: 1 / 1 }}
               onClick={() => navigate("/scheduler")}
             >
-              Try
+              <ArrowForwardIcon />
             </Button>
           </Stack>
         </Grid>

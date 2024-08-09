@@ -1,6 +1,5 @@
 import * as React from "react";
-import InfoIcon from "@mui/icons-material/Info";
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   Button,
   Dialog,
@@ -9,11 +8,13 @@ import {
   DialogTitle,
   IconButton,
   Typography,
+  useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 function InfoBubble() {
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   const toggleOpen = () => {
     setOpen(!open);
@@ -21,8 +22,20 @@ function InfoBubble() {
 
   return (
     <>
-      <IconButton onClick={toggleOpen}>
-        <InfoIcon />
+      <IconButton
+        onClick={toggleOpen}
+        sx={{
+          position: "fixed",
+          bottom: 7,
+          right: 8,
+          color: theme.palette.primary.main,
+          "&:hover": {
+            color: theme.palette.primary.dark,
+            backgroundColor: theme.palette.secondary.main,
+          },
+        }}
+      >
+        <InfoOutlinedIcon fontSize="medium" />
       </IconButton>
       <Dialog onClose={toggleOpen} open={open}>
         <DialogTitle>About VelocityDraft</DialogTitle>
@@ -50,7 +63,7 @@ function InfoBubble() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={toggleOpen}>
+          <Button autoFocus variant="contained" onClick={toggleOpen}>
             Close Menu
           </Button>
         </DialogActions>
