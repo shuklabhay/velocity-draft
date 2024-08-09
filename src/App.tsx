@@ -1,4 +1,5 @@
-import React, { Suspense } from "react";
+import * as React from "react";
+import { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 
