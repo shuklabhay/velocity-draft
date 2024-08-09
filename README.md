@@ -1,6 +1,6 @@
 # VelocityDraft
 
-[![On Push](https://github.com/shuklabhay/velocity-draft/actions/workflows/formatting.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/formatting.yml/badge.svg)
+[![On Push](https://github.com/shuklabhay/velocity-draft/actions/workflows/push.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/push.yml/badge.svg)
 
 ## App Info
 
