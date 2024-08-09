@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function InfoBubble() {
+function InfoBubble() {
   const [open, setOpen] = React.useState(false);
 
   const toggleOpen = () => {
@@ -58,3 +58,5 @@ export default function InfoBubble() {
     </>
   );
 }
+
+export default InfoBubble;

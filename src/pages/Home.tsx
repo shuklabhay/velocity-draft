@@ -1,11 +1,11 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import * as React from "react";
 import InfoBubble from "../components/InfoBubble";
 
-export default function Home() {
+function Home() {
   let navigate = useNavigate();
 
   return (
@@ -17,40 +17,47 @@ export default function Home() {
         alignItems="center"
         justifyContent="center"
         alignContent="center"
+        sx={{
+          height: "100vh",
+          display: "grid",
+          gridTemplateRows: "80% 50%",
+        }}
       >
-        <Grid item xs={12} sx={{ marginTop: 40 }}>
-          <Typography variant="h1" sx={{ fontWeight: "bold" }} align="center">
+        <Grid item>
+          <Typography
+            variant="h1"
+            sx={{ fontWeight: "bold", textAlign: "center" }}
+          >
             VelocityDraft
           </Typography>
           <Typography
-            align="center"
-            variant="h4"
             sx={{
+              fontSize: 33,
               fontWeight: 400,
-              alignContent: "center",
-              justifyContent: "center",
-              alignItems: "center",
+              textAlign: "center",
             }}
           >
-            College Application Essay Scheduler
+            Flexible Application Essay Scheduler
           </Typography>
         </Grid>
-        <Button
-          variant="contained"
-          sx={{
-            color: "white",
-            fontWeight: "medium",
-            marginTop: 1,
-            width: 550,
-            height: 50,
-            marginBottom: 49,
-            fontSize: "20px",
-          }}
-          onClick={() => navigate("/scheduler")}
-        >
-          Try it out! It's free!
-        </Button>
+
+        <Grid item>
+          <Button
+            variant="contained"
+            sx={{
+              color: "white",
+              fontWeight: "medium",
+              fontSize: "20px",
+            }}
+            fullWidth
+            onClick={() => navigate("/scheduler")}
+          >
+            Try it out! It's free!
+          </Button>
+        </Grid>
       </Grid>
     </>
   );
 }
+
+export default Home;
