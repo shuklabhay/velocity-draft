@@ -11,9 +11,9 @@ import InfoBubble from "./components/InfoBubble.tsx";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#d5f0f7",
+      light: "#96b9e3",
       main: "#5d94d4",
-      dark: "#06075c",
+      dark: "#4f7eb4",
       contrastText: "#ffffff", // White
     },
     secondary: {
