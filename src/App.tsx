@@ -3,10 +3,10 @@ import { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material";
 
-import Home from "./pages/Home.js";
-import NotFound from "./components/NotFound.js";
-import Scheduler from "./pages/Scheduler.js";
-import AppBar from "./components/SiteAppBar.js";
+import Home from "./pages/Home.tsx";
+import NotFound from "./components/NotFound.tsx";
+import Scheduler from "./pages/Scheduler.tsx";
+import AppBar from "./components/SiteAppBar.tsx";
 
 const theme = createTheme({
   palette: {

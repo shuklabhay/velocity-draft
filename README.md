@@ -1,31 +1,34 @@
 # VelocityDraft
 
-Flexible application essay writing scheduler
+[![On Push](https://github.com/shuklabhay/velocity-draft/actions/workflows/formatting.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/formatting.yml/badge.svg)
+
+## App Info
+
+College application essay writing scheduler
 
 3rd place submission at OneHacks III, view project on [Devpost](https://devpost.com/software/velocitydraft)!
 
 ## Setup
 
-add
+- [Install](https://nodejs.org/en/download) Node.js 18
+  - Confirm installation by running `node --version` in the command line
+- [Install](https://docs.oracle.com/en/java/javase/20/install/overview-jdk-installation.html) Java JDK 11 or higher
+  - Confirm installation by running `java --version` in the command line
+- In the repo run `npm run setup`
 
-## Available Scripts
+## VSCode Setup
 
-In the project directory, you can run:
+- Install [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions
+- In VSCode settings enable formatOnSave
+- In VSCode settings select "Prettier - Code formatter" for the Default Formatter
 
-### `npm start`
+## Development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Run `npm run setup` to install dependencies
+- Run `npm run dev` to start dev server
+- Run `npm run format` to format code and fix lint issues
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Code Structure
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `src`: React frontend
+  - [update this later]
