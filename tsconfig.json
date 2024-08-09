@@ -14,13 +14,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "noUncheckedIndexedAccess": true
+    "jsx": "preserve",
+    "noUncheckedIndexedAccess": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["src", "shared", "functions/src", "ops"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["src"]
 }
