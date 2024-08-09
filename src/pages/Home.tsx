@@ -2,10 +2,22 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { Stack, Typography } from "@mui/material";
-import * as React from "react";
 import InfoBubble from "../components/InfoBubble";
+import { TypeAnimation } from "react-type-animation";
+import { useEffect, useState } from "react";
 
 function Home() {
+  // Hide cursor after typing
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCursor(false);
+    }, 0.7);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   let navigate = useNavigate();
 
   return (
@@ -37,7 +49,18 @@ function Home() {
               textAlign: "center",
             }}
           >
-            Flexible Application Essay Scheduler
+            <TypeAnimation
+              sequence={["Flexible Application Essay Scheduler"]}
+              speed={70}
+              cursor={showCursor}
+              wrapper="div"
+              style={{
+                fontSize: 33,
+                fontWeight: 500,
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            />
           </Typography>
         </Grid>
 
