@@ -8,6 +8,7 @@ export default function Home() {
   let navigate = useNavigate();
 
   return (
+    <>
     <Grid
       container
       spacing={0}
@@ -55,5 +56,6 @@ export default function Home() {
         Try it out! It's free!
       </Button>
     </Grid>
+    </>
   );
 }
