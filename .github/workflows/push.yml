@@ -1,4 +1,4 @@
-name: Formatting
+name: Push Checks
 
 on:
   push:
