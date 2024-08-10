@@ -25,6 +25,10 @@ export default function Scheduler() {
   let navigate = useNavigate();
   const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
+  // Form Info
+  const [writingSpeed, setWritingSpeed] = React.useState<number>();
+  const [revisionLength, setRevisionLength] = React.useState<number>();
+
   return (
     <>
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -39,7 +43,7 @@ export default function Scheduler() {
           }}
         >
           <Typography
-            variant="h6"
+            variant="h5"
             sx={{
               color: theme.palette.primary.main,
               fontWeight: "bold",
@@ -62,45 +66,67 @@ export default function Scheduler() {
         Hi [name], tell me a little more about yourself:
       </Typography>
 
-      <Stack spacing={1} sx={{ paddingRight: 4 }}>
-        <Grid container spacing={2} direction="row">
+      <Stack>
+        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
           <Grid item xs={6}>
             <Typography variant="h5">
               How{" "}
-              <span style={{ color: theme.palette.primary.main }}>fast</span> do
-              you write? (1-5)
+              <span
+                style={{
+                  color: theme.palette.primary.main,
+                  fontWeight: "bold",
+                }}
+              >
+                fast
+              </span>{" "}
+              do you write? (1-5)
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <FormControl fullWidth>
-              <InputLabel>Writing Speed</InputLabel>
+              {!writingSpeed && (
+                <InputLabel shrink={false}>Writing Speed</InputLabel>
+              )}
               <Select
-              // value={}
-              // onChange={}
+                value={writingSpeed}
+                onChange={(e) => {
+                  setWritingSpeed(Number(e.target.value));
+                }}
               >
-                <MenuItem value={1}>1 (Slowest)</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5 (Fastest)</MenuItem>
+                <MenuItem value={1}>1 (Slow)</MenuItem>
+                <MenuItem value={2}>2 (Slow-Medium)</MenuItem>
+                <MenuItem value={3}>3 (Medium)</MenuItem>
+                <MenuItem value={4}>4 (Medium-Fast)</MenuItem>
+                <MenuItem value={5}>5 (Fast)</MenuItem>
               </Select>
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={2} direction="row">
+        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
           <Grid item xs={6}>
             <Typography variant="h5">
               How{" "}
-              <span style={{ color: theme.palette.primary.main }}>long</span> do
-              you want to reivse each essay for?
+              <span
+                style={{
+                  color: theme.palette.primary.main,
+                  fontWeight: "bold",
+                }}
+              >
+                long
+              </span>{" "}
+              do you want to reivse each essay for?
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <FormControl fullWidth>
-              <InputLabel>Revision Length</InputLabel>
+              {!revisionLength && (
+                <InputLabel shrink={false}>Revision Length</InputLabel>
+              )}
               <Select
-              // value={}
-              // onChange={}
+                value={revisionLength}
+                onChange={(e) => {
+                  setRevisionLength(Number(e.target.value));
+                }}
               >
                 <MenuItem value={1}>1 Day</MenuItem>
                 <MenuItem value={2}>2 Days</MenuItem>
@@ -111,11 +137,18 @@ export default function Scheduler() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={2} direction="row">
+        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
           <Grid item xs={6}>
             <Typography variant="h5">
-              <span style={{ color: theme.palette.primary.main }}>When</span> do
-              you want to start?
+              <span
+                style={{
+                  color: theme.palette.primary.main,
+                  fontWeight: "bold",
+                }}
+              >
+                When
+              </span>{" "}
+              do you want to start?
             </Typography>
           </Grid>
           <Grid item xs={6}>
@@ -129,13 +162,27 @@ export default function Scheduler() {
         </Grid>
       </Stack>
 
-      <Typography variant="h5" sx={{ paddingLeft: 2 }}>
-        Which <span style={{ color: theme.palette.primary.main }}>schools</span>{" "}
+      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
+        Which{" "}
+        <span style={{ color: theme.palette.primary.main, fontWeight: "bold" }}>
+          schools
+        </span>{" "}
         are you applying to?
       </Typography>
 
-      <Stack spacing={1} sx={{ paddingRight: 4 }}>
-        <Grid container spacing={2} direction={"row"}>
+      <Stack>
+        <Grid container spacing={1} direction={"row"}>
+          <Grid item xs={4}>
+            <Typography variant="h6">School Name</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6">Essay Count</Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6">Deadline</Typography>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1} direction={"row"} sx={{ paddingBottom: 2 }}>
           <Grid item xs={4}>
             <TextField label="School" variant="outlined" fullWidth />
           </Grid>
