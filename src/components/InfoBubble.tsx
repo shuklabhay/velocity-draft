@@ -82,7 +82,7 @@ function InfoBubble() {
         </DialogContent>
         <DialogActions>
           <Button autoFocus variant="contained" onClick={toggleOpen}>
-            Close Menu
+            <Typography textTransform="none">Close Menu</Typography>
           </Button>
         </DialogActions>
       </Dialog>

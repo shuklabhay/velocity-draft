@@ -17,7 +17,7 @@ function Home() {
   const desiredEdgeDistance = 20;
   const [scaleFactor, setScaleFactor] = useState(1);
 
-  const titleStackRef = useRef(null);
+  const titleStackRef = useRef<HTMLDivElement>(null);
   console.log(titleStackRef);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function Home() {
         return maxWidth / elementWidth;
       };
 
-      if (titleStackRef.current !== null) {
+      if (titleStackRef.current) {
         const elementWidth = titleStackRef.current.offsetWidth;
         const windowWidth = window.innerWidth;
         const calculatedScale = calculateScale(windowWidth, elementWidth);
