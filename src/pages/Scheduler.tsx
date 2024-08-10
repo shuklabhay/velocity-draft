@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Button,
   FormControl,
@@ -5,16 +6,16 @@ import {
   MenuItem,
   Select,
   Stack,
-  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
 
-function Scheduler() {
-  let navigate = useNavigate();
+import dayjs from "dayjs";
+
+export default function Scheduler() {
   const theme = useTheme();
+  let navigate = useNavigate();
+
   return (
     <>
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -45,7 +46,7 @@ function Scheduler() {
       </Typography>
       <Typography>Tell me a little more about yourself:</Typography>
 
-      <Stack>
+      <Stack spacing={2}>
         <Stack
           direction="row"
           spacing={2}
@@ -71,14 +72,22 @@ function Scheduler() {
           spacing={2}
           sx={{ justifyContent: "space-evenly" }}
         >
-          <Typography>How many revisions do you want?</Typography>
-        </Stack>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: "space-evenly" }}
-        >
-          <Typography>How long do you want to reivse for?</Typography>
+          <Typography>
+            How long do you want to reivse each essay for?
+          </Typography>
+          <FormControl sx={{ width: 400 }}>
+            <InputLabel>Revision Length</InputLabel>
+            <Select
+            // value={}
+            // onChange={}
+            >
+              <MenuItem value={1}>1 Day</MenuItem>
+              <MenuItem value={2}>2 Days</MenuItem>
+              <MenuItem value={3}>3 Days</MenuItem>
+              <MenuItem value={4}>4 Days</MenuItem>
+              <MenuItem value={5}>5 Days</MenuItem>
+            </Select>
+          </FormControl>
         </Stack>
         <Stack
           direction="row"
@@ -86,6 +95,9 @@ function Scheduler() {
           sx={{ justifyContent: "space-evenly" }}
         >
           <Typography>When do you want to start?</Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker defaultValue={dayjs("2022-04-17")} />
+          </LocalizationProvider>
         </Stack>
       </Stack>
 
@@ -93,5 +105,3 @@ function Scheduler() {
     </>
   );
 }
-
-export default Scheduler;

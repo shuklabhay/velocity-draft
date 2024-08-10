@@ -8,9 +8,9 @@ import { useEffect, useRef, useState } from "react";
 
 function Home() {
   // Hooks
-  const [name, setName] = useState("");
   const theme = useTheme();
   let navigate = useNavigate();
+  const [name, setName] = useState("");
   const isNameEntered = name.length > 0;
 
   // Resize based on page size
