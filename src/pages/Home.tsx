@@ -6,7 +6,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
 import { useEffect, useRef, useState } from "react";
 
-function Home() {
+export default function Home() {
   // Hooks
   const theme = useTheme();
   let navigate = useNavigate();
@@ -156,5 +156,3 @@ function Home() {
     </Grid>
   );
 }
-
-export default Home;

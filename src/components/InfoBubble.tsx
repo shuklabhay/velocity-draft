@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-function InfoBubble() {
+export default function InfoBubble() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
 
@@ -89,5 +89,3 @@ function InfoBubble() {
     </>
   );
 }
-
-export default InfoBubble;

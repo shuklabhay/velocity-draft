@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 export default function Scheduler() {
   const theme = useTheme();
@@ -95,9 +96,9 @@ export default function Scheduler() {
           sx={{ justifyContent: "space-evenly" }}
         >
           <Typography>When do you want to start?</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker defaultValue={dayjs("2022-04-17")} />
-          </LocalizationProvider>
+          </LocalizationProvider> */}
         </Stack>
       </Stack>
 
