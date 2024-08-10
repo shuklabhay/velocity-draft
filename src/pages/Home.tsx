@@ -18,7 +18,6 @@ export default function Home() {
   const [scaleFactor, setScaleFactor] = useState(1);
 
   const titleStackRef = useRef<HTMLDivElement>(null);
-  console.log(titleStackRef);
 
   useEffect(() => {
     const handleResize = () => {

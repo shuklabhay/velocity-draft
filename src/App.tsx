@@ -1,7 +1,12 @@
 import * as React from "react";
 import { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { createTheme, styled, ThemeProvider } from "@mui/material";
+import {
+  Container,
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+} from "@mui/material";
 
 import Home from "./pages/Home.tsx";
 import NotFound from "./components/NotFound.tsx";
@@ -29,16 +34,19 @@ const theme = createTheme({
 export default function App({}) {
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <InfoBubble />
-        <Suspense>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/Scheduler" element={<Scheduler />} />
-            <Route path="/*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+      <Container>
+        {/*container is for margins lol */}
+        <BrowserRouter>
+          <InfoBubble />
+          <Suspense>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Scheduler" element={<Scheduler />} />
+              <Route path="/*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </Container>
     </ThemeProvider>
   );
 }

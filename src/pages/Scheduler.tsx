@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  Box,
   Button,
   FormControl,
   InputLabel,
@@ -9,11 +10,13 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-
-import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
 
 export default function Scheduler() {
+  // Hooks
   const theme = useTheme();
   let navigate = useNavigate();
 
@@ -42,16 +45,18 @@ export default function Scheduler() {
         </Button>
       </Stack>
 
-      <Typography>
+      <Typography variant="h5">
         Hello [name], welcome to our application essay scheduler, VelocityDraft!
       </Typography>
-      <Typography>Tell me a little more about yourself:</Typography>
+      <Typography variant="h6">
+        Tell me a little more about yourself:
+      </Typography>
 
       <Stack spacing={2}>
         <Stack
           direction="row"
           spacing={2}
-          sx={{ justifyContent: "space-evenly" }}
+          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
         >
           <Typography>How fast do you write? (1-5)</Typography>
           <FormControl sx={{ width: 400 }}>
@@ -71,7 +76,7 @@ export default function Scheduler() {
         <Stack
           direction="row"
           spacing={2}
-          sx={{ justifyContent: "space-evenly" }}
+          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
         >
           <Typography>
             How long do you want to reivse each essay for?
@@ -93,12 +98,12 @@ export default function Scheduler() {
         <Stack
           direction="row"
           spacing={2}
-          sx={{ justifyContent: "space-evenly" }}
+          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
         >
           <Typography>When do you want to start?</Typography>
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker defaultValue={dayjs("2022-04-17")} />
-          </LocalizationProvider> */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker />
+          </LocalizationProvider>
         </Stack>
       </Stack>
 
