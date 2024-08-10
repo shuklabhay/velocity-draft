@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import {
+  CircularProgress,
   Divider,
   IconButton,
   Stack,
@@ -12,7 +13,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Home() {
   // Hooks
@@ -22,24 +23,32 @@ function Home() {
   const isNameEntered = name.length > 0;
 
   // Resize based on page size
-  // const [scaleValue, setScaleValue] = useState(1);
-  // useLayoutEffect(() => {
-  //   const handleResize = () => {
-  //     const windowWidth = window.innerWidth;
+  const desiredEdgeDistance = 20;
+  const [scaleFactor, setScaleFactor] = useState(1);
 
-  //     const newScaleValue = Math.max(
-  //       0.5,
-  //       Math.min(1, (windowWidth - 350) / (600 - 350))
-  //     );
+  const titleStackRef = useRef(null);
+  console.log(titleStackRef);
 
-  //     setScaleValue(newScaleValue);
-  //   };
+  useEffect(() => {
+    const handleResize = () => {
+      const calculateScale = (windowWidth: number, elementWidth: number) => {
+        const maxWidth = windowWidth - desiredEdgeDistance * 2;
+        return maxWidth / elementWidth;
+      };
 
-  //   window.addEventListener("resize", handleResize);
-  //   handleResize();
+      const elementWidth = titleStackRef.current.offsetWidth;
+      const windowWidth = window.innerWidth;
+      const calculatedScale = calculateScale(windowWidth, elementWidth);
 
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
+      console.log(elementWidth, windowWidth, calculatedScale);
+      setScaleFactor(calculatedScale);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -58,29 +67,20 @@ function Home() {
       >
         <Grid
           item
-          xs={12}
-          sm={6}
-          md={4}
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             overflow: "hidden",
-            padding: 20,
-            width: "100%",
-            maxWidth: "100%",
-            maxHeight: "100%",
           }}
         >
           <Stack
+            ref={titleStackRef}
             direction="row"
             spacing={2}
             sx={{
-              // transform: `scale(${scaleValue})`,
-              display: "flex",
               paddingRight: 2,
-              justifyContent: "center",
-              margin: "0 auto",
+              transform: scaleFactor < 1 ? `scale(${scaleFactor})` : "scale(1)",
             }}
           >
             <Divider
