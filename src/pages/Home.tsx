@@ -7,28 +7,39 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 function Home() {
-  const [showCursor, setShowCursor] = useState(true);
+  // Hooks
   const [name, setName] = useState("");
   const theme = useTheme();
-
+  let navigate = useNavigate();
   const isNameEntered = name.length > 0;
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowCursor(false);
-    }, 10);
+  // Resize based on page size
+  // const [scaleValue, setScaleValue] = useState(1);
+  // useLayoutEffect(() => {
+  //   const handleResize = () => {
+  //     const windowWidth = window.innerWidth;
 
-    return () => clearTimeout(timer);
-  }, []);
+  //     const newScaleValue = Math.max(
+  //       0.5,
+  //       Math.min(1, (windowWidth - 350) / (600 - 350))
+  //     );
 
-  let navigate = useNavigate();
+  //     setScaleValue(newScaleValue);
+  //   };
+
+  //   window.addEventListener("resize", handleResize);
+  //   handleResize();
+
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <>
@@ -54,34 +65,21 @@ function Home() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: "100%",
-            height: "80%",
             overflow: "hidden",
-            "& > *": {
-              transform:
-                "scale(clamp(0.5, calc(0.5 + (100vw - 300px) * 0.1), 1))",
-              transformOrigin: "center center",
-              transition: "transform 0.3s ease-out",
-            },
+            padding: 20,
+            width: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
           }}
         >
           <Stack
             direction="row"
             spacing={2}
             sx={{
-              // transform: "scale(var(--scale))",
-              // transformOrigin: "center center",
-              // "--scale": {
-              //   xs: "0.7",
-              //   sm: "1",
-              //   md: "1",
-              //   lg: "1",
-              // },
-              maxWidth: "100%",
-              maxHeight: "100%",
+              // transform: `scale(${scaleValue})`,
               display: "flex",
+              paddingRight: 2,
               justifyContent: "center",
-              width: "fit-content",
               margin: "0 auto",
             }}
           >
@@ -115,8 +113,6 @@ function Home() {
                 <TypeAnimation
                   sequence={["Flexible Application Essay Scheduler"]}
                   speed={65}
-                  cursor={showCursor}
-                  wrapper="div"
                   style={{
                     color: theme.palette.secondary.contrastText,
                     fontSize: 33,
@@ -124,6 +120,7 @@ function Home() {
                     paddingLeft: 7,
                     alignContent: "left",
                     alignItems: "left",
+                    whiteSpace: "nowrap",
                   }}
                 />
               </Typography>
