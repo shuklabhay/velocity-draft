@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
-import WrappedDatePicker from "../components/WrappedDatePicker";
+import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
 
 export default function Scheduler() {
   // Hooks
@@ -62,31 +62,38 @@ export default function Scheduler() {
         <Divider
           aria-hidden="true"
           flexItem
-          sx={{ borderRadius: 5, borderWidthTop: 1 }}
+          sx={{
+            borderRadius: 5,
+            borderTopWidth: 1,
+          }}
         />
       </Stack>
 
-      <Typography variant="h4" sx={{ paddingTop: 1 }}>
+      <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
         Hi [name], tell me a little more about yourself:
       </Typography>
 
       <Stack>
-        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
-          <Grid item xs={6}>
+        <Grid
+          container
+          spacing={1}
+          direction="column"
+          sx={{ paddingBottom: 2 }}
+        >
+          <Grid item>
             <Typography variant="h5">
-              How{" "}
               <span
                 style={{
                   color: theme.palette.primary.main,
                   fontWeight: "bold",
                 }}
               >
-                fast
+                How fast
               </span>{" "}
               do you write? (1-5)
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item>
             <FormControl fullWidth>
               {!writingSpeed && (
                 <InputLabel shrink={false}>Writing Speed</InputLabel>
@@ -106,22 +113,26 @@ export default function Scheduler() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
-          <Grid item xs={6}>
+        <Grid
+          container
+          spacing={1}
+          direction="column"
+          sx={{ paddingBottom: 2 }}
+        >
+          <Grid item>
             <Typography variant="h5">
-              How{" "}
               <span
                 style={{
                   color: theme.palette.primary.main,
                   fontWeight: "bold",
                 }}
               >
-                long
+                How long
               </span>{" "}
               do you want to reivse each essay for?
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item>
             <FormControl fullWidth>
               {!revisionLength && (
                 <InputLabel shrink={false}>Revision Length</InputLabel>
@@ -141,8 +152,13 @@ export default function Scheduler() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={1} direction="row" sx={{ paddingBottom: 2 }}>
-          <Grid item xs={6}>
+        <Grid
+          container
+          spacing={1}
+          direction="column"
+          sx={{ paddingBottom: 2 }}
+        >
+          <Grid item>
             <Typography variant="h5">
               <span
                 style={{
@@ -152,47 +168,70 @@ export default function Scheduler() {
               >
                 When
               </span>{" "}
-              do you want to start?
+              do you want to start writing?
             </Typography>
           </Grid>
-          <Grid item xs={6}>
-            <WrappedDatePicker value={startDate} setValue={setStartDate} />
-          </Grid>
-        </Grid>
-      </Stack>
-
-      <Typography variant="h5" sx={{ paddingBottom: 1 }}>
-        Which{" "}
-        <span style={{ color: theme.palette.primary.main, fontWeight: "bold" }}>
-          schools
-        </span>{" "}
-        are you applying to?
-      </Typography>
-
-      <Stack>
-        <Grid container spacing={1} direction={"row"}>
-          <Grid item xs={4}>
-            <Typography variant="h6">School Name</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="h6">Essay Count</Typography>
-          </Grid>
-          <Grid item xs={4}>
-            <Typography variant="h6">Deadline</Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={1} direction={"row"} sx={{ paddingBottom: 2 }}>
-          <Grid item xs={4}>
-            <TextField label="School" variant="outlined" fullWidth />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField label="Essays" variant="outlined" fullWidth />
-          </Grid>
-          <Grid item xs={4}>
-            <WrappedDatePicker
-              value={deadlineDate}
-              setValue={setDeadlineDate}
+          <Grid item>
+            <ResponsiveDatePicker
+              label={"Start Date"}
+              value={startDate}
+              setValue={setStartDate}
             />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={1}
+          direction="column"
+          sx={{ paddingBottom: 2 }}
+        >
+          <Grid item>
+            <Typography variant="h5">
+              <span
+                style={{
+                  color: theme.palette.primary.main,
+                  fontWeight: "bold",
+                }}
+              >
+                What
+              </span>{" "}
+              are you applying to?
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Stack>
+              <Grid container spacing={1} direction={"row"} sx={{}}>
+                <Grid item xs={4}>
+                  <Typography variant="h6">Recipient</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h6">Essay Count</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="h6">Deadline</Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={1}
+                direction={"row"}
+                sx={{ paddingBottom: 2 }}
+              >
+                <Grid item xs={4}>
+                  <TextField label="Recipient" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField label="Essays" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={4}>
+                  <ResponsiveDatePicker
+                    label={"Deadline"}
+                    value={deadlineDate}
+                    setValue={setDeadlineDate}
+                  />
+                </Grid>
+              </Grid>
+            </Stack>
           </Grid>
         </Grid>
       </Stack>

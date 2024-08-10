@@ -5,6 +5,7 @@ import { Divider, Stack, TextField, Typography, useTheme } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
 import { useEffect, useRef, useState } from "react";
+import ResponsiveTextField from "../components/ResponsiveTextField";
 
 export default function Home() {
   // Hooks
@@ -53,7 +54,7 @@ export default function Home() {
       sx={{
         height: "100svh",
         display: "grid",
-        paddingBottom: "1px",
+        paddingTop: 5,
       }}
     >
       <Grid
@@ -63,7 +64,7 @@ export default function Home() {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          py: 15,
+          marginBottom: "5vh",
         }}
       >
         <Stack
@@ -121,27 +122,13 @@ export default function Home() {
         </Stack>
       </Grid>
 
-      <Grid item sx={{ padding: 1, width: "100%", paddingTop: 35 }}>
+      <Grid item sx={{ padding: 1, paddingTop: 35 }}>
         <Stack direction="row" spacing={1}>
-          <TextField
-            color="primary"
-            label="Enter your name here..."
-            fullWidth
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: false,
-              style: {
-                marginTop: "1px",
-                opacity: isNameEntered ? 0 : 1,
-              },
-            }}
-            InputProps={{
-              style: {
-                borderRadius: 40,
-              },
-            }}
+          <ResponsiveTextField
+            label={"Enter your name here..."}
+            borderRadius={40}
+            value={name}
+            setValue={setName}
           />
           <Button
             variant="contained"

@@ -4,10 +4,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/DatePicker";
 import dayjs from "dayjs";
 
-export default function WrappedDatePicker({
+export default function ResponsiveDatePicker({
+  label,
   value,
   setValue,
 }: {
+  label: string;
   value: dayjs.Dayjs | undefined;
   setValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | undefined>>;
 }) {
@@ -16,7 +18,7 @@ export default function WrappedDatePicker({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
-        label={value ? "" : "Start Date"}
+        label={value ? "" : label}
         value={value}
         onChange={(newValue) => {
           setValue(newValue ? newValue : todayDate);
