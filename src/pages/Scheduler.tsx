@@ -18,16 +18,20 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
+import dayjs, { Dayjs } from "dayjs";
+import WrappedDatePicker from "../components/WrappedDatePicker";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
   // Form Info
   const [writingSpeed, setWritingSpeed] = React.useState<number>();
   const [revisionLength, setRevisionLength] = React.useState<number>();
+  const [startDate, setStartDate] = React.useState<Dayjs>();
+  const [deadlineDate, setDeadlineDate] = React.useState<Dayjs>();
 
   return (
     <>
@@ -152,12 +156,7 @@ export default function Scheduler() {
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label={"Start Date"}
-                slotProps={{ textField: { fullWidth: true } }}
-              />
-            </LocalizationProvider>
+            <WrappedDatePicker value={startDate} setValue={setStartDate} />
           </Grid>
         </Grid>
       </Stack>
@@ -190,12 +189,10 @@ export default function Scheduler() {
             <TextField label="Essays" variant="outlined" fullWidth />
           </Grid>
           <Grid item xs={4}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label={"Deadline"}
-                slotProps={{ textField: { fullWidth: true } }}
-              />
-            </LocalizationProvider>
+            <WrappedDatePicker
+              value={deadlineDate}
+              setValue={setDeadlineDate}
+            />
           </Grid>
         </Grid>
       </Stack>

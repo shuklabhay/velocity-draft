@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 export default function Home() {
   // Hooks
   const theme = useTheme();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const isNameEntered = name.length > 0;
 
