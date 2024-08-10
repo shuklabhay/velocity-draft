@@ -37,7 +37,7 @@ export default function InfoBubble() {
           },
           [theme.breakpoints.down("sm")]: {
             bottom: "auto",
-            top: 8,
+            top: 5,
           },
         }}
       >

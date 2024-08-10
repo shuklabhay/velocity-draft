@@ -2,12 +2,16 @@ import * as React from "react";
 import {
   Box,
   Button,
+  Divider,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  TextField,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +23,7 @@ export default function Scheduler() {
   // Hooks
   const theme = useTheme();
   let navigate = useNavigate();
+  const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <>
@@ -28,86 +33,125 @@ export default function Scheduler() {
           onClick={() => navigate("/")}
           sx={{
             backgroundColor: "transparent",
-            width: 175,
+            width: 145,
+            height: 45,
+            borderRadius: 2,
           }}
         >
           <Typography
-            variant="h5"
+            variant="h6"
             sx={{
               color: theme.palette.primary.main,
               fontWeight: "bold",
               textAlign: "center",
               textTransform: "none",
+              paddingTop: "6px",
             }}
           >
             VelocityDraft
           </Typography>
         </Button>
+        <Divider
+          aria-hidden="true"
+          flexItem
+          sx={{ borderRadius: 5, borderWidthTop: 1 }}
+        />
       </Stack>
 
-      <Typography variant="h5">
-        Hello [name], welcome to our application essay scheduler, VelocityDraft!
-      </Typography>
-      <Typography variant="h6">
-        Tell me a little more about yourself:
+      <Typography variant="h4" sx={{ paddingTop: 1 }}>
+        Hi [name], tell me a little more about yourself:
       </Typography>
 
-      <Stack spacing={2}>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
-        >
-          <Typography>How fast do you write? (1-5)</Typography>
-          <FormControl sx={{ width: 400 }}>
-            <InputLabel>Writing Speed</InputLabel>
-            <Select
-            // value={}
-            // onChange={}
-            >
-              <MenuItem value={1}>1 (Slowest)</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5 (Fastest)</MenuItem>
-            </Select>
-          </FormControl>
-        </Stack>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
-        >
-          <Typography>
-            How long do you want to reivse each essay for?
-          </Typography>
-          <FormControl sx={{ width: 400 }}>
-            <InputLabel>Revision Length</InputLabel>
-            <Select
-            // value={}
-            // onChange={}
-            >
-              <MenuItem value={1}>1 Day</MenuItem>
-              <MenuItem value={2}>2 Days</MenuItem>
-              <MenuItem value={3}>3 Days</MenuItem>
-              <MenuItem value={4}>4 Days</MenuItem>
-              <MenuItem value={5}>5 Days</MenuItem>
-            </Select>
-          </FormControl>
-        </Stack>
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ justifyContent: "space-evenly", alignItems: "flex-start" }}
-        >
-          <Typography>When do you want to start?</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker />
-          </LocalizationProvider>
-        </Stack>
+      <Stack spacing={1} sx={{ paddingRight: 4 }}>
+        <Grid container spacing={2} direction="row">
+          <Grid item xs={6}>
+            <Typography variant="h5">
+              How{" "}
+              <span style={{ color: theme.palette.primary.main }}>fast</span> do
+              you write? (1-5)
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel>Writing Speed</InputLabel>
+              <Select
+              // value={}
+              // onChange={}
+              >
+                <MenuItem value={1}>1 (Slowest)</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5 (Fastest)</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} direction="row">
+          <Grid item xs={6}>
+            <Typography variant="h5">
+              How{" "}
+              <span style={{ color: theme.palette.primary.main }}>long</span> do
+              you want to reivse each essay for?
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <FormControl fullWidth>
+              <InputLabel>Revision Length</InputLabel>
+              <Select
+              // value={}
+              // onChange={}
+              >
+                <MenuItem value={1}>1 Day</MenuItem>
+                <MenuItem value={2}>2 Days</MenuItem>
+                <MenuItem value={3}>3 Days</MenuItem>
+                <MenuItem value={4}>4 Days</MenuItem>
+                <MenuItem value={5}>5 Days</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} direction="row">
+          <Grid item xs={6}>
+            <Typography variant="h5">
+              <span style={{ color: theme.palette.primary.main }}>When</span> do
+              you want to start?
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"Start Date"}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
       </Stack>
 
-      <Typography>Which schools are you applying to?</Typography>
+      <Typography variant="h5" sx={{ paddingLeft: 2 }}>
+        Which <span style={{ color: theme.palette.primary.main }}>schools</span>{" "}
+        are you applying to?
+      </Typography>
+
+      <Stack spacing={1} sx={{ paddingRight: 4 }}>
+        <Grid container spacing={2} direction={"row"}>
+          <Grid item xs={4}>
+            <TextField label="School" variant="outlined" fullWidth />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField label="Essays" variant="outlined" fullWidth />
+          </Grid>
+          <Grid item xs={4}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label={"Deadline"}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+      </Stack>
     </>
   );
 }

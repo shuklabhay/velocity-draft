@@ -76,6 +76,7 @@ export default function Home() {
           }}
         >
           <Divider
+            aria-hidden="true"
             orientation="vertical"
             flexItem
             sx={{
@@ -120,7 +121,7 @@ export default function Home() {
         </Stack>
       </Grid>
 
-      <Grid item sx={{ padding: 3, width: "100%", paddingTop: 35 }}>
+      <Grid item sx={{ padding: 1, width: "100%", paddingTop: 35 }}>
         <Stack direction="row" spacing={1}>
           <TextField
             color="primary"
