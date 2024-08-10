@@ -45,8 +45,46 @@ function Home() {
           gridTemplateRows: "80% 50%",
         }}
       >
-        <Grid item>
-          <Stack direction="row" spacing={2}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: "80%",
+            overflow: "hidden",
+            "& > *": {
+              transform:
+                "scale(clamp(0.5, calc(0.5 + (100vw - 300px) * 0.1), 1))",
+              transformOrigin: "center center",
+              transition: "transform 0.3s ease-out",
+            },
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              // transform: "scale(var(--scale))",
+              // transformOrigin: "center center",
+              // "--scale": {
+              //   xs: "0.7",
+              //   sm: "1",
+              //   md: "1",
+              //   lg: "1",
+              // },
+              maxWidth: "100%",
+              maxHeight: "100%",
+              display: "flex",
+              justifyContent: "center",
+              width: "fit-content",
+              margin: "0 auto",
+            }}
+          >
             <Divider
               orientation="vertical"
               flexItem
@@ -93,7 +131,7 @@ function Home() {
           </Stack>
         </Grid>
 
-        <Grid item>
+        <Grid item sx={{ padding: 3, width: "100%" }}>
           <Stack direction="row" spacing={1}>
             <TextField
               color="primary"
@@ -105,7 +143,7 @@ function Home() {
               InputLabelProps={{
                 shrink: false,
                 style: {
-                  marginTop: "2px",
+                  marginTop: "1px",
                   opacity: isNameEntered ? 0 : 1,
                 },
               }}

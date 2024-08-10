@@ -5,8 +5,10 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   IconButton,
+  Stack,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -33,12 +35,19 @@ function InfoBubble() {
             color: theme.palette.primary.dark,
             backgroundColor: theme.palette.secondary.main,
           },
+          [theme.breakpoints.down("sm")]: {
+            bottom: "auto",
+            top: 8,
+          },
         }}
       >
         <InfoOutlinedIcon fontSize="medium" />
       </IconButton>
+
       <Dialog onClose={toggleOpen} open={open}>
-        <DialogTitle>About VelocityDraft</DialogTitle>
+        <DialogTitle sx={{ fontWeight: "bold" }}>
+          About VelocityDraft
+        </DialogTitle>
         <IconButton
           aria-label="close"
           onClick={toggleOpen}
@@ -46,21 +55,30 @@ function InfoBubble() {
             position: "absolute",
             right: 8,
             top: 8,
+            "&:hover": {
+              color: theme.palette.primary.dark,
+              backgroundColor: theme.palette.secondary.main,
+            },
           }}
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          <Typography gutterBottom>
+
+        <DialogContent sx={{ paddingTop: 0 }}>
+          <DialogContentText>
             VelocityDraft is flexible application essay writing scheduler a
             developed by Abhay Shukla and Michael Leong. The application was
             originally made to help high school students plan writing their
-            college application essays, but it can be used for any kind of
-            application essay (high school, undergrad, grad)!
-          </Typography>
-          <Typography gutterBottom>
+            college application essays, but VelocityDraft supports creating
+            plans for high school applications, summer program applications,
+            college applications, internship applications, graduate program
+            applications, and many more! If you need to apply, VelocityDraft has
+            you covered.
+          </DialogContentText>
+          <br />
+          <DialogContentText>
             VelocityDraft won third place in the OneHacks III hackathon.
-          </Typography>
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus variant="contained" onClick={toggleOpen}>
