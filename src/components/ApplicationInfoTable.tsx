@@ -4,34 +4,59 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 
-interface FormDataItem {
+interface TableDataItem {
   recipient: string;
-  essays: string;
+  essayCount: number;
   deadline: dayjs.Dayjs;
 }
 
 export default function ApplicationInfoTable() {
-  const [formData, setFormData] = useState<FormDataItem[]>([]);
+  const [tableData, setTableData] = useState<TableDataItem[]>([]);
 
-  const handleInputChange = (index, field, value) => {
-    const updatedFormData = [...formData];
-    updatedFormData[index][field] = value;
-    setFormData(updatedFormData);
-    if (
-      index === updatedFormData.length - 1 &&
-      isRowComplete(updatedFormData[index])
-    ) {
-      addEmptyRow();
+  function isRowComplete(row: TableDataItem) {
+    return row.recipient && row.essayCount && row.deadline;
+  }
+
+  function addEmptyRow() {
+    // now how tf should i do this
+    // const updatedTableData = [...tableData];
+    // updatedTableData.push({
+    //   recipient: null,
+    //   essayCount: null,
+    //   deadline: null,
+    // });
+    // setTableData(updatedTableData);
+  }
+
+  function handleChange(
+    index: number,
+    field: keyof TableDataItem,
+    value: string | dayjs.Dayjs
+  ) {
+    const newTableData = [...tableData];
+
+    if (newTableData[index]) {
+      // Update table data
+      const dataIsRecipient = field === "recipient" && typeof value == "string";
+      const dataIsEssays = field === "essayCount" && typeof value == "number";
+      const dataIsDeadline =
+        field === "deadline" && value instanceof dayjs.Dayjs;
+
+      if (dataIsRecipient) {
+        newTableData[index].recipient = value;
+      } else if (dataIsEssays) {
+        newTableData[index].essayCount = value;
+      } else if (dataIsDeadline) {
+        newTableData[index].deadline = value;
+      }
+      setTableData(newTableData);
+
+      // Add new row
+      if (index == tableData.length - 1) {
+        addEmptyRow();
+      }
     }
-  };
-
-  const isRowComplete = (row) => {
-    return row.recipient && row.essays && row.deadline;
-  };
-
-  const addEmptyRow = () => {
-    setFormData([...formData, { recipient: "", essays: "", deadline: "" }]);
-  };
+  }
 
   return (
     <div>
@@ -46,13 +71,37 @@ export default function ApplicationInfoTable() {
           <Typography variant="h6">Deadline</Typography>
         </Grid>
       </Grid>
-      {formData.map((row, index) => (
+      <Grid container spacing={2} key={0}>
+        <Grid item xs={4}>
+          <ResponsiveTextField
+            label="Recipient"
+            borderRadius={7}
+            value={tableData[0].recipient}
+            onChange={(e) => handleInputChange(0, "recipient", e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <ResponsiveTextField
+            label="Essays"
+            borderRadius={7}
+            value={tableData[0].essayCount}
+            onChange={(e) => handleInputChange(0, "essays", e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <ResponsiveDatePicker
+            label={"Deadline"}
+            value={tableData[0].deadline}
+            onChange={(e) => handleInputChange(0, "deadline", e.target.value)}
+          />
+        </Grid>
+      </Grid>
+      {tableData.map((row, index) => (
         <Grid container spacing={2} key={index}>
           <Grid item xs={4}>
-            <TextField
-              label="recipient"
-              variant="outlined"
-              fullWidth
+            <ResponsiveTextField
+              label="Recipient"
+              borderRadius={7}
               value={row.recipient}
               onChange={(e) =>
                 handleInputChange(index, "recipient", e.target.value)
@@ -63,17 +112,7 @@ export default function ApplicationInfoTable() {
             <ResponsiveTextField
               label="Essays"
               borderRadius={7}
-              value={row.essays}
-              onChange={(e) =>
-                handleInputChange(index, "essays", e.target.value)
-              }
-            />
-
-            <TextField
-              label="Essays"
-              variant="outlined"
-              fullWidth
-              value={row.essays}
+              value={row.essayCount}
               onChange={(e) =>
                 handleInputChange(index, "essays", e.target.value)
               }
