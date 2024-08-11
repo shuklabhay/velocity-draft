@@ -73,7 +73,7 @@ export default function Scheduler() {
         Hi [name], tell me a little more about yourself:
       </Typography>
 
-      <Stack>
+      <div>
         <Grid container direction="column" sx={{ paddingBottom: 2 }}>
           <Grid item>
             <Typography variant="h5">
@@ -180,32 +180,9 @@ export default function Scheduler() {
           </Grid>
           <Grid item>
             <ApplicationInfoTable />
-            {/* Hard coded table - reference */}
-            {/* <Stack>
-              <Grid
-                container
-                spacing={1}
-                direction={"row"}
-                sx={{ paddingBottom: 2 }}
-              >
-                <Grid item xs={4}>
-                  <TextField label="Recipient" variant="outlined" fullWidth />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField label="Essays" variant="outlined" fullWidth />
-                </Grid>
-                <Grid item xs={4}>
-                  <ResponsiveDatePicker
-                    label={"Deadline"}
-                    value={deadlineDate}
-                    onChange={(e) => setDeadlineDate(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-            </Stack> */}
           </Grid>
         </Grid>
-      </Stack>
+      </div>
     </>
   );
 }

@@ -96,7 +96,7 @@ export default function ApplicationInfoTable() {
 
   return (
     <div>
-      <Grid container spacing={0.5} direction={"row"} sx={{}}>
+      <Grid container spacing={2} direction={"row"}>
         <Grid item xs={4}>
           <Typography variant="h6">Recipient</Typography>
         </Grid>
@@ -108,7 +108,7 @@ export default function ApplicationInfoTable() {
         </Grid>
       </Grid>
       {tableData.map((row, index) => (
-        <Grid container spacing={2} key={index}>
+        <Grid container spacing={2} key={index} sx={{ paddingBottom: 1 }}>
           <Grid item xs={4}>
             <ResponsiveTextField
               label="Recipient"
