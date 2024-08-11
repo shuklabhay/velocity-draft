@@ -32,7 +32,6 @@ export default function Scheduler() {
   const [writingSpeed, setWritingSpeed] = React.useState<number>();
   const [revisionLength, setRevisionLength] = React.useState<number>();
   const [startDate, setStartDate] = React.useState<Dayjs>();
-  const [deadlineDate, setDeadlineDate] = React.useState<Dayjs>();
 
   return (
     <>
@@ -95,7 +94,7 @@ export default function Scheduler() {
                 <InputLabel shrink={false}>Writing Speed</InputLabel>
               )}
               <Select
-                value={writingSpeed}
+                value={String(writingSpeed)}
                 onChange={(e) => {
                   setWritingSpeed(Number(e.target.value));
                 }}
@@ -129,7 +128,7 @@ export default function Scheduler() {
                 <InputLabel shrink={false}>Revision Length</InputLabel>
               )}
               <Select
-                value={revisionLength}
+                value={String(revisionLength)}
                 onChange={(e) => {
                   setRevisionLength(Number(e.target.value));
                 }}
