@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 
 export default function ResponsiveTextField({
   label,
-  borderRadius = 7,
+  borderRadius = 5,
   value,
   onChange,
 }: {

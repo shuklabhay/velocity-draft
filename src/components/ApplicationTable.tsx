@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Grid, Typography } from "@mui/material";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
@@ -92,7 +99,7 @@ export default function ApplicationTable() {
           <Typography variant="h6">Recipient</Typography>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="h6">Essay Count</Typography>
+          <Typography variant="h6">Essay Requirement</Typography>
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6">Deadline</Typography>
@@ -103,20 +110,29 @@ export default function ApplicationTable() {
           <Grid item xs={4}>
             <ResponsiveTextField
               label="Recipient"
-              borderRadius={7}
+              borderRadius={5}
               value={row.recipient}
               onChange={(e) => handleChange(index, "recipient", e.target.value)}
             />
           </Grid>
           <Grid item xs={4}>
-            <ResponsiveTextField
-              label="Essays"
-              borderRadius={7}
-              value={row.essayCount}
-              onChange={(e) =>
-                handleChange(index, "essayCount", e.target.value)
-              }
-            />
+            <FormControl fullWidth>
+              {!row.essayCount && (
+                <InputLabel shrink={false}>Essays</InputLabel>
+              )}
+              <Select
+                value={row.essayCount}
+                onChange={(e) => {
+                  handleChange(index, "essayCount", e.target.value);
+                }}
+              >
+                <MenuItem value={"1"}>1 Essay</MenuItem>
+                <MenuItem value={"2"}>2 Essays</MenuItem>
+                <MenuItem value={"3"}>3 Essays</MenuItem>
+                <MenuItem value={"4"}>4 Essays</MenuItem>
+                <MenuItem value={"5"}>5 Essays</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={4}>
             <ResponsiveDatePicker

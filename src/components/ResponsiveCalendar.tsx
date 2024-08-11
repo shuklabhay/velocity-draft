@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Stack, useTheme } from "@mui/material";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import dayjs from "dayjs";
@@ -64,7 +64,7 @@ export default function ResponsiveCalendar() {
       <Calendar
         localizer={localizer}
         events={events}
-        style={{ height: maxEventsOnDay * 175 + 200 }}
+        style={{ height: maxEventsOnDay * 175 + 200, borderRadius: 50 }}
         components={{
           toolbar: ResponsiveToolbar,
           event: ResponsiveEvent,
