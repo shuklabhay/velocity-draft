@@ -1,7 +1,7 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { NavigateAction, ToolbarProps, View } from "react-big-calendar";
 
-export default function CustomToolbar(props: ToolbarProps) {
+export default function ResponsiveToolbar(props: ToolbarProps) {
   const { onNavigate, label, onView, view } = props;
 
   const navigate = (action: NavigateAction) => {
@@ -30,19 +30,28 @@ export default function CustomToolbar(props: ToolbarProps) {
     >
       <Stack direction="row" spacing={1}>
         <Button
+          variant="contained"
           onClick={() => navigate("TODAY")}
           sx={{ textTransform: "none" }}
         >
           Today
         </Button>
-        <Button onClick={() => navigate("PREV")} sx={{ textTransform: "none" }}>
+        <Button
+          variant="contained"
+          onClick={() => navigate("PREV")}
+          sx={{ textTransform: "none" }}
+        >
           Back
         </Button>
-        <Button onClick={() => navigate("NEXT")} sx={{ textTransform: "none" }}>
+        <Button
+          variant="contained"
+          onClick={() => navigate("NEXT")}
+          sx={{ textTransform: "none" }}
+        >
           Next
         </Button>
       </Stack>
-      <span>{label}</span>
+      <Typography variant="h5">{label}</Typography>
       <Stack direction="row" spacing={1}>
         {viewButtons}
       </Stack>

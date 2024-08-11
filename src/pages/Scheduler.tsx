@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Dayjs } from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
-import ApplicationInfoTable from "../components/ApplicationInfoTable";
+import ApplicationTable from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
 
 export default function Scheduler() {
@@ -175,7 +175,7 @@ export default function Scheduler() {
             </Typography>
           </Grid>
           <Grid item>
-            <ApplicationInfoTable />
+            <ApplicationTable />
           </Grid>
         </Grid>
       </div>

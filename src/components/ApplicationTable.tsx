@@ -3,24 +3,15 @@ import { Grid, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
+import { TableItem } from "../utils/types";
 
-interface TableDataItem {
-  recipient: string;
-  essayCount: string;
-  deadline: dayjs.Dayjs | null;
-}
-
-export default function ApplicationInfoTable() {
-  const [tableData, setTableData] = useState<TableDataItem[]>([
+export default function ApplicationTable() {
+  const [tableData, setTableData] = useState<TableItem[]>([
     { recipient: "", essayCount: "", deadline: null },
     { recipient: "", essayCount: "", deadline: null },
   ]);
 
-  function isRowComplete(row: TableDataItem) {
-    return row.recipient && row.essayCount && row.deadline;
-  }
-
-  function isRowEmpty(row: TableDataItem) {
+  function isRowEmpty(row: TableItem) {
     return !row.recipient && !row.essayCount && !row.deadline;
   }
 
@@ -48,7 +39,7 @@ export default function ApplicationInfoTable() {
 
   function handleChange(
     index: number,
-    field: keyof TableDataItem,
+    field: keyof TableItem,
     value: string | dayjs.Dayjs
   ) {
     const newTableData = [...tableData];

@@ -1,30 +1,28 @@
 import * as React from "react";
-import { Button, Container, Stack, Typography } from "@mui/material";
-import {
-  Calendar,
-  dayjsLocalizer,
-  NavigateAction,
-  ToolbarProps,
-} from "react-big-calendar";
+import { Button, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import CalendarToolbar from "./CalendarToolbar";
+import ResponsiveToolbar from "./ResponsiveToolbar";
+import { CalendarEvent } from "../utils/types";
+import ResponsiveEvent from "./ResponsiveEvent";
 
 export default function ResponsiveCalendar() {
   const localizer = dayjsLocalizer(dayjs);
+  const theme = useTheme();
   dayjs.extend(isSameOrBefore);
   dayjs.extend(isSameOrAfter);
 
-  const events = [
+  const events: CalendarEvent[] = [
     {
       title: "heyyy",
       start: dayjs("2024-08-11").toDate(),
       end: dayjs("2024-08-13").toDate(),
     },
     {
-      title: "heyyy",
+      title: "Deadline",
       start: dayjs("2024-08-11").toDate(),
       end: dayjs("2024-08-13").toDate(),
     },
@@ -49,15 +47,29 @@ export default function ResponsiveCalendar() {
     return max;
   }, 0);
 
+  const eventStyleGetter = (event: CalendarEvent) => {
+    let backgroundColor = theme.palette.primary.main;
+    if (event.title.includes("Deadline")) {
+      backgroundColor = theme.palette.error.main;
+    }
+    return {
+      style: {
+        backgroundColor,
+      },
+    };
+  };
+
   return (
     <Stack spacing={0} sx={{ paddingBottom: 2 }}>
       <Calendar
         localizer={localizer}
         events={events}
-        style={{ height: maxEventsOnDay * 125 + 175 }}
+        style={{ height: maxEventsOnDay * 175 + 200 }}
         components={{
-          toolbar: CalendarToolbar,
+          toolbar: ResponsiveToolbar,
+          event: ResponsiveEvent,
         }}
+        eventPropGetter={eventStyleGetter}
       />
 
       {/* add saving stuff here */}
