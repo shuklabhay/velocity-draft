@@ -5,12 +5,13 @@ import { Divider, Stack, TextField, Typography, useTheme } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { TypeAnimation } from "react-type-animation";
 import { useEffect, useRef, useState } from "react";
+import ResponsiveTextField from "../components/ResponsiveTextField";
 
-function Home() {
+export default function Home() {
   // Hooks
-  const [name, setName] = useState("");
   const theme = useTheme();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
   const isNameEntered = name.length > 0;
 
   // Resize based on page size
@@ -18,7 +19,6 @@ function Home() {
   const [scaleFactor, setScaleFactor] = useState(1);
 
   const titleStackRef = useRef<HTMLDivElement>(null);
-  console.log(titleStackRef);
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,7 +54,7 @@ function Home() {
       sx={{
         height: "100svh",
         display: "grid",
-        paddingBottom: "1px",
+        paddingTop: 5,
       }}
     >
       <Grid
@@ -64,7 +64,7 @@ function Home() {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          py: 15,
+          marginBottom: "5vh",
         }}
       >
         <Stack
@@ -77,6 +77,7 @@ function Home() {
           }}
         >
           <Divider
+            aria-hidden="true"
             orientation="vertical"
             flexItem
             sx={{
@@ -121,27 +122,13 @@ function Home() {
         </Stack>
       </Grid>
 
-      <Grid item sx={{ padding: 3, width: "100%", paddingTop: 35 }}>
+      <Grid item sx={{ padding: 1, paddingTop: 35 }}>
         <Stack direction="row" spacing={1}>
-          <TextField
-            color="primary"
-            label="Enter your name here..."
-            fullWidth
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            InputLabelProps={{
-              shrink: false,
-              style: {
-                marginTop: "1px",
-                opacity: isNameEntered ? 0 : 1,
-              },
-            }}
-            InputProps={{
-              style: {
-                borderRadius: 40,
-              },
-            }}
+          <ResponsiveTextField
+            label={"Enter your name here..."}
+            borderRadius={40}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <Button
             variant="contained"
@@ -156,5 +143,3 @@ function Home() {
     </Grid>
   );
 }
-
-export default Home;

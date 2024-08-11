@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-function InfoBubble() {
+export default function InfoBubble() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
 
@@ -37,7 +37,7 @@ function InfoBubble() {
           },
           [theme.breakpoints.down("sm")]: {
             bottom: "auto",
-            top: 8,
+            top: 5,
           },
         }}
       >
@@ -70,10 +70,10 @@ function InfoBubble() {
             developed by Abhay Shukla and Michael Leong. The application was
             originally made to help high school students plan writing their
             college application essays, but VelocityDraft supports creating
-            plans for high school applications, summer program applications,
-            college applications, internship applications, graduate program
-            applications, and many more! If you need to apply, VelocityDraft has
-            you covered.
+            plans to write essays for high school applications, summer program
+            applications, college applications, internship applications,
+            graduate program applications, and more! If you need to write essays
+            to apply, VelocityDraft has you covered.
           </DialogContentText>
           <br />
           <DialogContentText>
@@ -89,5 +89,3 @@ function InfoBubble() {
     </>
   );
 }
-
-export default InfoBubble;
