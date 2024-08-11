@@ -128,7 +128,7 @@ export default function Home() {
             label={"Enter your name here..."}
             borderRadius={40}
             value={name}
-            setValue={setName}
+            onChange={(e) => setName(e.target.value)}
           />
           <Button
             variant="contained"

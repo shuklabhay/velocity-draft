@@ -5,21 +5,19 @@ export default function ResponsiveTextField({
   label,
   borderRadius = 7,
   value,
-  setValue,
+  onChange,
 }: {
   label: string;
   borderRadius: number;
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (e: any) => void;
 }) {
   return (
     <TextField
       label={label}
       fullWidth
       value={value}
-      onChange={(e) => {
-        setValue(e.target.value);
-      }}
+      onChange={onChange}
       InputLabelProps={{
         shrink: false,
         style: {

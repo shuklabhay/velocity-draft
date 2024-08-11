@@ -20,6 +20,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
+import ApplicationInfoTable from "../components/ApplicationInfoTable";
 
 export default function Scheduler() {
   // Hooks
@@ -74,12 +75,7 @@ export default function Scheduler() {
       </Typography>
 
       <Stack>
-        <Grid
-          container
-          spacing={1}
-          direction="column"
-          sx={{ paddingBottom: 2 }}
-        >
+        <Grid container direction="column" sx={{ paddingBottom: 2 }}>
           <Grid item>
             <Typography variant="h5">
               <span
@@ -113,12 +109,7 @@ export default function Scheduler() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={1}
-          direction="column"
-          sx={{ paddingBottom: 2 }}
-        >
+        <Grid container direction="column" sx={{ paddingBottom: 2 }}>
           <Grid item>
             <Typography variant="h5">
               <span
@@ -152,12 +143,7 @@ export default function Scheduler() {
             </FormControl>
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={1}
-          direction="column"
-          sx={{ paddingBottom: 2 }}
-        >
+        <Grid container direction="column" sx={{ paddingBottom: 2 }}>
           <Grid item>
             <Typography variant="h5">
               <span
@@ -175,16 +161,11 @@ export default function Scheduler() {
             <ResponsiveDatePicker
               label={"Start Date"}
               value={startDate}
-              setValue={setStartDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
           </Grid>
         </Grid>
-        <Grid
-          container
-          spacing={1}
-          direction="column"
-          sx={{ paddingBottom: 2 }}
-        >
+        <Grid container direction="column" sx={{ paddingBottom: 2 }}>
           <Grid item>
             <Typography variant="h5">
               <span
@@ -199,18 +180,9 @@ export default function Scheduler() {
             </Typography>
           </Grid>
           <Grid item>
-            <Stack>
-              <Grid container spacing={1} direction={"row"} sx={{}}>
-                <Grid item xs={4}>
-                  <Typography variant="h6">Recipient</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="h6">Essay Count</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="h6">Deadline</Typography>
-                </Grid>
-              </Grid>
+            <ApplicationInfoTable />
+            {/* Hard coded table - reference */}
+            {/* <Stack>
               <Grid
                 container
                 spacing={1}
@@ -227,11 +199,11 @@ export default function Scheduler() {
                   <ResponsiveDatePicker
                     label={"Deadline"}
                     value={deadlineDate}
-                    setValue={setDeadlineDate}
+                    onChange={(e) => setDeadlineDate(e.target.value)}
                   />
                 </Grid>
               </Grid>
-            </Stack>
+            </Stack> */}
           </Grid>
         </Grid>
       </Stack>

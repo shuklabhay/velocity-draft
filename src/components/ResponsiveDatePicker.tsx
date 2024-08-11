@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 export default function ResponsiveDatePicker({
   label,
   value,
-  setValue,
+  onChange,
 }: {
   label: string;
   value: dayjs.Dayjs | undefined;
-  setValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | undefined>>;
+  onChange: (e: any) => void;
 }) {
   const todayDate = dayjs(new Date());
 
@@ -20,9 +20,7 @@ export default function ResponsiveDatePicker({
       <DatePicker
         label={value ? "" : label}
         value={value}
-        onChange={(newValue) => {
-          setValue(newValue ? newValue : todayDate);
-        }}
+        onChange={onChange}
         slotProps={{
           textField: {
             fullWidth: true,
