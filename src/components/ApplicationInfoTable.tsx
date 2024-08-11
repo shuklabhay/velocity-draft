@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 
-// code partially generated with gemini- im spending a lot of time reformatting it to work on my case w/ my wrappers and stuff
 interface FormDataItem {
   recipient: string;
   essays: string;
