@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import * as React from "react";
 
-function NotFound() {
+export default function NotFound() {
   let navigate = useNavigate();
 
   return (
@@ -28,5 +28,3 @@ function NotFound() {
     </div>
   );
 }
-
-export default NotFound;
