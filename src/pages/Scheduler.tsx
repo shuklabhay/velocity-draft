@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Box,
   Button,
   Divider,
   FormControl,
@@ -9,18 +8,15 @@ import {
   MenuItem,
   Select,
   Stack,
-  TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
 import ApplicationInfoTable from "../components/ApplicationInfoTable";
+import ResponsiveCalendar from "../components/ResponsiveCalendar";
 
 export default function Scheduler() {
   // Hooks
@@ -164,7 +160,7 @@ export default function Scheduler() {
             />
           </Grid>
         </Grid>
-        <Grid container direction="column" sx={{ paddingBottom: 2 }}>
+        <Grid container direction="column" sx={{ paddingBottom: 3 }}>
           <Grid item>
             <Typography variant="h5">
               <span
@@ -183,6 +179,21 @@ export default function Scheduler() {
           </Grid>
         </Grid>
       </div>
+
+      <Divider
+        aria-hidden="true"
+        flexItem
+        sx={{
+          borderRadius: 5,
+          borderTopWidth: 1,
+        }}
+      />
+
+      <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
+        Your plan:
+      </Typography>
+
+      <ResponsiveCalendar />
     </>
   );
 }

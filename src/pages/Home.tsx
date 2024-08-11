@@ -1,47 +1,17 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { Divider, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { TypeAnimation } from "react-type-animation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import ResponsiveTextField from "../components/ResponsiveTextField";
+import ResponsiveTitle from "../components/ResponsiveTitle";
 
 export default function Home() {
   // Hooks
-  const theme = useTheme();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const isNameEntered = name.length > 0;
-
-  // Resize based on page size
-  const desiredEdgeDistance = 20;
-  const [scaleFactor, setScaleFactor] = useState(1);
-
-  const titleStackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const calculateScale = (windowWidth: number, elementWidth: number) => {
-        const maxWidth = windowWidth - desiredEdgeDistance * 2;
-        return maxWidth / elementWidth;
-      };
-
-      if (titleStackRef.current) {
-        const elementWidth = titleStackRef.current.offsetWidth;
-        const windowWidth = window.innerWidth;
-        const calculatedScale = calculateScale(windowWidth, elementWidth);
-
-        console.log(elementWidth, windowWidth, calculatedScale);
-        setScaleFactor(calculatedScale);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <Grid
@@ -67,59 +37,10 @@ export default function Home() {
           marginBottom: "5vh",
         }}
       >
-        <Stack
-          ref={titleStackRef}
-          direction="row"
-          spacing={2}
-          sx={{
-            paddingRight: 2,
-            transform: scaleFactor < 1 ? `scale(${scaleFactor})` : "scale(1)",
-          }}
-        >
-          <Divider
-            aria-hidden="true"
-            orientation="vertical"
-            flexItem
-            sx={{
-              borderRightWidth: 5,
-              borderRadius: 5,
-            }}
-          />
-
-          <Stack>
-            <Typography
-              variant="h1"
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: "bold",
-                textAlign: "left",
-              }}
-            >
-              VelocityDraft
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 33,
-                fontWeight: 400,
-                textAlign: "left",
-              }}
-            >
-              <TypeAnimation
-                sequence={["Flexible Application Essay Scheduler"]}
-                speed={65}
-                style={{
-                  color: theme.palette.secondary.contrastText,
-                  fontSize: 33,
-                  fontWeight: 500,
-                  paddingLeft: 7,
-                  alignContent: "left",
-                  alignItems: "left",
-                  whiteSpace: "nowrap",
-                }}
-              />
-            </Typography>
-          </Stack>
-        </Stack>
+        <ResponsiveTitle
+          title="VelocityDraft"
+          subtitle="Flexible Application Essay Scheduler"
+        />
       </Grid>
 
       <Grid item sx={{ padding: 1, paddingTop: 35 }}>

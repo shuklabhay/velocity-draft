@@ -1,1 +1,1 @@
-export function scheduleInputsOnCalender() {}
+export function scheduleFromData() {}
