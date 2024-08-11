@@ -10,7 +10,7 @@ College application essay writing scheduler
 
 ## Setup
 
-- [Install](https://nodejs.org/en/download) Node.js 18
+- [Install](https://nodejs.org/en/download) Node.js 18 or higher
   - Confirm installation by running `node --version` in the command line
 - [Install](https://docs.oracle.com/en/java/javase/20/install/overview-jdk-installation.html) Java JDK 11 or higher
   - Confirm installation by running `java --version` in the command line
