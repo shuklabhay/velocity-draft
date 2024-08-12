@@ -13,7 +13,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
 import ApplicationTable from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
@@ -27,17 +27,17 @@ export default function Scheduler() {
 
   // Form Info
   const [writingSpeed, setWritingSpeed] = React.useState<number>();
-  const [revisionLength, setRevisionLength] = React.useState<number>();
+  const [revisionSessions, setRevisionSessions] = React.useState<number>();
   const [startDate, setStartDate] = React.useState<Date>();
 
-  if (writingSpeed && revisionLength && startDate) {
+  if (writingSpeed && revisionSessions && startDate) {
     const writerInfo: WriterInfo = {
       name: "placeholder",
       speed: writingSpeed,
-      revisionLength: revisionLength,
+      revisionSessionCount: revisionSessions,
       startDate: startDate,
     };
-    console.log(writerInfo);
+    // and if form info, then pass that into here or whatever
   }
 
   return (
@@ -123,27 +123,28 @@ export default function Scheduler() {
                   fontWeight: "bold",
                 }}
               >
-                How long
+                How many
               </span>{" "}
-              do you want to reivse each essay for?
+              revision sessions do you want?
             </Typography>
           </Grid>
           <Grid item>
             <FormControl fullWidth>
-              {!revisionLength && (
-                <InputLabel shrink={false}>Revision Length</InputLabel>
+              {!revisionSessions && (
+                <InputLabel shrink={false}>Lead Time</InputLabel>
               )}
               <Select
-                value={String(revisionLength)}
+                value={String(revisionSessions)}
                 onChange={(e) => {
-                  setRevisionLength(Number(e.target.value));
+                  setRevisionSessions(Number(e.target.value));
                 }}
               >
-                <MenuItem value={1}>1 Day</MenuItem>
-                <MenuItem value={2}>2 Days</MenuItem>
-                <MenuItem value={3}>3 Days</MenuItem>
-                <MenuItem value={4}>4 Days</MenuItem>
-                <MenuItem value={5}>5 Days</MenuItem>
+                <MenuItem value={1}>1 sessions</MenuItem>
+                <MenuItem value={2}>2 sessions</MenuItem>
+                <MenuItem value={3}>3 sessions</MenuItem>
+                <MenuItem value={4}>4 sessions</MenuItem>
+                <MenuItem value={5}>5 sessions</MenuItem>
+                <MenuItem value={6}>6 sessions</MenuItem>
               </Select>
             </FormControl>
           </Grid>

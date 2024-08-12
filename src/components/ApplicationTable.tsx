@@ -92,6 +92,8 @@ export default function ApplicationTable() {
     }
   }
 
+  console.log(tableData);
+
   return (
     <div>
       <Grid container spacing={2} direction={"row"}>
@@ -99,7 +101,7 @@ export default function ApplicationTable() {
           <Typography variant="h6">Recipient</Typography>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="h6">Essay Requirement</Typography>
+          <Typography variant="h6">Essays</Typography>
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6">Deadline</Typography>

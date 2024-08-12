@@ -69,7 +69,7 @@ export default function InfoBubble() {
             plans to write essays for high school applications, summer program
             applications, college applications, internship applications,
             graduate program applications, and more! If you need to write essays
-            to apply, VelocityDraft has you covered!
+            to apply to a lot of palces, VelocityDraft has you covered!
           </DialogContentText>
           <br />
           <DialogContentText>
