@@ -13,13 +13,10 @@ export default function ResponsiveDatePicker({
   value: dayjs.Dayjs | undefined;
   onChange: (e: any) => void;
 }) {
-  const todayDate = dayjs(new Date());
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         label={value ? "" : label}
-        value={value}
         onChange={onChange}
         slotProps={{
           textField: {

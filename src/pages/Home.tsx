@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useState } from "react";
 import ResponsiveTextField from "../components/ResponsiveTextField";
-import ResponsiveTitle from "../components/ResponsiveTitle";
+import ApplicationTitle from "../components/ApplicationTitle";
 
 export default function Home() {
   // Hooks
@@ -37,7 +37,7 @@ export default function Home() {
           marginBottom: "5vh",
         }}
       >
-        <ResponsiveTitle
+        <ApplicationTitle
           title="VelocityDraft"
           subtitle="Flexible Application Essay Scheduler"
         />

@@ -71,11 +71,11 @@ export default function ApplicationTable() {
 
         newTableData[index].essayCount = value;
       } else if (dataIsDeadline) {
-        value !== newTableData[index].deadline
+        value.toDate() !== newTableData[index].deadline
           ? (isInfoAdded = true)
           : (isInfoAdded = false);
 
-        newTableData[index].deadline = value;
+        newTableData[index].deadline = value.toDate();
       }
       setTableData(newTableData);
     }
@@ -137,7 +137,7 @@ export default function ApplicationTable() {
           <Grid item xs={4}>
             <ResponsiveDatePicker
               label={"Deadline"}
-              value={row.deadline ? row.deadline : undefined}
+              value={row.deadline ? dayjs(row.deadline) : undefined}
               onChange={(newValue) => handleChange(index, "deadline", newValue)}
             />
           </Grid>

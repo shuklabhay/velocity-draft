@@ -6,12 +6,11 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 export default function ResponsiveToolbar(props: ToolbarProps) {
   const { onNavigate, label, onView, view } = props;
 
-  const navigate = (action: NavigateAction) => {
+  function navigate(action: NavigateAction) {
     onNavigate(action);
-  };
+  }
 
   const viewNames: View[] = ["month", "agenda"];
-
   const viewButtons = viewNames.map((name) => (
     <Button
       key={name}

@@ -5,7 +5,7 @@ import { TypeAnimation } from "react-type-animation";
 import { useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
-export default function ResponsiveTitle({
+export default function ApplicationTitle({
   title,
   subtitle,
 }: {

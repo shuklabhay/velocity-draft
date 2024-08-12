@@ -13,10 +13,11 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
 import ApplicationTable from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
+import { WriterInfo } from "../utils/types";
 
 export default function Scheduler() {
   // Hooks
@@ -27,7 +28,17 @@ export default function Scheduler() {
   // Form Info
   const [writingSpeed, setWritingSpeed] = React.useState<number>();
   const [revisionLength, setRevisionLength] = React.useState<number>();
-  const [startDate, setStartDate] = React.useState<Dayjs>();
+  const [startDate, setStartDate] = React.useState<Date>();
+
+  if (writingSpeed && revisionLength && startDate) {
+    const writerInfo: WriterInfo = {
+      name: "placeholder",
+      speed: writingSpeed,
+      revisionLength: revisionLength,
+      startDate: startDate,
+    };
+    console.log(writerInfo);
+  }
 
   return (
     <>
@@ -56,7 +67,6 @@ export default function Scheduler() {
           </Typography>
         </Button>
         <Divider
-          aria-hidden="true"
           flexItem
           sx={{
             borderRadius: 5,
@@ -155,8 +165,8 @@ export default function Scheduler() {
           <Grid item>
             <ResponsiveDatePicker
               label={"Start Date"}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={startDate ? dayjs(startDate) : undefined}
+              onChange={(newValue) => setStartDate(newValue.toDate())}
             />
           </Grid>
         </Grid>
