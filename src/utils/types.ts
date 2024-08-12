@@ -3,7 +3,7 @@ import { Event } from "react-big-calendar";
 export interface WriterInfo {
   name: string;
   speed: number;
-  revisionSessionCount: number;
+  reviewSessionCount: number;
   startDate: Date;
 }
 

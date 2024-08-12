@@ -1,16 +1,8 @@
-import { StrictTableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
-}
-
-function isEnoughTime(startDate: Date, timeToComplete: number, deadline: Date) {
-  const startDateDayjs = dayjs(startDate);
-  const deadlineDayjs = dayjs(deadline);
-
-  const timeToDeadline = Math.abs(startDateDayjs.diff(deadlineDayjs, "days"));
-  return timeToDeadline > timeToComplete;
 }
 
 function sortByDeadline(tableItems: StrictTableItem[]) {
@@ -25,26 +17,61 @@ function sortByDeadline(tableItems: StrictTableItem[]) {
   return sortedTableItems;
 }
 
+function addDays(start: Date, toAdd: number) {
+  return dayjs(start).add(toAdd, "days").toDate();
+}
+
 export function createWritingPlan({
-  writerInfo,
+  writerInfo: { name, speed, reviewSessionCount, startDate },
   essaysToWrite,
 }: {
   writerInfo: WriterInfo;
   essaysToWrite: StrictTableItem[];
 }) {
   const sortedEssaysToWrite = sortByDeadline(essaysToWrite);
-  const timeToWrite = determineWritingTime(writerInfo.speed);
+  const writingTime = determineWritingTime(speed);
 
-  sortedEssaysToWrite.forEach((tableItem, i) => {
-    // Determine review session lengths, factor into timeToComplete
+  const outputEvents: CalendarEvent[] = [];
 
-    // if lots of time space out, if not a lot of time stack onto each other. minimum len=1
-    // fail if more than 2 sessions on one day
+  sortedEssaysToWrite.forEach(({ recipient, essayCount, deadline }) => {
+    //implement essayCount by nesting everything in a for loop
 
-    if (isEnoughTime(writerInfo.startDate, timeToWrite, tableItem.deadline)) {
-      console.log("hiii");
+    // Write Essay
+    const finishedWritingDate = addDays(startDate, writingTime);
+    outputEvents.push({
+      title: `Write ${recipient} Essay ${"placeholder"}`,
+      start: startDate,
+      end: finishedWritingDate,
+    });
+
+    const reviewPeriodLength = Math.abs(
+      dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
+    );
+
+    const breakLength = 1;
+    const breakCount = reviewSessionCount - 1;
+    const breaks =
+      reviewPeriodLength >= reviewSessionCount + breakCount * breakLength;
+
+    const reviewSessionLength = breaks
+      ? Math.floor(reviewPeriodLength - breakCount / reviewSessionCount)
+      : Math.floor(reviewPeriodLength / reviewSessionCount);
+
+    if (reviewSessionLength > 1) {
+      let lastProcessedDate = finishedWritingDate;
+      for (let i = 0; i < reviewSessionCount; i++) {
+        let toPush = {
+          title: `Review ${recipient} Essay ${"placeholder"}`, //Implement essayCount
+          startDate: lastProcessedDate,
+          endWritingDate: addDays(lastProcessedDate, reviewSessionLength),
+        };
+        lastProcessedDate = addDays(
+          lastProcessedDate,
+          reviewSessionLength + breakLength
+        );
+      }
     } else {
-      // create WRITE&REVIEW block
+      // find how many 2 day review sessions can happen, create events
     }
   });
 

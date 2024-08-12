@@ -60,7 +60,7 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
         </Stack>
       </Grid>
       <Grid item>
-        <Typography variant="h5">{label}</Typography>
+        <Typography variant="h3">{label}</Typography>
       </Grid>
       <Grid item>
         <Stack direction="row" spacing={1}>

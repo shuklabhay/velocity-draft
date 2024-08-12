@@ -133,6 +133,11 @@ export default function ApplicationTable() {
                 <MenuItem value={"3"}>3 Essays</MenuItem>
                 <MenuItem value={"4"}>4 Essays</MenuItem>
                 <MenuItem value={"5"}>5 Essays</MenuItem>
+                <MenuItem value={"6"}>6 Essays</MenuItem>
+                <MenuItem value={"7"}>7 Essays</MenuItem>
+                <MenuItem value={"8"}>8 Essays</MenuItem>
+                <MenuItem value={"9"}>9 Essays</MenuItem>
+                <MenuItem value={"10"}>10 Essays</MenuItem>
               </Select>
             </FormControl>
           </Grid>

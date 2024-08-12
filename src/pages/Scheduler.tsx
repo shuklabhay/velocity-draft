@@ -27,14 +27,14 @@ export default function Scheduler() {
 
   // Form Info
   const [writingSpeed, setWritingSpeed] = React.useState<number>();
-  const [revisionSessions, setRevisionSessions] = React.useState<number>();
+  const [reviewSessionCount, setReviewSessionCount] = React.useState<number>();
   const [startDate, setStartDate] = React.useState<Date>();
 
-  if (writingSpeed && revisionSessions && startDate) {
+  if (writingSpeed && reviewSessionCount && startDate) {
     const writerInfo: WriterInfo = {
       name: "placeholder",
       speed: writingSpeed,
-      revisionSessionCount: revisionSessions,
+      reviewSessionCount: reviewSessionCount,
       startDate: startDate,
     };
     // and if form info, then pass that into here or whatever
@@ -130,13 +130,13 @@ export default function Scheduler() {
           </Grid>
           <Grid item>
             <FormControl fullWidth>
-              {!revisionSessions && (
-                <InputLabel shrink={false}>Lead Time</InputLabel>
+              {!reviewSessionCount && (
+                <InputLabel shrink={false}>Review sessions</InputLabel>
               )}
               <Select
-                value={String(revisionSessions)}
+                value={String(reviewSessionCount)}
                 onChange={(e) => {
-                  setRevisionSessions(Number(e.target.value));
+                  setReviewSessionCount(Number(e.target.value));
                 }}
               >
                 <MenuItem value={1}>1 sessions</MenuItem>
