@@ -12,20 +12,32 @@ import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 
-export default function ApplicationTable() {
-  const [tableData, setTableData] = useState<TableItem[]>([
-    { recipient: "", essayCount: "", deadline: null },
-    { recipient: "", essayCount: "", deadline: null },
-  ]);
+function isRowEntirelyEmpty(row: TableItem) {
+  return !row.recipient && !row.essayCount && !row.deadline;
+}
 
-  function isRowEmpty(row: TableItem) {
-    return !row.recipient && !row.essayCount && !row.deadline;
-  }
+function isRowEntirelyFull(row: TableItem) {
+  return row.recipient && row.essayCount && row.deadline;
+}
 
+export function isTableReadyToCreateEvents(tableData: TableItem[]) {
+  // check if every row is either entirely full or entirely empty
+  tableData.forEach((row: TableItem) => {
+    if (!isRowEntirelyEmpty(row) || !isRowEntirelyFull(row)) {
+      return false;
+    }
+  });
+  return true;
+}
+
+export default function ApplicationTable(
+  tableData: TableItem[],
+  setTableData: React.Dispatch<React.SetStateAction<TableItem[]>>
+) {
   function arePreviousRowsEmpty(index: number) {
     for (let i = 0; i < index; i++) {
       if (tableData[i]) {
-        if (isRowEmpty(tableData[i]!)) {
+        if (isRowEntirelyEmpty(tableData[i]!)) {
           return true;
         }
       }

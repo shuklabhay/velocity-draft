@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Button,
   Divider,
@@ -15,9 +14,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
-import ApplicationTable from "../components/ApplicationTable";
+import ApplicationTable, {
+  isTableReadyToCreateEvents,
+} from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
-import { WriterInfo } from "../utils/types";
+import { TableItem, WriterInfo } from "../utils/types";
+import { useState } from "react";
 
 export default function Scheduler() {
   // Hooks
@@ -26,17 +28,28 @@ export default function Scheduler() {
   const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
   // Form Info
-  const [writingSpeed, setWritingSpeed] = React.useState<number>();
-  const [reviewSessionCount, setReviewSessionCount] = React.useState<number>();
-  const [startDate, setStartDate] = React.useState<Date>();
+  const [writingSpeed, setWritingSpeed] = useState<number>();
+  const [reviewSessionCount, setReviewSessionCount] = useState<number>();
+  const [startDate, setStartDate] = useState<Date>();
 
-  if (writingSpeed && reviewSessionCount && startDate) {
+  const [tableData, setTableData] = useState<TableItem[]>([
+    { recipient: "", essayCount: "", deadline: null },
+    { recipient: "", essayCount: "", deadline: null },
+  ]);
+
+  if (
+    writingSpeed &&
+    reviewSessionCount &&
+    startDate &&
+    isTableReadyToCreateEvents(tableData)
+  ) {
     const writerInfo: WriterInfo = {
       name: "placeholder",
       speed: writingSpeed,
       reviewSessionCount: reviewSessionCount,
       startDate: startDate,
     };
+
     // and if form info, then pass that into here or whatever
   }
 
@@ -186,7 +199,10 @@ export default function Scheduler() {
             </Typography>
           </Grid>
           <Grid item>
-            <ApplicationTable />
+            <ApplicationTable
+              tableData={tableData}
+              setTableData={setTableData}
+            />
           </Grid>
         </Grid>
       </div>

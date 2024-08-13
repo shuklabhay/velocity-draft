@@ -34,51 +34,49 @@ export function createWritingPlan({
   const outputEvents: CalendarEvent[] = [];
 
   sortedEssaysToWrite.forEach(({ recipient, essayCount, deadline }) => {
-    //implement essayCount by nesting everything in a for loop
+    for (
+      let currentEssay = 1;
+      currentEssay <= Number(essayCount);
+      currentEssay++
+    ) {
+      // Write Essay
+      const finishedWritingDate = addDays(startDate, writingTime);
+      outputEvents.push({
+        title: `Write ${recipient} Essay ${"placeholder"}`,
+        start: startDate,
+        end: finishedWritingDate,
+      });
 
-    // Write Essay
-    const finishedWritingDate = addDays(startDate, writingTime);
-    outputEvents.push({
-      title: `Write ${recipient} Essay ${"placeholder"}`,
-      start: startDate,
-      end: finishedWritingDate,
-    });
+      const reviewPeriodLength = Math.abs(
+        dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
+      );
 
-    const reviewPeriodLength = Math.abs(
-      dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
-    );
+      const breakLength = 1;
+      const breakCount = reviewSessionCount - 1;
+      const breaks =
+        reviewPeriodLength >= reviewSessionCount + breakCount * breakLength;
 
-    const breakLength = 1;
-    const breakCount = reviewSessionCount - 1;
-    const breaks =
-      reviewPeriodLength >= reviewSessionCount + breakCount * breakLength;
+      const reviewSessionLength = breaks
+        ? Math.floor(reviewPeriodLength - breakCount / reviewSessionCount)
+        : Math.floor(reviewPeriodLength / reviewSessionCount);
 
-    const reviewSessionLength = breaks
-      ? Math.floor(reviewPeriodLength - breakCount / reviewSessionCount)
-      : Math.floor(reviewPeriodLength / reviewSessionCount);
-
-    if (reviewSessionLength > 1) {
-      let lastProcessedDate = finishedWritingDate;
-      for (let i = 0; i < reviewSessionCount; i++) {
-        let toPush = {
-          title: `Review ${recipient} Essay ${"placeholder"}`, //Implement essayCount
-          startDate: lastProcessedDate,
-          endWritingDate: addDays(lastProcessedDate, reviewSessionLength),
-        };
-        lastProcessedDate = addDays(
-          lastProcessedDate,
-          reviewSessionLength + breakLength
-        );
+      if (reviewSessionLength >= 2) {
+        let lastProcessedDate = finishedWritingDate;
+        for (let i = 0; i < reviewSessionCount; i++) {
+          outputEvents.push({
+            title: `Review ${recipient} Essay ${"placeholder"}`, //Implement essayCount
+            start: lastProcessedDate,
+            end: addDays(lastProcessedDate, reviewSessionLength),
+          });
+          lastProcessedDate = addDays(
+            lastProcessedDate,
+            reviewSessionLength + breakLength
+          );
+        }
+      } else {
+        // find how many 2 day review sessions can happen, create events
       }
-    } else {
-      // find how many 2 day review sessions can happen, create events
     }
+    return outputEvents;
   });
-
-  // get distance between starting date and deadline - revision period
-  // determine how long to write (const)
-  // make events for writing and revision period- optimize for
-  // FIGURE OUT how to have staggered writing dates so all schools arent written in one day
-  // Stagger writing multiple essays, then have reviewing periods for all of them
-  // probably schools with later starting dates start 1-2 days off or whatever
 }
