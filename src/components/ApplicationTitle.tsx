@@ -30,7 +30,6 @@ export default function ApplicationTitle({
         const windowWidth = window.innerWidth;
         const calculatedScale = calculateScale(windowWidth, elementWidth);
 
-        console.log(elementWidth, windowWidth, calculatedScale);
         setScaleFactor(calculatedScale);
       }
     };

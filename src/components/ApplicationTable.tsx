@@ -11,37 +11,7 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
-
-function isRowEntirelyEmpty(row: TableItem) {
-  return (
-    row.institution === "" && row.essayCount === "" && row.deadline === null
-  );
-}
-
-function isRowEntirelyFull(row: TableItem) {
-  return (
-    row.institution !== "" && row.essayCount !== "" && row.deadline !== null
-  );
-}
-
-export function isTableReadyToCreateEvents(tableData: TableItem[]) {
-  let emptyRows = 0;
-  let isValid = true;
-
-  tableData.forEach((row) => {
-    if (isRowEntirelyEmpty(row)) {
-      emptyRows += 1;
-    } else if (!isRowEntirelyFull(row)) {
-      isValid = false;
-    }
-  });
-
-  if (emptyRows == tableData.length) {
-    return false;
-  } else {
-    return isValid;
-  }
-}
+import { isRowEntirelyEmpty } from "../utils/table";
 
 export default function ApplicationTable({
   tableData,

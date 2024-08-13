@@ -8,24 +8,17 @@ import {
   Select,
   Stack,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
-import ApplicationTable, {
-  isTableReadyToCreateEvents,
-} from "../components/ApplicationTable";
+import ApplicationTable from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
-import {
-  CalendarEvent,
-  StrictTableItem,
-  TableItem,
-  WriterInfo,
-} from "../utils/types";
+import { StrictTableItem, TableItem, WriterInfo } from "../utils/types";
 import { useState } from "react";
-import { createWritingPlan } from "../utils/SchedulingLogic";
+import { createWritingPlan } from "../utils/planner";
+import { isTableReadyToCreateEvents } from "../utils/table";
 
 export default function Scheduler() {
   // Hooks

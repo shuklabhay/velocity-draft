@@ -1,13 +1,18 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
-// TODO: figure out why breaks dont generate
+// TODO: make breaks real
+// TODO: make case where time to finish = time to write also say write and review
+//       maybe just calculate all the times and stuff before going into each essay- also
+//       allows 1 event for write&review case then instead of 7 lol
 // TODO: find a way to stagger 'writing' so that closest deadlines will be written first;
 //       so bascially (verify that the sortbydeadline is working)
-// TODO: make every school's events a different color
+// TODO: find a way to generate like 100 colors just in an array and the refer to that
+//       instead of generating dcolors each time
 
-// TODO: do some more bigbrain stuff, like if u only have 2 days for writing essay just
-//       make one event for all of them, multiple events is only needed bc of the staggering stuff
+// TODO: if u only have 2 days for writing essay just make one event for all of them,
+//       multiple events is only needed bc of the staggering stuff
+// TODO: all the gh error stuff
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
 }
