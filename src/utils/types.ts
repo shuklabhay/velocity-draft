@@ -19,10 +19,6 @@ export interface StrictTableItem {
   deadline: Date;
 }
 
-export interface WritingPlan {
-  plan: CalendarEvent[];
-}
-
 export interface CalendarEvent extends Event {
   title: string;
   start: Date;

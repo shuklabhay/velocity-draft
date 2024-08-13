@@ -9,29 +9,13 @@ import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
 
-export default function ResponsiveCalendar() {
+export default function ResponsiveCalendar(events: CalendarEvent[]) {
   const localizer = dayjsLocalizer(dayjs);
   const theme = useTheme();
   dayjs.extend(isSameOrBefore);
   dayjs.extend(isSameOrAfter);
 
-  const events: CalendarEvent[] = [
-    {
-      title: "heyyy",
-      start: dayjs("2024-08-11").toDate(),
-      end: dayjs("2024-08-13").toDate(),
-    },
-    {
-      title: "Deadline",
-      start: dayjs("2024-08-11").toDate(),
-      end: dayjs("2024-08-13").toDate(),
-    },
-    {
-      title: "heyyy",
-      start: dayjs("2024-08-11").toDate(),
-      end: dayjs("2024-08-13").toDate(),
-    },
-  ];
+  const minCalSize = 2 * 175 + 200;
 
   const maxEventsOnDay = events.reduce((max, event) => {
     let dayToCheck = dayjs(event.start);
@@ -64,7 +48,10 @@ export default function ResponsiveCalendar() {
       <Calendar
         localizer={localizer}
         events={events}
-        style={{ height: maxEventsOnDay * 175 + 200, borderRadius: 50 }}
+        style={{
+          height: maxEventsOnDay < 2 ? minCalSize : maxEventsOnDay * 175 + 200,
+          borderRadius: 50,
+        }}
         components={{
           toolbar: ResponsiveToolbar,
           event: ResponsiveEvent,

@@ -18,7 +18,12 @@ import ApplicationTable, {
   isTableReadyToCreateEvents,
 } from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
-import { TableItem, WriterInfo } from "../utils/types";
+import {
+  CalendarEvent,
+  StrictTableItem,
+  TableItem,
+  WriterInfo,
+} from "../utils/types";
 import { useState } from "react";
 import { createWritingPlan } from "../utils/SchedulingLogic";
 
@@ -41,7 +46,7 @@ export default function Scheduler() {
     writingSpeed &&
     reviewSessionCount &&
     startDate &&
-    isTableReadyToCreateEvents(tableData)
+    isTableReadyToCreateEvents(tableData) // Checks for null dates
   ) {
     const writerInfo: WriterInfo = {
       name: "placeholder",
@@ -49,11 +54,12 @@ export default function Scheduler() {
       reviewSessionCount: reviewSessionCount,
       startDate: startDate,
     };
-    // do some check to convert tabledata to strict items
-    const writingPlan = createWritingPlan({ writerInfo, tableData });
+    const strictTableData = tableData as StrictTableItem[]; //isTableReadyToCreateEvents checks for null dates
+    const writingPlan = createWritingPlan({
+      writerInfo: writerInfo,
+      tableData: strictTableData,
+    });
     console.log(writingPlan);
-
-    // and if form info, then pass that into here or whatever
   }
 
   return (
@@ -223,7 +229,7 @@ export default function Scheduler() {
         Your plan:
       </Typography>
 
-      <ResponsiveCalendar />
+      <ResponsiveCalendar events={[] as CalendarEvent[]} />
     </>
   );
 }

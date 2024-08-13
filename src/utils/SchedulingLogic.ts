@@ -21,8 +21,12 @@ function addDays(start: Date, toAdd: number) {
   return dayjs(start).add(toAdd, "days").toDate();
 }
 
-function daysUntil(start: Date, end: Date) {
-  return dayjs(start).diff(dayjs(end), "day");
+function daysBetween(start: Date, end: Date) {
+  return Math.abs(dayjs(start).diff(dayjs(end), "day"));
+}
+
+function isDateAfterDate(dateToCheck: Date, referenceDate: Date) {
+  return dayjs(dateToCheck).isAfter(dayjs(referenceDate), "day");
 }
 
 export function createWritingPlan({
@@ -43,10 +47,14 @@ export function createWritingPlan({
       currentEssay <= Number(essayCount);
       currentEssay++
     ) {
-      const daysUntilDeadline = daysUntil(startDate, deadline);
+      const daysUntilDeadline = daysBetween(startDate, deadline);
 
-      if (daysUntilDeadline < writingTime) {
-        // long write and review session
+      if (writingTime > daysUntilDeadline) {
+        outputEvents.push({
+          title: `Write and Review ${institution} Essay ${currentEssay}`,
+          start: startDate,
+          end: deadline,
+        });
       } else {
         const finishedWritingDate = addDays(startDate, writingTime);
         const reviewPeriodLength = Math.abs(
@@ -68,25 +76,22 @@ export function createWritingPlan({
           end: finishedWritingDate,
         });
 
-        if (reviewSessionLength < 2) {
-          // as many review sessions as possible
-        }
-        if (reviewSessionLength >= 2) {
-          let lastProcessedDate = finishedWritingDate;
-          for (let i = 0; i < reviewSessionCount; i++) {
-            outputEvents.push({
-              title: `Review ${institution} Essay ${currentEssay}`,
-              start: lastProcessedDate,
-              end: addDays(lastProcessedDate, reviewSessionLength),
-            });
-            lastProcessedDate = addDays(
-              lastProcessedDate,
-              reviewSessionLength + breakLength
-            );
+        let lastProcessedDate = finishedWritingDate;
+        for (let i = 0; i < reviewSessionCount; i++) {
+          if (isDateAfterDate(lastProcessedDate, deadline)) {
+            break;
           }
+          outputEvents.push({
+            title: `Review ${institution} Essay ${currentEssay}`,
+            start: lastProcessedDate,
+            end: addDays(lastProcessedDate, reviewSessionLength),
+          });
+          lastProcessedDate = addDays(
+            lastProcessedDate,
+            reviewSessionLength + breakLength
+          );
         }
       }
-      // clean this up, incorp this w/ logic below or wtv- do date check before making writing event so everything in order
     }
   });
   return outputEvents;
