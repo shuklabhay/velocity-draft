@@ -21,14 +21,18 @@ function addDays(start: Date, toAdd: number) {
   return dayjs(start).add(toAdd, "days").toDate();
 }
 
+function daysUntil(start: Date, end: Date) {
+  return dayjs(start).diff(dayjs(end), "day");
+}
+
 export function createWritingPlan({
   writerInfo: { name, speed, reviewSessionCount, startDate },
-  essaysToWrite,
+  tableData,
 }: {
   writerInfo: WriterInfo;
-  essaysToWrite: StrictTableItem[];
+  tableData: StrictTableItem[];
 }) {
-  const sortedEssaysToWrite = sortByDeadline(essaysToWrite);
+  const sortedEssaysToWrite = sortByDeadline(tableData);
   const writingTime = determineWritingTime(speed);
 
   const outputEvents: CalendarEvent[] = [];
@@ -41,10 +45,13 @@ export function createWritingPlan({
     ) {
       // Write Essay
       const finishedWritingDate = addDays(startDate, writingTime);
+      const daysUntilDeadline = daysUntil(startDate, deadline);
+
+      // clean this up, incorp this w/ logic below or wtv- do date check before making writing event so everything in order
       outputEvents.push({
-        title: `Write ${recipient} Essay ${"placeholder"}`,
+        title: `Write ${recipient} Essay ${currentEssay}`,
         start: startDate,
-        end: finishedWritingDate,
+        end: writingTime < daysUntilDeadline ? finishedWritingDate : deadline,
       });
 
       const reviewPeriodLength = Math.abs(
@@ -64,7 +71,7 @@ export function createWritingPlan({
         let lastProcessedDate = finishedWritingDate;
         for (let i = 0; i < reviewSessionCount; i++) {
           outputEvents.push({
-            title: `Review ${recipient} Essay ${"placeholder"}`, //Implement essayCount
+            title: `Review ${recipient} Essay ${currentEssay}`,
             start: lastProcessedDate,
             end: addDays(lastProcessedDate, reviewSessionLength),
           });
@@ -77,6 +84,6 @@ export function createWritingPlan({
         // find how many 2 day review sessions can happen, create events
       }
     }
-    return outputEvents;
   });
+  return outputEvents;
 }

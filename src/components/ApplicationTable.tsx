@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   FormControl,
   Grid,
@@ -13,27 +13,39 @@ import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 
 function isRowEntirelyEmpty(row: TableItem) {
-  return !row.recipient && !row.essayCount && !row.deadline;
+  return row.recipient === "" && row.essayCount === "" && row.deadline === null;
 }
 
 function isRowEntirelyFull(row: TableItem) {
-  return row.recipient && row.essayCount && row.deadline;
+  return row.recipient !== "" && row.essayCount !== "" && row.deadline !== null;
 }
 
 export function isTableReadyToCreateEvents(tableData: TableItem[]) {
-  // check if every row is either entirely full or entirely empty
-  tableData.forEach((row: TableItem) => {
-    if (!isRowEntirelyEmpty(row) || !isRowEntirelyFull(row)) {
-      return false;
+  let emptyRows = 0;
+  let isValid = true;
+
+  tableData.forEach((row) => {
+    if (isRowEntirelyEmpty(row)) {
+      emptyRows += 1;
+    } else if (!isRowEntirelyFull(row)) {
+      isValid = false;
     }
   });
-  return true;
+
+  if (emptyRows == tableData.length) {
+    return false;
+  } else {
+    return isValid;
+  }
 }
 
-export default function ApplicationTable(
-  tableData: TableItem[],
-  setTableData: React.Dispatch<React.SetStateAction<TableItem[]>>
-) {
+export default function ApplicationTable({
+  tableData,
+  setTableData,
+}: {
+  tableData: TableItem[];
+  setTableData: Dispatch<SetStateAction<TableItem[]>>;
+}) {
   function arePreviousRowsEmpty(index: number) {
     for (let i = 0; i < index; i++) {
       if (tableData[i]) {
@@ -103,8 +115,6 @@ export default function ApplicationTable(
       addEmptyRow();
     }
   }
-
-  console.log(tableData);
 
   return (
     <div>

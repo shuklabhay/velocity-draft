@@ -20,12 +20,12 @@ import ApplicationTable, {
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
 import { TableItem, WriterInfo } from "../utils/types";
 import { useState } from "react";
+import { createWritingPlan } from "../utils/SchedulingLogic";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
   const navigate = useNavigate();
-  const isSm = useMediaQuery(theme.breakpoints.up("sm"));
 
   // Form Info
   const [writingSpeed, setWritingSpeed] = useState<number>();
@@ -49,6 +49,9 @@ export default function Scheduler() {
       reviewSessionCount: reviewSessionCount,
       startDate: startDate,
     };
+    // do some check to convert tabledata to strict items
+    const writingPlan = createWritingPlan({ writerInfo, tableData });
+    console.log(writingPlan);
 
     // and if form info, then pass that into here or whatever
   }
