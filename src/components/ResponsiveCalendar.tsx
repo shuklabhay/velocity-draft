@@ -11,11 +11,9 @@ import ResponsiveEvent from "./ResponsiveEvent";
 import { generateRandomColor } from "../utils/color";
 
 export default function ResponsiveCalendar({
-  calendarKey,
   events,
   institutionsAppliedTo,
 }: {
-  calendarKey: number;
   events: CalendarEvent[];
   institutionsAppliedTo: string[];
 }) {
@@ -62,7 +60,6 @@ export default function ResponsiveCalendar({
   return (
     <Stack spacing={0} sx={{ paddingBottom: 2 }}>
       <Calendar
-        key={calendarKey}
         localizer={localizer}
         events={events}
         style={{

@@ -1,6 +1,147 @@
 import { useTheme } from "@mui/material";
 
-// Running color math is VERY computationally expensive
+const generatedColors = [
+  "#d22da6",
+  "#737d03",
+  "#bd42bb",
+  "#bf00ff",
+  "#c42dd2",
+  "#c738b4",
+  "#d32ca4",
+  "#cd32ae",
+  "#c738b4",
+  "#c42ed1",
+  "#056ffa",
+  "#c518e7",
+  "#bb44bb",
+  "#c33cb8",
+  "#c332cd",
+  "#d12ea6",
+  "#0970f6",
+  "#737d02",
+  "#c936b3",
+  "#c332cd",
+  "#cc33ae",
+  "#ce31ac",
+  "#c53ab7",
+  "#c936b3",
+  "#c936b3",
+  "#767c03",
+  "#bb44bb",
+  "#c20af5",
+  "#c33cb8",
+  "#767c04",
+  "#be41ba",
+  "#c33cb8",
+  "#bf00ff",
+  "#d32ca3",
+  "#c20af5",
+  "#c20af5",
+  "#c03fba",
+  "#c332cd",
+  "#c53ab7",
+  "#bf00ff",
+  "#c53ab7",
+  "#d22da6",
+  "#cd32ae",
+  "#be41ba",
+  "#6f7e02",
+  "#be41ba",
+  "#767c03",
+  "#767c03",
+  "#c639b6",
+  "#ca35b1",
+  "#d22da6",
+  "#c518e7",
+  "#d22da6",
+  "#6f7e02",
+  "#d52a9f",
+  "#bf40bb",
+  "#c738b4",
+  "#ce31ac",
+  "#c639b5",
+  "#c528d7",
+  "#d22da6",
+  "#c42dd2",
+  "#d02fa8",
+  "#d52a9f",
+  "#d22da6",
+  "#d12ea6",
+  "#c639b5",
+  "#c13eba",
+  "#cc33ae",
+  "#ca35b1",
+  "#c517e8",
+  "#767c03",
+  "#c20af5",
+  "#c53ab7",
+  "#056ffa",
+  "#737d03",
+  "#c20af5",
+  "#c837b4",
+  "#c42ed1",
+  "#bb44bb",
+  "#c43bb7",
+  "#cf30aa",
+  "#056ffa",
+  "#d52a9f",
+  "#c30ef1",
+  "#bf40bb",
+  "#c33cb8",
+  "#c639b6",
+  "#c332cd",
+  "#c529d6",
+  "#d02fa8",
+  "#c332cd",
+  "#767c04",
+  "#c639b6",
+  "#c20af5",
+  "#c20af5",
+  "#c209f6",
+  "#767c03",
+  "#cd32ae",
+  "#c20af5",
+  "#bf00ff",
+  "#c03ac5",
+  "#c518e7",
+  "#0970f6",
+  "#bf40bb",
+  "#ce31ac",
+  "#c738b4",
+  "#d22da6",
+  "#c23db9",
+  "#c23db9",
+  "#d02fa8",
+  "#c517e8",
+  "#767c04",
+  "#056ffa",
+  "#c738b4",
+  "#cf30aa",
+  "#bb44bb",
+  "#be41ba",
+  "#737d03",
+  "#c43bb7",
+];
+
+const filteredGenerated = [
+  "#d22da6",
+  "#737d03",
+  "#bd42bb",
+  "#c42dd2",
+  "#c738b4",
+  "#cd32ae",
+  "#056ffa",
+  "#c518e7",
+  "#c33cb8",
+  "#c332cd",
+  "#0970f6",
+  "#c20af5",
+  "#ca35b1",
+  "#d52a9f",
+  "#c528d7",
+  "#c30ef1",
+  "#c03ac5",
+];
 
 export function generateColorArray(numColors: number) {
   const colors: string[] = [];
@@ -30,7 +171,7 @@ export function generateRandomColor() {
       const color = hslToHex(hue, saturation, lightness);
       const luminance = calculateLuminance(color);
 
-      if (Math.abs(luminance - targetLuminance) < 0.11) {
+      if (Math.abs(luminance - targetLuminance) < 0.1) {
         if (hasGoodContrastWithWhite(color) && color.length === 7) {
           return color;
         }
@@ -84,3 +225,33 @@ function hslToHex(h: number, s: number, l: number) {
   };
   return `#${f(0)}${f(8)}${f(4)}`;
 }
+
+function colorDistance(hex1: string, hex2: string) {
+  const rgb1 = hexToRgb(hex1);
+  const rgb2 = hexToRgb(hex2);
+  const [r1, g1, b1] = rgb1;
+  const [r2, g2, b2] = rgb2;
+  if (r1 && r2 && g1 && g2 && b1 && b2) {
+    return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
+  }
+  return 0;
+}
+
+function removeSimilarColors(colors: string[], threshold: number) {
+  const uniqueColors: string[] = [];
+  for (let i = 0; i < colors.length; i++) {
+    let isSimilar = false;
+    for (let j = 0; j < uniqueColors.length; j++) {
+      if (colors[i] && colorDistance(colors[i], uniqueColors[j]) < threshold) {
+        isSimilar = true;
+        break;
+      }
+    }
+    if (!isSimilar) {
+      uniqueColors.push(colors[i]);
+    }
+  }
+  return uniqueColors;
+}
+
+export const filtered = removeSimilarColors(generatedColors, 10);

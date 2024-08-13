@@ -21,15 +21,15 @@ import {
   TableItem,
   WriterInfo,
 } from "../utils/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createWritingPlan } from "../utils/planner";
 import { isTableReadyToCreateEvents } from "../utils/table";
+import { filtered, generateColorArray } from "../utils/color";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
   const navigate = useNavigate();
-  const [calendarKey, setCalendarKey] = useState<number>(0);
   const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
 
   // Form Info
@@ -43,27 +43,30 @@ export default function Scheduler() {
   ]);
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
-  if (
-    writingSpeed &&
-    reviewSessionCount &&
-    startDate &&
-    isTableReadyToCreateEvents(tableData) // Checks for null dates
-  ) {
-    const writerInfo: WriterInfo = {
-      name: "placeholder",
-      speed: writingSpeed,
-      reviewSessionCount: reviewSessionCount,
-      startDate: startDate,
-    };
-    const strictTableData = tableData as StrictTableItem[]; //isTableReadyToCreateEvents checks for null dates
-    setWritingPlan(
-      createWritingPlan({
-        writerInfo: writerInfo,
-        tableData: strictTableData,
-      })
-    ); //GET REFRESHING CALENDER ON NEW EVENT PUSH WORKING
-    setCalendarKey((calendarKey) => calendarKey + 1);
-  }
+  useEffect(() => {
+    if (
+      writingSpeed &&
+      reviewSessionCount &&
+      startDate &&
+      isTableReadyToCreateEvents(tableData) // Checks for null date
+    ) {
+      const writerInfo: WriterInfo = {
+        name: "placeholder",
+        speed: writingSpeed,
+        reviewSessionCount: reviewSessionCount,
+        startDate: startDate,
+      };
+      const strictTableData = tableData as StrictTableItem[]; // isTableReadyToCreateEvents checks for null date
+      setWritingPlan(
+        createWritingPlan({
+          writerInfo: writerInfo,
+          tableData: strictTableData,
+        })
+      );
+    }
+  }, [writingSpeed, reviewSessionCount, startDate, tableData]);
+
+  console.log(filtered);
 
   return (
     <>
@@ -233,7 +236,6 @@ export default function Scheduler() {
       </Typography>
 
       <ResponsiveCalendar
-        calendarKey={calendarKey}
         events={writingPlan ? writingPlan : []}
         institutionsAppliedTo={
           institutionsAppliedTo ? institutionsAppliedTo : []

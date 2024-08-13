@@ -1,6 +1,7 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
+// TODO: fix +n more view on calender
 // TODO: make breaks real
 // TODO: make case where time to finish = time to write also say write and review
 
