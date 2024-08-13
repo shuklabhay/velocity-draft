@@ -2,9 +2,12 @@ import { Button, Grid, Stack, Typography } from "@mui/material";
 import { NavigateAction, ToolbarProps, View } from "react-big-calendar";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { useState } from "react";
 
 export default function ResponsiveToolbar(props: ToolbarProps) {
   const { onNavigate, label, onView, view } = props;
+  const [currentView, setCurrentView] = useState<View>("month");
+  onView(currentView);
 
   function navigate(action: NavigateAction) {
     onNavigate(action);
@@ -64,7 +67,20 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
       </Grid>
       <Grid item>
         <Stack direction="row" spacing={1}>
-          {viewButtons}
+          <Button
+            onClick={() => setCurrentView("month")}
+            variant={currentView == "month" ? "contained" : "outlined"}
+            sx={{ textTransform: "capitalize" }}
+          >
+            Calendar
+          </Button>
+          <Button
+            onClick={() => setCurrentView("agenda")}
+            variant={currentView == "agenda" ? "contained" : "outlined"}
+            sx={{ textTransform: "capitalize" }}
+          >
+            Agenda
+          </Button>
         </Stack>
       </Grid>
     </Grid>

@@ -15,7 +15,12 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "../components/ResponsiveDatePicker";
 import ApplicationTable from "../components/ApplicationTable";
 import ResponsiveCalendar from "../components/ResponsiveCalendar";
-import { StrictTableItem, TableItem, WriterInfo } from "../utils/types";
+import {
+  CalendarEvent,
+  StrictTableItem,
+  TableItem,
+  WriterInfo,
+} from "../utils/types";
 import { useState } from "react";
 import { createWritingPlan } from "../utils/planner";
 import { isTableReadyToCreateEvents } from "../utils/table";
@@ -24,6 +29,8 @@ export default function Scheduler() {
   // Hooks
   const theme = useTheme();
   const navigate = useNavigate();
+  const [calendarKey, setCalendarKey] = useState<number>(0);
+  const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
 
   // Form Info
   const [writingSpeed, setWritingSpeed] = useState<number>();
@@ -36,7 +43,6 @@ export default function Scheduler() {
   ]);
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
-  let writingPlan;
   if (
     writingSpeed &&
     reviewSessionCount &&
@@ -50,10 +56,13 @@ export default function Scheduler() {
       startDate: startDate,
     };
     const strictTableData = tableData as StrictTableItem[]; //isTableReadyToCreateEvents checks for null dates
-    writingPlan = createWritingPlan({
-      writerInfo: writerInfo,
-      tableData: strictTableData,
-    });
+    setWritingPlan(
+      createWritingPlan({
+        writerInfo: writerInfo,
+        tableData: strictTableData,
+      })
+    ); //GET REFRESHING CALENDER ON NEW EVENT PUSH WORKING
+    setCalendarKey((calendarKey) => calendarKey + 1);
   }
 
   return (
@@ -224,6 +233,7 @@ export default function Scheduler() {
       </Typography>
 
       <ResponsiveCalendar
+        calendarKey={calendarKey}
         events={writingPlan ? writingPlan : []}
         institutionsAppliedTo={
           institutionsAppliedTo ? institutionsAppliedTo : []

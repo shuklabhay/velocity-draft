@@ -1,4 +1,4 @@
-import { Typography, useTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 import { CalendarEvent } from "../utils/types";
 
 export default function ResponsiveEvent({ event }: { event: CalendarEvent }) {

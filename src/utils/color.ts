@@ -15,7 +15,12 @@ export function generateRandomColor() {
   const targetLuminance = calculateLuminance(theme.palette.primary.main);
 
   while (true) {
-    const hue = Math.floor(Math.random() * 240) + 150;
+    let hue = Math.floor(Math.random() * 360);
+
+    while (hue <= 40 || hue >= 320) {
+      hue = Math.floor(Math.random() * 360);
+    }
+
     const saturation = Math.random() * 0.6 + 0.4;
     let lightness = 0.5;
 
