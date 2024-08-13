@@ -2,10 +2,12 @@ import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 // TODO: figure out why breaks dont generate
-// TODO: add deadlines to the calendar
 // TODO: find a way to stagger 'writing' so that closest deadlines will be written first;
 //       so bascially (verify that the sortbydeadline is working)
+// TODO: make every school's events a different color
 
+// TODO: do some more bigbrain stuff, like if u only have 2 days for writing essay just
+//       make one event for all of them, multiple events is only needed bc of the staggering stuff
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
 }
@@ -46,8 +48,14 @@ export function createWritingPlan({
   const writingTime = determineWritingTime(speed);
 
   const outputEvents: CalendarEvent[] = [];
+  const deadlines: CalendarEvent[] = [];
 
   sortedEssaysToWrite.forEach(({ institution, essayCount, deadline }) => {
+    deadlines.push({
+      title: `${institution} Deadline`,
+      start: deadline,
+      end: deadline,
+    });
     for (
       let currentEssay = 1;
       currentEssay <= Number(essayCount);
@@ -100,5 +108,5 @@ export function createWritingPlan({
       }
     }
   });
-  return outputEvents;
+  return [...deadlines, ...outputEvents];
 }

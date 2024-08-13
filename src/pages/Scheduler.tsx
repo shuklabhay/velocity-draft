@@ -41,6 +41,7 @@ export default function Scheduler() {
     { institution: "", essayCount: "", deadline: null },
     { institution: "", essayCount: "", deadline: null },
   ]);
+  const institutionsAppliedTo = tableData.map((item) => item.institution);
 
   let writingPlan;
   if (
@@ -229,7 +230,12 @@ export default function Scheduler() {
         Your plan:
       </Typography>
 
-      <ResponsiveCalendar events={writingPlan ? writingPlan : []} />
+      <ResponsiveCalendar
+        events={writingPlan ? writingPlan : []}
+        institutionsAppliedTo={
+          institutionsAppliedTo ? institutionsAppliedTo : []
+        }
+      />
     </>
   );
 }
