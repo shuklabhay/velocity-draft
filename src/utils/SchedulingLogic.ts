@@ -1,6 +1,11 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
+// TODO: figure out why breaks dont generate
+// TODO: add deadlines to the calendar
+// TODO: find a way to stagger 'writing' so that closest deadlines will be written first;
+//       so bascially (verify that the sortbydeadline is working)
+
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
 }
@@ -9,9 +14,7 @@ function sortByDeadline(tableItems: StrictTableItem[]) {
   const sortedTableItems = [...tableItems];
 
   sortedTableItems.sort((a, b) => {
-    const deadlineA = dayjs(a.deadline);
-    const deadlineB = dayjs(b.deadline);
-    return deadlineA.diff(deadlineB);
+    return dayjs(a.deadline).diff(dayjs(b.deadline));
   });
 
   return sortedTableItems;
@@ -25,8 +28,11 @@ function daysBetween(start: Date, end: Date) {
   return Math.abs(dayjs(start).diff(dayjs(end), "day"));
 }
 
-function isDateAfterDate(dateToCheck: Date, referenceDate: Date) {
-  return dayjs(dateToCheck).isAfter(dayjs(referenceDate), "day");
+function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
+  const dateIsAfter = dayjs(dateToCheck).isAfter(dayjs(referenceDate), "day");
+  const dateIsOn = dayjs(dateToCheck).isSame(dayjs(referenceDate), "day");
+
+  return dateIsAfter || dateIsOn;
 }
 
 export function createWritingPlan({
@@ -78,7 +84,7 @@ export function createWritingPlan({
 
         let lastProcessedDate = finishedWritingDate;
         for (let i = 0; i < reviewSessionCount; i++) {
-          if (isDateAfterDate(lastProcessedDate, deadline)) {
+          if (isDateOnOrAfterDate(lastProcessedDate, deadline)) {
             break;
           }
           outputEvents.push({

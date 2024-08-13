@@ -9,7 +9,11 @@ import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
 
-export default function ResponsiveCalendar(events: CalendarEvent[]) {
+export default function ResponsiveCalendar({
+  events,
+}: {
+  events: CalendarEvent[];
+}) {
   const localizer = dayjsLocalizer(dayjs);
   const theme = useTheme();
   dayjs.extend(isSameOrBefore);
@@ -18,16 +22,10 @@ export default function ResponsiveCalendar(events: CalendarEvent[]) {
   const minCalSize = 2 * 175 + 200;
 
   const maxEventsOnDay = events.reduce((max, event) => {
-    let dayToCheck = dayjs(event.start);
-    while (dayToCheck.isBefore(dayjs(event.end).add(1, "day"))) {
-      const eventsOnThisDay = events.filter(
-        (e) =>
-          dayjs(e.start).isSameOrBefore(dayToCheck) &&
-          dayjs(e.end).isSameOrAfter(dayToCheck)
-      ).length;
-      max = Math.max(max, eventsOnThisDay);
-      dayToCheck = dayToCheck.add(1, "day");
-    }
+    const eventsOnThisDay = events.filter((e) =>
+      dayjs(e.start).isSame(dayjs(event.start), "day")
+    ).length;
+    max = Math.max(max, eventsOnThisDay);
     return max;
   }, 0);
 
@@ -43,6 +41,7 @@ export default function ResponsiveCalendar(events: CalendarEvent[]) {
     };
   };
 
+  console.log(maxEventsOnDay);
   return (
     <Stack spacing={0} sx={{ paddingBottom: 2 }}>
       <Calendar

@@ -42,6 +42,7 @@ export default function Scheduler() {
     { institution: "", essayCount: "", deadline: null },
   ]);
 
+  let writingPlan;
   if (
     writingSpeed &&
     reviewSessionCount &&
@@ -55,11 +56,10 @@ export default function Scheduler() {
       startDate: startDate,
     };
     const strictTableData = tableData as StrictTableItem[]; //isTableReadyToCreateEvents checks for null dates
-    const writingPlan = createWritingPlan({
+    writingPlan = createWritingPlan({
       writerInfo: writerInfo,
       tableData: strictTableData,
     });
-    console.log(writingPlan);
   }
 
   return (
@@ -229,7 +229,7 @@ export default function Scheduler() {
         Your plan:
       </Typography>
 
-      <ResponsiveCalendar events={[] as CalendarEvent[]} />
+      <ResponsiveCalendar events={writingPlan ? writingPlan : []} />
     </>
   );
 }
