@@ -13,11 +13,15 @@ import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 
 function isRowEntirelyEmpty(row: TableItem) {
-  return row.recipient === "" && row.essayCount === "" && row.deadline === null;
+  return (
+    row.institution === "" && row.essayCount === "" && row.deadline === null
+  );
 }
 
 function isRowEntirelyFull(row: TableItem) {
-  return row.recipient !== "" && row.essayCount !== "" && row.deadline !== null;
+  return (
+    row.institution !== "" && row.essayCount !== "" && row.deadline !== null
+  );
 }
 
 export function isTableReadyToCreateEvents(tableData: TableItem[]) {
@@ -61,7 +65,7 @@ export default function ApplicationTable({
     setTableData([
       ...tableData,
       {
-        recipient: "",
+        institution: "",
         essayCount: "",
         deadline: null,
       },
@@ -78,16 +82,17 @@ export default function ApplicationTable({
 
     // Update table data
     if (newTableData[index]) {
-      const dataIsRecipient = field === "recipient" && typeof value == "string";
+      const dataIsInstitution =
+        field === "institution" && typeof value == "string";
       const dataIsEssays = field === "essayCount" && typeof value == "string";
       const dataIsDeadline = field === "deadline" && dayjs.isDayjs(value);
 
-      if (dataIsRecipient) {
-        value.length > newTableData[index].recipient.length
+      if (dataIsInstitution) {
+        value.length > newTableData[index].institution.length
           ? (isInfoAdded = true)
           : (isInfoAdded = false);
 
-        newTableData[index].recipient = value;
+        newTableData[index].institution = value;
       } else if (dataIsEssays) {
         value.length > newTableData[index].essayCount.length
           ? (isInfoAdded = true)
@@ -120,7 +125,7 @@ export default function ApplicationTable({
     <div>
       <Grid container spacing={2} direction={"row"}>
         <Grid item xs={4}>
-          <Typography variant="h6">Recipient</Typography>
+          <Typography variant="h6">Institution</Typography>
         </Grid>
         <Grid item xs={4}>
           <Typography variant="h6">Essays</Typography>
@@ -133,10 +138,12 @@ export default function ApplicationTable({
         <Grid container spacing={2} key={index} sx={{ paddingBottom: 1 }}>
           <Grid item xs={4}>
             <ResponsiveTextField
-              label="Recipient"
+              label="Institution"
               borderRadius={5}
-              value={row.recipient}
-              onChange={(e) => handleChange(index, "recipient", e.target.value)}
+              value={row.institution}
+              onChange={(e) =>
+                handleChange(index, "institution", e.target.value)
+              }
             />
           </Grid>
           <Grid item xs={4}>

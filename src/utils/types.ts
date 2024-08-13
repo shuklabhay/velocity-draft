@@ -8,13 +8,13 @@ export interface WriterInfo {
 }
 
 export interface TableItem {
-  recipient: string;
+  institution: string;
   essayCount: string;
   deadline: Date | null;
 }
 
 export interface StrictTableItem {
-  recipient: string;
+  institution: string;
   essayCount: string;
   deadline: Date;
 }

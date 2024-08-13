@@ -33,8 +33,8 @@ export default function Scheduler() {
   const [startDate, setStartDate] = useState<Date>();
 
   const [tableData, setTableData] = useState<TableItem[]>([
-    { recipient: "", essayCount: "", deadline: null },
-    { recipient: "", essayCount: "", deadline: null },
+    { institution: "", essayCount: "", deadline: null },
+    { institution: "", essayCount: "", deadline: null },
   ]);
 
   if (
@@ -141,7 +141,7 @@ export default function Scheduler() {
               >
                 How many
               </span>{" "}
-              revision sessions do you want?
+              revision sessions do you want (time permitting)?
             </Typography>
           </Grid>
           <Grid item>
