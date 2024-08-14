@@ -30,6 +30,7 @@ export default function InfoBubble() {
           bottom: "auto",
           top: 5,
           right: 8,
+          zIndex: 9999,
           color: theme.palette.primary.main,
           "&:hover": {
             color: theme.palette.primary.dark,

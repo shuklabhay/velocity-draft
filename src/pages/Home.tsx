@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useState } from "react";
 import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
+import { useNameContext } from "../components/NameContext";
 
 export default function Home() {
   // Hooks
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  const { name, setName } = useNameContext();
   const isNameEntered = name.length > 0;
 
   return (

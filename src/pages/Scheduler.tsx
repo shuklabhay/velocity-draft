@@ -24,10 +24,12 @@ import {
 import { useEffect, useState } from "react";
 import { createWritingPlan } from "../utils/planner";
 import { isTableReadyToCreateEvents } from "../utils/table";
+import { useNameContext } from "../components/NameContext";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
+  const { name, setName } = useNameContext();
   const navigate = useNavigate();
   const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
 
@@ -50,7 +52,7 @@ export default function Scheduler() {
       isTableReadyToCreateEvents(tableData) // Checks for null date
     ) {
       const writerInfo: WriterInfo = {
-        name: "placeholder",
+        name: name,
         speed: writingSpeed,
         reviewSessionCount: reviewSessionCount,
         startDate: startDate,
@@ -101,7 +103,7 @@ export default function Scheduler() {
       </Stack>
 
       <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
-        Hi [name], tell me a little more about yourself:
+        Hi {name}, tell me a little more about yourself:
       </Typography>
 
       <div>

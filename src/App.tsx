@@ -12,6 +12,7 @@ import Home from "./pages/Home.tsx";
 import NotFound from "./components/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
 import InfoBubble from "./components/InfoBubble.tsx";
+import { NameProvider } from "./components/NameContext.tsx";
 
 const theme = createTheme({
   palette: {
@@ -54,19 +55,21 @@ const theme = createTheme({
 export default function App({}) {
   return (
     <ThemeProvider theme={theme}>
-      <Container>
-        {/*container is for margins lol */}
-        <BrowserRouter>
-          <InfoBubble />
-          <Suspense>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/Scheduler" element={<Scheduler />} />
-              <Route path="/*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
-      </Container>
+      <NameProvider>
+        <Container>
+          {/*container is for margins lol */}
+          <BrowserRouter>
+            <InfoBubble />
+            <Suspense>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/Scheduler" element={<Scheduler />} />
+                <Route path="/*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </Container>
+      </NameProvider>
     </ThemeProvider>
   );
 }
