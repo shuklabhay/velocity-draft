@@ -3,12 +3,9 @@ import dayjs from "dayjs";
 
 // TODO: above should also helpfind a way to stagger 'writing' so that closest deadlines
 // will be written earlier
-// TODO: get name thing working, redirect to home page if no name is entered
 
+// TODO: save form info in a use state
 // TODO: all the gh error stuff
-function determineWritingTime(speed: number) {
-  return Math.round(7 / speed);
-}
 
 function addDays(start: Date, toAdd: number) {
   return dayjs(start).add(toAdd, "days").toDate();
@@ -26,43 +23,71 @@ function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
 }
 
 export function createWritingPlan({
-  writerInfo: { speed, reviewSessionCount, startDate },
+  writerInfo: { writingLength, reviewSessionCount, startDate },
   tableData,
 }: {
   writerInfo: WriterInfo;
   tableData: StrictTableItem[];
 }) {
-  const writingTime = determineWritingTime(speed);
-
   const outputEvents: CalendarEvent[] = [];
   const deadlines: CalendarEvent[] = [];
 
   const maxReviewLength = 5;
 
+  let currentEssayStartDate = dayjs(startDate);
+
   tableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
       institution: "Deadline",
-      title: `${institution} Deadline`,
+      title: `✉️ ${institution} Deadline`,
       start: deadline,
       end: deadline,
     });
 
-    const daysUntilDeadline = daysBetween(startDate, deadline);
+    let daysUntilDeadline = daysBetween(
+      currentEssayStartDate.toDate(),
+      deadline
+    );
 
-    if (writingTime >= daysUntilDeadline) {
-      outputEvents.push({
-        institution: institution,
-        title: `Write and Review ${institution} Essays 1-${essayCount}`,
-        start: startDate,
-        end: deadline,
-      });
-    } else {
+    if (writingLength >= daysUntilDeadline) {
+      currentEssayStartDate = dayjs(deadline).subtract(writingLength, "day");
+      daysUntilDeadline = writingLength;
+    }
+
+    const totalWritingDays = Math.min(daysUntilDeadline, Number(essayCount));
+    const baseEssaysPerDay = Math.floor(Number(essayCount) / totalWritingDays);
+    const extraEssays = Number(essayCount) % totalWritingDays;
+
+    let currentEssay = 1;
+
+    for (let day = 0; day < totalWritingDays; day++) {
+      const essaysToWriteToday = baseEssaysPerDay + (day < extraEssays ? 1 : 0);
+
       for (
-        let currentEssay = 1;
-        currentEssay <= Number(essayCount);
-        currentEssay++
+        let i = 0;
+        i < essaysToWriteToday && currentEssay <= Number(essayCount);
+        i++
       ) {
-        const finishedWritingDate = addDays(startDate, writingTime);
+        let finishedWritingDate = addDays(
+          currentEssayStartDate.toDate(),
+          writingLength
+        );
+
+        if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
+          finishedWritingDate = addDays(deadline, -1);
+          currentEssayStartDate = dayjs(finishedWritingDate).subtract(
+            writingLength,
+            "day"
+          );
+        }
+
+        outputEvents.push({
+          institution: institution,
+          title: `✍️ Write ${institution} Essay ${currentEssay}`,
+          start: currentEssayStartDate.toDate(),
+          end: finishedWritingDate,
+        });
+
         const reviewPeriodLength = Math.abs(
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
@@ -85,13 +110,6 @@ export function createWritingPlan({
             ? Math.max(1, Math.floor(totalBreakTime / (reviewSessionCount - 1)))
             : 0;
 
-        outputEvents.push({
-          institution: institution,
-          title: `Write ${institution} Essay ${currentEssay}`,
-          start: startDate,
-          end: finishedWritingDate,
-        });
-
         let lastProcessedDate = finishedWritingDate;
         for (let i = 0; i < reviewSessionCount; i++) {
           if (isDateOnOrAfterDate(lastProcessedDate, deadline)) {
@@ -99,12 +117,12 @@ export function createWritingPlan({
           }
           let reviewEndDate = addDays(lastProcessedDate, reviewSessionLength);
           if (isDateOnOrAfterDate(reviewEndDate, deadline)) {
-            reviewEndDate = addDays(deadline, -1);
+            reviewEndDate = deadline;
           }
 
           outputEvents.push({
             institution: institution,
-            title: `Review ${institution} Essay ${currentEssay}`,
+            title: `📝 Review ${institution} Essay ${currentEssay}`,
             start: lastProcessedDate,
             end: reviewEndDate,
           });
@@ -113,8 +131,12 @@ export function createWritingPlan({
             reviewSessionLength + breakLength
           );
         }
+
+        currentEssay++;
       }
+      currentEssayStartDate = currentEssayStartDate.add(1, "day");
     }
   });
+
   return [...deadlines, ...outputEvents];
 }
