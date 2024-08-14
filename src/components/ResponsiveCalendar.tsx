@@ -22,7 +22,11 @@ export default function ResponsiveCalendar({
   dayjs.extend(isSameOrBefore);
   dayjs.extend(isSameOrAfter);
 
-  const minCalSize = 2 * 165 + 200;
+  function windowHeight(events: number) {
+    return events * 165 + 200;
+  }
+
+  const minCalSize = windowHeight(2);
 
   const maxEventsOnDay = events.reduce((max, event) => {
     const eventsOnThisDay = events.filter((e) => {
@@ -67,10 +71,11 @@ export default function ResponsiveCalendar({
   return (
     <Stack spacing={0} sx={{ paddingBottom: 2 }}>
       <Calendar
+        showAllEvents={true}
         localizer={localizer}
         events={events}
         style={{
-          height: Math.max(minCalSize, maxEventsOnDay * 165 + 200),
+          height: Math.max(minCalSize, windowHeight(maxEventsOnDay)),
           borderRadius: 50,
         }}
         components={{

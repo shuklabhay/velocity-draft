@@ -1,27 +1,13 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
-// TODO: fix +n more view on calender
-// TODO: make case where time to finish = time to write also say write and review
-
-// TODO: maybe just calculate all the times and stuff before going into each essay- also
-//       allows 1 event for write&review every essay case then instead of 7 lol
 // TODO: above should also helpfind a way to stagger 'writing' so that closest deadlines
 // will be written earlier
+// TODO: get name thing working, redirect to home page if no name is entered
 
 // TODO: all the gh error stuff
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
-}
-
-function sortByDeadline(tableItems: StrictTableItem[]) {
-  const sortedTableItems = [...tableItems];
-
-  sortedTableItems.sort((a, b) => {
-    return dayjs(a.deadline).diff(dayjs(b.deadline));
-  });
-
-  return sortedTableItems;
 }
 
 function addDays(start: Date, toAdd: number) {
@@ -40,66 +26,65 @@ function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
 }
 
 export function createWritingPlan({
-  writerInfo: { name, speed, reviewSessionCount, startDate },
+  writerInfo: { speed, reviewSessionCount, startDate },
   tableData,
 }: {
   writerInfo: WriterInfo;
   tableData: StrictTableItem[];
 }) {
-  const sortedEssaysToWrite = sortByDeadline(tableData);
   const writingTime = determineWritingTime(speed);
 
   const outputEvents: CalendarEvent[] = [];
   const deadlines: CalendarEvent[] = [];
 
-  sortedEssaysToWrite.forEach(({ institution, essayCount, deadline }) => {
+  const maxReviewLength = 5;
+
+  tableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
-      institution: institution,
+      institution: "Deadline",
       title: `${institution} Deadline`,
       start: deadline,
       end: deadline,
     });
-    for (
-      let currentEssay = 1;
-      currentEssay <= Number(essayCount);
-      currentEssay++
-    ) {
-      const daysUntilDeadline = daysBetween(startDate, deadline);
 
-      if (writingTime > daysUntilDeadline) {
-        outputEvents.push({
-          institution: institution,
-          title: `Write and Review ${institution} Essay ${currentEssay}`,
-          start: startDate,
-          end: deadline,
-        });
-      } else {
+    const daysUntilDeadline = daysBetween(startDate, deadline);
+
+    if (writingTime >= daysUntilDeadline) {
+      outputEvents.push({
+        institution: institution,
+        title: `Write and Review ${institution} Essays 1-${essayCount}`,
+        start: startDate,
+        end: deadline,
+      });
+    } else {
+      for (
+        let currentEssay = 1;
+        currentEssay <= Number(essayCount);
+        currentEssay++
+      ) {
         const finishedWritingDate = addDays(startDate, writingTime);
         const reviewPeriodLength = Math.abs(
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
-
-        const totalDays = daysBetween(startDate, deadline);
-        const breakLength = Math.max(1, Math.floor(totalDays / 15));
-
-        const breakCount = reviewSessionCount - 1;
         const potentialReviewSessionLength = Math.floor(
           reviewPeriodLength / reviewSessionCount
         );
+        const reviewSessionLength = Math.min(
+          maxReviewLength,
+          potentialReviewSessionLength
+        );
+        const totalReviewPeriodLength = daysBetween(
+          finishedWritingDate,
+          deadline
+        );
 
-        const totalTimeWithBreaks =
-          reviewSessionCount * potentialReviewSessionLength +
-          breakCount * breakLength;
-        const breaks = reviewPeriodLength >= totalTimeWithBreaks;
-        const reviewSessionLength = breaks
-          ? Math.min(
-              4,
-              Math.floor(
-                (reviewPeriodLength - breakCount * breakLength) /
-                  reviewSessionCount
-              )
-            )
-          : Math.min(4, potentialReviewSessionLength);
+        const totalReviewTime = reviewSessionCount * reviewSessionLength;
+        const totalBreakTime = totalReviewPeriodLength - totalReviewTime;
+        const breakLength =
+          reviewSessionCount > 1
+            ? Math.max(1, Math.floor(totalBreakTime / (reviewSessionCount - 1)))
+            : 0;
+
         outputEvents.push({
           institution: institution,
           title: `Write ${institution} Essay ${currentEssay}`,
