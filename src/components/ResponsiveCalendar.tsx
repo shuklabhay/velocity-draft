@@ -22,12 +22,19 @@ export default function ResponsiveCalendar({
   dayjs.extend(isSameOrBefore);
   dayjs.extend(isSameOrAfter);
 
-  const minCalSize = 2 * 145 + 200;
+  const minCalSize = 2 * 165 + 200;
 
   const maxEventsOnDay = events.reduce((max, event) => {
-    const eventsOnThisDay = events.filter((e) =>
-      dayjs(e.start).isSame(dayjs(event.start), "day")
-    ).length;
+    const eventsOnThisDay = events.filter((e) => {
+      const start = dayjs(e.start);
+      const end = dayjs(e.end);
+      return (
+        start.isSame(dayjs(event.start), "day") ||
+        (start.isBefore(dayjs(event.start), "day") &&
+          end.isAfter(dayjs(event.start), "day"))
+      );
+    }).length;
+
     max = Math.max(max, eventsOnThisDay);
     return max;
   }, 0);
@@ -63,7 +70,7 @@ export default function ResponsiveCalendar({
         localizer={localizer}
         events={events}
         style={{
-          height: Math.max(minCalSize, maxEventsOnDay * 145 + 200),
+          height: Math.max(minCalSize, maxEventsOnDay * 165 + 200),
           borderRadius: 50,
         }}
         components={{

@@ -2,7 +2,6 @@ import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 // TODO: fix +n more view on calender
-// TODO: make breaks real
 // TODO: make case where time to finish = time to write also say write and review
 
 // TODO: maybe just calculate all the times and stuff before going into each essay- also
@@ -80,7 +79,9 @@ export function createWritingPlan({
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
 
-        const breakLength = 1;
+        const totalDays = daysBetween(startDate, deadline);
+        const breakLength = Math.max(1, Math.floor(totalDays / 15));
+
         const breakCount = reviewSessionCount - 1;
         const potentialReviewSessionLength = Math.floor(
           reviewPeriodLength / reviewSessionCount
@@ -91,11 +92,14 @@ export function createWritingPlan({
           breakCount * breakLength;
         const breaks = reviewPeriodLength >= totalTimeWithBreaks;
         const reviewSessionLength = breaks
-          ? Math.floor(
-              (reviewPeriodLength - breakCount * breakLength) /
-                reviewSessionCount
+          ? Math.min(
+              4,
+              Math.floor(
+                (reviewPeriodLength - breakCount * breakLength) /
+                  reviewSessionCount
+              )
             )
-          : potentialReviewSessionLength;
+          : Math.min(4, potentialReviewSessionLength);
         outputEvents.push({
           institution: institution,
           title: `Write ${institution} Essay ${currentEssay}`,
@@ -108,11 +112,16 @@ export function createWritingPlan({
           if (isDateOnOrAfterDate(lastProcessedDate, deadline)) {
             break;
           }
+          let reviewEndDate = addDays(lastProcessedDate, reviewSessionLength);
+          if (isDateOnOrAfterDate(reviewEndDate, deadline)) {
+            reviewEndDate = addDays(deadline, -1);
+          }
+
           outputEvents.push({
             institution: institution,
             title: `Review ${institution} Essay ${currentEssay}`,
             start: lastProcessedDate,
-            end: addDays(lastProcessedDate, reviewSessionLength),
+            end: reviewEndDate,
           });
           lastProcessedDate = addDays(
             lastProcessedDate,
