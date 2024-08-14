@@ -20,6 +20,7 @@ export interface StrictTableItem {
 }
 
 export interface CalendarEvent extends Event {
+  institution: string;
   title: string;
   start: Date;
   end: Date;

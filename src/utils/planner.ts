@@ -10,9 +10,6 @@ import dayjs from "dayjs";
 // TODO: above should also helpfind a way to stagger 'writing' so that closest deadlines
 // will be written earlier
 
-// TODO: find a way to generate like 100 actual good colors just in an array and
-// refer to that instead of generating dcolors each time
-
 // TODO: all the gh error stuff
 function determineWritingTime(speed: number) {
   return Math.round(7 / speed);
@@ -58,6 +55,7 @@ export function createWritingPlan({
 
   sortedEssaysToWrite.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
+      institution: institution,
       title: `${institution} Deadline`,
       start: deadline,
       end: deadline,
@@ -71,6 +69,7 @@ export function createWritingPlan({
 
       if (writingTime > daysUntilDeadline) {
         outputEvents.push({
+          institution: institution,
           title: `Write and Review ${institution} Essay ${currentEssay}`,
           start: startDate,
           end: deadline,
@@ -83,14 +82,22 @@ export function createWritingPlan({
 
         const breakLength = 1;
         const breakCount = reviewSessionCount - 1;
-        const breaks =
-          reviewPeriodLength >= reviewSessionCount + breakCount * breakLength;
+        const potentialReviewSessionLength = Math.floor(
+          reviewPeriodLength / reviewSessionCount
+        );
 
+        const totalTimeWithBreaks =
+          reviewSessionCount * potentialReviewSessionLength +
+          breakCount * breakLength;
+        const breaks = reviewPeriodLength >= totalTimeWithBreaks;
         const reviewSessionLength = breaks
-          ? Math.floor(reviewPeriodLength - breakCount / reviewSessionCount)
-          : Math.floor(reviewPeriodLength / reviewSessionCount);
-
+          ? Math.floor(
+              (reviewPeriodLength - breakCount * breakLength) /
+                reviewSessionCount
+            )
+          : potentialReviewSessionLength;
         outputEvents.push({
+          institution: institution,
           title: `Write ${institution} Essay ${currentEssay}`,
           start: startDate,
           end: finishedWritingDate,
@@ -102,6 +109,7 @@ export function createWritingPlan({
             break;
           }
           outputEvents.push({
+            institution: institution,
             title: `Review ${institution} Essay ${currentEssay}`,
             start: lastProcessedDate,
             end: addDays(lastProcessedDate, reviewSessionLength),

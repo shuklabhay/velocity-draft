@@ -41,18 +41,12 @@ export default function ResponsiveCalendar({
     ) {
       backgroundColor = theme.palette.error.main;
     } else {
-      const match = event.title.match(
-        /(Write|Review|Write and Review)\s+(.+?)\s+Essay\s+\d+/i
-      );
-      const extractedText = match ? match[2] : null;
       const currenetInstitutionIndex = institutionsAppliedTo.findIndex(
-        (institution) => extractedText == institution
+        (institution) => event.institution == institution
       );
-      backgroundColor = usableColors[
-        currenetInstitutionIndex % usableColors.length
-      ]
-        ? usableColors[currenetInstitutionIndex % usableColors.length]
-        : theme.palette.primary.main;
+      const colorToUse =
+        usableColors[currenetInstitutionIndex % usableColors.length];
+      backgroundColor = colorToUse ? colorToUse : theme.palette.primary.main;
     }
 
     return {
