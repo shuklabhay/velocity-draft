@@ -23,7 +23,7 @@ export default function ResponsiveCalendar({
   dayjs.extend(isSameOrAfter);
 
   function windowHeight(events: number) {
-    return events * 165 + 200;
+    return events * 150 + 215;
   }
 
   const minCalSize = windowHeight(2);

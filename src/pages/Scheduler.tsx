@@ -209,7 +209,7 @@ export default function Scheduler() {
             <Grid item>
               <ResponsiveDatePicker
                 label={"Start Date"}
-                value={startDate ? dayjs(startDate) : undefined}
+                value={startDate ? dayjs(startDate) : null}
                 onChange={(newValue) => setStartDate(newValue.toDate())}
               />
             </Grid>
@@ -238,7 +238,6 @@ export default function Scheduler() {
         </div>
 
         <Divider
-          aria-hidden="true"
           flexItem
           sx={{
             borderRadius: 5,

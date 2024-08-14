@@ -1,10 +1,15 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
-// TODO: above should also helpfind a way to stagger 'writing' so that closest deadlines
-// will be written earlier
+// TODO: find a way to stagger 'writing' so that closest deadlines will be written earlier
+// throughout all colleges, also stagger writing btwn essays in each college. earliest
+// deadline = earliest done, later deadlines start later but ig still like have that # of
+// review sessions. like one writing block and then reviewing over time while for another
+// school theres a writing block after it and closer review sessions so over time theres a
+// lot of review sessions happening but break+review lengths change/wtv. closer deadlines
+// just supposed to have writing block happen then later further block- so every school
+// everything isnt being written in one week. MAKE STAGGERING REAL
 
-// TODO: save form info in a use state
 // TODO: all the gh error stuff
 
 function addDays(start: Date, toAdd: number) {
@@ -31,11 +36,9 @@ export function createWritingPlan({
 }) {
   const outputEvents: CalendarEvent[] = [];
   const deadlines: CalendarEvent[] = [];
-
   const maxReviewLength = 5;
 
-  let currentEssayStartDate = dayjs(startDate);
-
+  // Deadline
   tableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
       institution: "Deadline",
@@ -44,67 +47,53 @@ export function createWritingPlan({
       end: deadline,
     });
 
-    let daysUntilDeadline = daysBetween(
-      currentEssayStartDate.toDate(),
-      deadline
-    );
-
+    // Event Creator
+    const daysUntilDeadline = daysBetween(startDate, deadline);
+    const essayTag =
+      Number(essayCount) == 1 ? "Essay 1" : `Essays 1-${essayCount}`;
     if (writingLength >= daysUntilDeadline) {
-      currentEssayStartDate = dayjs(deadline).subtract(writingLength, "day");
-      daysUntilDeadline = writingLength;
-    }
-
-    const totalWritingDays = Math.min(daysUntilDeadline, Number(essayCount));
-    const baseEssaysPerDay = Math.floor(Number(essayCount) / totalWritingDays);
-    const extraEssays = Number(essayCount) % totalWritingDays;
-
-    let currentEssay = 1;
-
-    for (let day = 0; day < totalWritingDays; day++) {
-      const essaysToWriteToday = baseEssaysPerDay + (day < extraEssays ? 1 : 0);
-
+      // Write and Review
+      outputEvents.push({
+        institution: institution,
+        title: `💨 Write and Review ${institution} ${essayTag}`,
+        start: startDate,
+        end: deadline,
+      });
+    } else {
+      // on breaklen=0 case just generate one write and one review for 1-6 or wtv. make some
+      // kidna like events to create for the for loop instead of iterating on essay coubt.
+      // it wont always be max count bc like staggering or wtv will be write 1-2 on one
+      // day 3-4 on other day
       for (
-        let i = 0;
-        i < essaysToWriteToday && currentEssay <= Number(essayCount);
-        i++
+        let currentEssay = 1;
+        currentEssay <= Number(essayCount);
+        currentEssay++
       ) {
-        let finishedWritingDate = addDays(
-          currentEssayStartDate.toDate(),
-          writingLength
-        );
-
+        // Write
+        let finishedWritingDate = addDays(startDate, writingLength);
         if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
           finishedWritingDate = addDays(deadline, -1);
-          currentEssayStartDate = dayjs(finishedWritingDate).subtract(
-            writingLength,
-            "day"
-          );
         }
 
         outputEvents.push({
           institution: institution,
           title: `✍️ Write ${institution} Essay ${currentEssay}`,
-          start: currentEssayStartDate.toDate(),
+          start: startDate,
           end: finishedWritingDate,
         });
 
+        // Review
         const reviewPeriodLength = Math.abs(
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
-        const potentialReviewSessionLength = Math.floor(
-          reviewPeriodLength / reviewSessionCount
-        );
         const reviewSessionLength = Math.min(
           maxReviewLength,
-          potentialReviewSessionLength
-        );
-        const totalReviewPeriodLength = daysBetween(
-          finishedWritingDate,
-          deadline
+          Math.floor(reviewPeriodLength / reviewSessionCount)
         );
 
         const totalReviewTime = reviewSessionCount * reviewSessionLength;
-        const totalBreakTime = totalReviewPeriodLength - totalReviewTime;
+        const totalBreakTime =
+          daysBetween(finishedWritingDate, deadline) - totalReviewTime;
         const breakLength =
           reviewSessionCount > 1
             ? Math.max(1, Math.floor(totalBreakTime / (reviewSessionCount - 1)))
@@ -117,7 +106,7 @@ export function createWritingPlan({
           }
           let reviewEndDate = addDays(lastProcessedDate, reviewSessionLength);
           if (isDateOnOrAfterDate(reviewEndDate, deadline)) {
-            reviewEndDate = deadline;
+            reviewEndDate = addDays(deadline, -1);
           }
 
           outputEvents.push({
@@ -131,12 +120,8 @@ export function createWritingPlan({
             reviewSessionLength + breakLength
           );
         }
-
-        currentEssay++;
       }
-      currentEssayStartDate = currentEssayStartDate.add(1, "day");
     }
   });
-
   return [...deadlines, ...outputEvents];
 }

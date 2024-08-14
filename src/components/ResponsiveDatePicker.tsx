@@ -10,7 +10,7 @@ export default function ResponsiveDatePicker({
   onChange,
 }: {
   label: string;
-  value: dayjs.Dayjs | undefined;
+  value: dayjs.Dayjs | null;
   onChange: (e: any) => void;
 }) {
   return (
@@ -18,6 +18,7 @@ export default function ResponsiveDatePicker({
       <DatePicker
         label={value ? "" : label}
         onChange={onChange}
+        value={value}
         slotProps={{
           textField: {
             fullWidth: true,
