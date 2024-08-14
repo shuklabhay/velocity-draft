@@ -8,7 +8,6 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
-import { generateRandomColor } from "../utils/color";
 
 export default function ResponsiveCalendar({
   events,
@@ -34,15 +33,16 @@ export default function ResponsiveCalendar({
 
   if (institutionsAppliedTo) {
   }
-  const indexedColors = institutionsAppliedTo.map(() => generateRandomColor());
+  // const indexedColors = institutionsAppliedTo.map(() => generateRandomColor());
 
   const eventStyleGetter = (event: CalendarEvent) => {
     const currenetInstitutionIndex = institutionsAppliedTo.findIndex(
       (institution) => event.title.includes(institution)
     );
-    let backgroundColor = indexedColors[currenetInstitutionIndex]
-      ? indexedColors[currenetInstitutionIndex]
-      : theme.palette.primary.main;
+    // let backgroundColor = indexedColors[currenetInstitutionIndex]
+    //   ? indexedColors[currenetInstitutionIndex]
+    //   : theme.palette.primary.main;
+    let backgroundColor = theme.palette.primary.main;
     let color = theme.palette.primary.contrastText;
 
     if (event.title.includes("Deadline")) {
