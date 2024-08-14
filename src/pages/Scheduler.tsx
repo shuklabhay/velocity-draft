@@ -24,7 +24,6 @@ import {
 import { useEffect, useState } from "react";
 import { createWritingPlan } from "../utils/planner";
 import { isTableReadyToCreateEvents } from "../utils/table";
-import { usableColors } from "../utils/color";
 
 export default function Scheduler() {
   // Hooks
@@ -65,8 +64,6 @@ export default function Scheduler() {
       );
     }
   }, [writingSpeed, reviewSessionCount, startDate, tableData]);
-
-  console.log(usableColors);
 
   return (
     <>

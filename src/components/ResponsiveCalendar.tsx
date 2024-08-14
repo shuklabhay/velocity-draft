@@ -8,6 +8,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
+import { usableColors } from "../utils/color";
 
 export default function ResponsiveCalendar({
   events,
@@ -31,22 +32,27 @@ export default function ResponsiveCalendar({
     return max;
   }, 0);
 
-  if (institutionsAppliedTo) {
-  }
-  // const indexedColors = institutionsAppliedTo.map(() => generateRandomColor());
-
   const eventStyleGetter = (event: CalendarEvent) => {
-    const currenetInstitutionIndex = institutionsAppliedTo.findIndex(
-      (institution) => event.title.includes(institution)
-    );
-    // let backgroundColor = indexedColors[currenetInstitutionIndex]
-    //   ? indexedColors[currenetInstitutionIndex]
-    //   : theme.palette.primary.main;
-    let backgroundColor = theme.palette.primary.main;
     let color = theme.palette.primary.contrastText;
-
-    if (event.title.includes("Deadline")) {
+    let backgroundColor = theme.palette.primary.main;
+    if (
+      event.title.includes("Deadline") &&
+      !(event.title.includes("Write") || event.title.includes("Review"))
+    ) {
       backgroundColor = theme.palette.error.main;
+    } else {
+      const match = event.title.match(
+        /(Write|Review|Write and Review)\s+(.+?)\s+Essay\s+\d+/i
+      );
+      const extractedText = match ? match[2] : null;
+      const currenetInstitutionIndex = institutionsAppliedTo.findIndex(
+        (institution) => extractedText == institution
+      );
+      backgroundColor = usableColors[
+        currenetInstitutionIndex % usableColors.length
+      ]
+        ? usableColors[currenetInstitutionIndex % usableColors.length]
+        : theme.palette.primary.main;
     }
 
     return {
