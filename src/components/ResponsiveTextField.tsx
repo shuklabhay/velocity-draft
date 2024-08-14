@@ -5,11 +5,13 @@ export default function ResponsiveTextField({
   label,
   borderRadius = 5,
   value,
+  renderAsError = false,
   onChange,
 }: {
   label: string;
   borderRadius: number;
   value: string;
+  renderAsError: boolean;
   onChange: (e: any) => void;
 }) {
   return (
@@ -18,6 +20,7 @@ export default function ResponsiveTextField({
       fullWidth
       value={value}
       onChange={onChange}
+      error={renderAsError}
       InputLabelProps={{
         shrink: false,
         style: {

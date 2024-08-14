@@ -6,12 +6,36 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
 import { useNameContext } from "../components/NameContext";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   // Hooks
   const navigate = useNavigate();
   const { name, setName } = useNameContext();
   const isNameEntered = name.length > 0;
+  const [renderNameError, setRenderNameError] = useState(false);
+
+  const handleSubmit = useCallback(() => {
+    if (isNameEntered) {
+      navigate("/scheduler");
+    } else {
+      setRenderNameError(true);
+    }
+  }, [isNameEntered, navigate]);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === "Return") {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleSubmit, isNameEntered]);
 
   return (
     <Grid
@@ -49,13 +73,16 @@ export default function Home() {
             label={"Enter your name here..."}
             borderRadius={40}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            renderAsError={renderNameError}
+            onChange={(e) => {
+              setRenderNameError(false);
+              setName(e.target.value);
+            }}
           />
           <Button
             variant="contained"
-            disabled={!isNameEntered}
             sx={{ borderRadius: 40, minWidth: 60 }}
-            onClick={() => navigate("/scheduler")}
+            onClick={handleSubmit}
           >
             <ArrowForwardIcon />
           </Button>

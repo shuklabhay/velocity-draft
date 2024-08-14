@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 // lot of review sessions happening but break+review lengths change/wtv. closer deadlines
 // just supposed to have writing block happen then later further block- so every school
 // everything isnt being written in one week. MAKE STAGGERING REAL
+// TODO: make scheduler page feedback real (see gh error)
 
 // TODO: all the gh error stuff
 
