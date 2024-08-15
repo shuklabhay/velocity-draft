@@ -2,15 +2,19 @@ import * as React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker/DatePicker";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export default function ResponsiveDatePicker({
   label,
   value,
+  renderAsError = false,
+  minDate = dayjs(),
   onChange,
 }: {
   label: string;
   value: dayjs.Dayjs | null;
+  renderAsError: boolean;
+  minDate: Dayjs;
   onChange: (e: any) => void;
 }) {
   return (
@@ -19,9 +23,11 @@ export default function ResponsiveDatePicker({
         label={value ? "" : label}
         onChange={onChange}
         value={value}
+        minDate={minDate}
         slotProps={{
           textField: {
             fullWidth: true,
+            error: renderAsError,
             InputLabelProps: {
               shrink: false,
               sx: {

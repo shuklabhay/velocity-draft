@@ -7,25 +7,28 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
-import { isRowEntirelyEmpty } from "../utils/table";
+import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
+import { addDays } from "../utils/planner";
 
 export default function ApplicationTable({
+  minDate,
   tableData,
   setTableData,
 }: {
+  minDate: Date;
   tableData: TableItem[];
   setTableData: Dispatch<SetStateAction<TableItem[]>>;
 }) {
+  // Helpers
+
   function arePreviousRowsEmpty(index: number) {
     for (let i = 0; i < index; i++) {
-      if (tableData[i]) {
-        if (isRowEntirelyEmpty(tableData[i]!)) {
-          return true;
-        }
+      if (tableData[i] && isRowEntirelyEmpty(tableData[i]!)) {
+        return true;
       }
     }
     return false;
@@ -111,13 +114,17 @@ export default function ApplicationTable({
               label="Institution"
               borderRadius={5}
               value={row.institution}
+              renderAsError={isRowPartiallyFilled(row) && !row.institution}
               onChange={(e) =>
                 handleChange(index, "institution", e.target.value)
               }
             />
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth>
+            <FormControl
+              fullWidth
+              error={isRowPartiallyFilled(row) && !row.essayCount}
+            >
               {!row.essayCount && (
                 <InputLabel shrink={false}>Essays</InputLabel>
               )}
@@ -143,7 +150,9 @@ export default function ApplicationTable({
           <Grid item xs={4}>
             <ResponsiveDatePicker
               label={"Deadline"}
-              value={row.deadline ? dayjs(row.deadline) : undefined}
+              minDate={dayjs(minDate)}
+              value={row.deadline ? dayjs(row.deadline) : null}
+              renderAsError={isRowPartiallyFilled(row) && !row.deadline}
               onChange={(newValue) => handleChange(index, "deadline", newValue)}
             />
           </Grid>

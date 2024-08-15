@@ -1,5 +1,12 @@
 import { TableItem } from "./types";
 
+export function isRowPartiallyFilled(row: TableItem) {
+  const filledFields = [row.institution, row.essayCount, row.deadline].filter(
+    Boolean
+  ).length;
+  return filledFields > 0 && filledFields < 3;
+}
+
 export function isRowEntirelyEmpty(row: TableItem) {
   return (
     row.institution === "" && row.essayCount === "" && row.deadline === null

@@ -22,7 +22,7 @@ import {
   WriterInfo,
 } from "../utils/types";
 import { useEffect, useState } from "react";
-import { createWritingPlan } from "../utils/planner";
+import { addDays, createWritingPlan } from "../utils/planner";
 import { isTableReadyToCreateEvents } from "../utils/table";
 import { useNameContext } from "../components/NameContext";
 
@@ -32,6 +32,17 @@ export default function Scheduler() {
   const { name } = useNameContext();
   const navigate = useNavigate();
   const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
+
+  const [renderWritingLengthError, setRenderWritingLengthError] =
+    useState(false);
+  const [renderSessionCountError, setRenderSessionCountError] = useState(false);
+  const [renderStartDateError, setRenderStartDateError] = useState(false);
+
+  useEffect(() => {
+    if (name.length === 0) {
+      navigate("/");
+    }
+  }, [name, navigate]);
 
   // Form Info
   const [writingLength, setWritingLength] = useState<number>();
@@ -44,12 +55,24 @@ export default function Scheduler() {
   ]);
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
+  // Error feedback
   useEffect(() => {
-    if (name.length === 0) {
-      navigate("/");
-    }
-  }, [name, navigate]);
+    const filledInputs = [writingLength, reviewSessionCount, startDate].filter(
+      Boolean
+    ).length;
 
+    if (filledInputs === 2) {
+      setRenderWritingLengthError(!writingLength);
+      setRenderSessionCountError(!reviewSessionCount);
+      setRenderStartDateError(!startDate);
+    } else {
+      setRenderWritingLengthError(false);
+      setRenderSessionCountError(false);
+      setRenderStartDateError(false);
+    }
+  }, [writingLength, reviewSessionCount, startDate]);
+
+  // Generate calendar events
   useEffect(() => {
     if (
       writingLength &&
@@ -138,7 +161,7 @@ export default function Scheduler() {
               </Typography>
             </Grid>
             <Grid item>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={renderWritingLengthError}>
                 {!writingLength && (
                   <InputLabel shrink={false}>Writing Length</InputLabel>
                 )}
@@ -172,7 +195,7 @@ export default function Scheduler() {
               </Typography>
             </Grid>
             <Grid item>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={renderSessionCountError}>
                 {!reviewSessionCount && (
                   <InputLabel shrink={false}>Review sessions</InputLabel>
                 )}
@@ -209,6 +232,8 @@ export default function Scheduler() {
             <Grid item>
               <ResponsiveDatePicker
                 label={"Start Date"}
+                minDate={dayjs()}
+                renderAsError={renderStartDateError}
                 value={startDate ? dayjs(startDate) : null}
                 onChange={(newValue) => setStartDate(newValue.toDate())}
               />
@@ -230,6 +255,11 @@ export default function Scheduler() {
             </Grid>
             <Grid item>
               <ApplicationTable
+                minDate={
+                  startDate
+                    ? addDays(startDate, 1)
+                    : addDays(dayjs().toDate(), 1)
+                }
                 tableData={tableData}
                 setTableData={setTableData}
               />

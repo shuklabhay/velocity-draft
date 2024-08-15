@@ -9,19 +9,18 @@ import dayjs from "dayjs";
 // lot of review sessions happening but break+review lengths change/wtv. closer deadlines
 // just supposed to have writing block happen then later further block- so every school
 // everything isnt being written in one week. MAKE STAGGERING REAL
-// TODO: make scheduler page feedback real (see gh error)
 
 // TODO: all the gh error stuff
 
-function addDays(start: Date, toAdd: number) {
+export function addDays(start: Date, toAdd: number) {
   return dayjs(start).add(toAdd, "days").toDate();
 }
 
-function daysBetween(start: Date, end: Date) {
+export function daysBetween(start: Date, end: Date) {
   return Math.abs(dayjs(start).diff(dayjs(end), "day"));
 }
 
-function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
+export function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
   const dateIsAfter = dayjs(dateToCheck).isAfter(dayjs(referenceDate), "day");
   const dateIsOn = dayjs(dateToCheck).isSame(dayjs(referenceDate), "day");
 
