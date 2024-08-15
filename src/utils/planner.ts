@@ -1,18 +1,6 @@
 import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
-// TODO: find a way to stagger 'writing' so that closest deadlines will be written earlier
-// throughout all colleges, also stagger writing btwn essays in each college. earliest
-// deadline = earliest done, later deadlines start later but ig still like have that # of
-// review sessions. like one writing block and then reviewing over time while for another
-// school theres a writing block after it and closer review sessions so over time theres a
-// lot of review sessions happening but break+review lengths change/wtv. closer deadlines
-// just supposed to have writing block happen then later further block- so every school
-// everything isnt being written in one week. MAKE STAGGERING REAL. ideally just try to cut
-// down or move around breaks to maximize writing and reviewing time.
-// two layers of staggering, stagger essays for school and stagger writing for diff schools
-// basically: stagger first, then events that overlap simplify down to one
-
 // TODO: all the gh error stuff
 
 export function addDays(start: Date, toAdd: number) {
@@ -52,8 +40,7 @@ export function createWritingPlan({
 
     // Event Creator
     const daysUntilDeadline = daysBetween(startDate, deadline);
-    const essayTag =
-      Number(essayCount) == 1 ? "Essay 1" : `Essays 1-${essayCount}`;
+    const essayTag = Number(essayCount) == 1 ? "#1" : `#1-${essayCount}`;
     if (writingLength >= daysUntilDeadline) {
       // Write and Review
       outputEvents.push({
@@ -63,21 +50,34 @@ export function createWritingPlan({
         end: deadline,
       });
     } else {
-      for (
-        let currentEssay = 1;
-        currentEssay <= Number(essayCount);
-        currentEssay++
-      ) {
+      const essayCountNumber = Number(essayCount);
+      const maxEssaysPerDay = essayCountNumber < 5 ? 2 : 3;
+      let essayStartDate = startDate;
+
+      let currentEssay = 1;
+      while (currentEssay <= essayCountNumber) {
+        let endEssay = Math.min(
+          currentEssay + maxEssaysPerDay - 1,
+          essayCountNumber
+        );
+
         // Write
-        let finishedWritingDate = addDays(startDate, writingLength);
+        let finishedWritingDate = addDays(essayStartDate, writingLength);
         if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
           finishedWritingDate = deadline;
         }
 
+        let writeTitle = `✍️ Write ${institution} #`;
+        if (currentEssay === endEssay) {
+          writeTitle += `${currentEssay}`;
+        } else {
+          writeTitle += `${currentEssay}-${endEssay}`;
+        }
+
         outputEvents.push({
           institution: institution,
-          title: `✍️ Write ${institution} Essay ${currentEssay}`,
-          start: startDate,
+          title: writeTitle,
+          start: essayStartDate,
           end: finishedWritingDate,
         });
 
@@ -108,17 +108,23 @@ export function createWritingPlan({
             reviewEndDate = deadline;
           }
 
-          outputEvents.push({
-            institution: institution,
-            title: `📝 Review ${institution} Essay ${currentEssay}`,
-            start: lastProcessedDate,
-            end: reviewEndDate,
-          });
+          for (let j = currentEssay; j <= endEssay; j++) {
+            outputEvents.push({
+              institution: institution,
+              title: `📝 Review ${institution} #${j}`,
+              start: lastProcessedDate,
+              end: reviewEndDate,
+            });
+          }
+
           lastProcessedDate = addDays(
             lastProcessedDate,
             reviewSessionLength + breakLength
           );
         }
+
+        currentEssay = endEssay + 1;
+        essayStartDate = addDays(essayStartDate, 1);
       }
     }
   });
