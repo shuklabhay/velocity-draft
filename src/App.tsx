@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 import Home from "./pages/Home.tsx";
-import NotFound from "./components/NotFound.tsx";
+import NotFound from "./pages/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
 import InfoBubble from "./components/InfoBubble.tsx";
 import { NameProvider } from "./components/NameContext.tsx";
@@ -31,6 +31,7 @@ const theme = createTheme({
     mode: "light",
   },
   typography: {
+    fontFamily: ["Nunito", "sans-serif"].join(","),
     h1: {
       fontSize: "6rem",
     },

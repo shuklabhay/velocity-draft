@@ -8,7 +8,10 @@ import dayjs from "dayjs";
 // school theres a writing block after it and closer review sessions so over time theres a
 // lot of review sessions happening but break+review lengths change/wtv. closer deadlines
 // just supposed to have writing block happen then later further block- so every school
-// everything isnt being written in one week. MAKE STAGGERING REAL
+// everything isnt being written in one week. MAKE STAGGERING REAL. ideally just try to cut
+// down or move around breaks to maximize writing and reviewing time.
+// two layers of staggering, stagger essays for school and stagger writing for diff schools
+// basically: stagger first, then events that overlap simplify down to one
 
 // TODO: all the gh error stuff
 
@@ -60,10 +63,6 @@ export function createWritingPlan({
         end: deadline,
       });
     } else {
-      // on breaklen=0 case just generate one write and one review for 1-6 or wtv. make some
-      // kidna like events to create for the for loop instead of iterating on essay coubt.
-      // it wont always be max count bc like staggering or wtv will be write 1-2 on one
-      // day 3-4 on other day
       for (
         let currentEssay = 1;
         currentEssay <= Number(essayCount);
