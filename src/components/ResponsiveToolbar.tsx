@@ -16,18 +16,6 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
     onNavigate(action);
   }
 
-  const viewNames: View[] = ["month", "agenda"];
-  const viewButtons = viewNames.map((name) => (
-    <Button
-      key={name}
-      onClick={() => onView(name)}
-      variant={view === name ? "contained" : "outlined"}
-      sx={{ textTransform: "capitalize" }}
-    >
-      {name}
-    </Button>
-  ));
-
   return (
     <Grid
       container
@@ -40,6 +28,29 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
       }}
       spacing={1}
     >
+      <Grid item>
+        <Stack direction="row" spacing={1}>
+          <Button
+            onClick={() => setCurrentView("month")}
+            variant={currentView == "month" ? "contained" : "outlined"}
+            sx={{ textTransform: "capitalize" }}
+          >
+            Calendar
+          </Button>
+          <Button
+            onClick={() => setCurrentView("agenda")}
+            variant={currentView == "agenda" ? "contained" : "outlined"}
+            sx={{ textTransform: "capitalize" }}
+          >
+            Agenda
+          </Button>
+        </Stack>
+      </Grid>
+
+      <Grid item>
+        <Typography variant="h3">{label}</Typography>
+      </Grid>
+
       <Grid item>
         <Stack direction="row" spacing={1}>
           <Button
@@ -62,27 +73,6 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
             sx={{ textTransform: "none", minWidth: "5%" }}
           >
             <ArrowRightIcon />
-          </Button>
-        </Stack>
-      </Grid>
-      <Grid item>
-        <Typography variant="h3">{label}</Typography>
-      </Grid>
-      <Grid item>
-        <Stack direction="row" spacing={1}>
-          <Button
-            onClick={() => setCurrentView("month")}
-            variant={currentView == "month" ? "contained" : "outlined"}
-            sx={{ textTransform: "capitalize" }}
-          >
-            Calendar
-          </Button>
-          <Button
-            onClick={() => setCurrentView("agenda")}
-            variant={currentView == "agenda" ? "contained" : "outlined"}
-            sx={{ textTransform: "capitalize" }}
-          >
-            Agenda
           </Button>
         </Stack>
       </Grid>

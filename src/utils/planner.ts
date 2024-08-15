@@ -1,4 +1,4 @@
-import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, TableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 export function addDays(start: Date, toAdd: number) {
@@ -27,7 +27,11 @@ export function createWritingPlan({
   const deadlines: CalendarEvent[] = [];
   const maxReviewLength = 5;
 
-  tableData.forEach(({ institution, essayCount, deadline }) => {
+  const sortedTableData = [...tableData].sort((a, b) =>
+    dayjs(a.deadline).diff(dayjs(b.deadline))
+  );
+
+  sortedTableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
       institution: "Deadline",
       title: `✉️ ${institution} Deadline`,
@@ -62,6 +66,40 @@ export function createWritingPlan({
           finishedWritingDate = deadline;
         }
 
+        let bestStartDate = essayStartDate;
+        let minOverlapDays = Infinity;
+        for (
+          let testDate = essayStartDate;
+          testDate < deadline;
+          testDate = addDays(testDate, 1)
+        ) {
+          let overlapDays = 0;
+          for (const event of outputEvents) {
+            if (
+              (event.title.startsWith("✍️ Write") ||
+                event.title.startsWith("📝 Review")) &&
+              isDateOnOrAfterDate(testDate, event.start) &&
+              isDateOnOrAfterDate(event.end, testDate)
+            ) {
+              overlapDays++;
+            }
+          }
+
+          if (overlapDays < minOverlapDays) {
+            minOverlapDays = overlapDays;
+            bestStartDate = testDate;
+          }
+          if (minOverlapDays === 0) {
+            break;
+          }
+        }
+
+        essayStartDate = bestStartDate;
+        finishedWritingDate = addDays(essayStartDate, writingLength);
+        if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
+          finishedWritingDate = deadline;
+        }
+
         let writeTitle = `✍️ Write ${institution} #`;
         if (currentEssay === endEssay) {
           writeTitle += `${currentEssay}`;
@@ -76,10 +114,9 @@ export function createWritingPlan({
           end: finishedWritingDate,
         });
 
-        // Review (Batched)
+        // Review
         let lastProcessedDate = finishedWritingDate;
 
-        // Calculate review period length and break length for the batch
         const reviewPeriodLength = Math.abs(
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
@@ -100,19 +137,15 @@ export function createWritingPlan({
 
           let reviewEndDate = addDays(lastProcessedDate, maxReviewLength);
 
-          if (
-            i === reviewSessionCount - 1 &&
-            isDateOnOrAfterDate(reviewEndDate, deadline)
-          ) {
+          if (dayjs(reviewEndDate).isAfter(dayjs(deadline))) {
             reviewEndDate = deadline;
           }
 
-          // Create a single review event for the batch
           let reviewTitle = `📝 Review ${institution} #`;
           for (let j = currentEssay; j <= endEssay; j++) {
             reviewTitle += `${j}, `;
           }
-          reviewTitle = reviewTitle.slice(0, -2); // Remove trailing comma and space
+          reviewTitle = reviewTitle.slice(0, -2);
 
           outputEvents.push({
             institution: institution,
