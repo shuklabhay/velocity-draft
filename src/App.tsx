@@ -31,7 +31,7 @@ const theme = createTheme({
     mode: "light",
   },
   typography: {
-    fontFamily: ["Nunito", "sans-serif"].join(","),
+    fontFamily: ["sans-serif"].join(","),
     h1: {
       fontSize: "6rem",
     },

@@ -85,8 +85,8 @@ export default function InfoBubble() {
           </DialogContentText>
           <br />
           <DialogContentText>
-            VelocityDraft won third place in the OneHacks III hackathon. No user
-            data is ever stored or saved.
+            VelocityDraft won third place in the 2023 OneHacks III hackathon. No
+            user data is ever stored or saved.
           </DialogContentText>
         </DialogContent>
 

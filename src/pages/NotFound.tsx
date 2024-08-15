@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { Divider, Grid, Stack, Typography, useTheme } from "@mui/material";
 import * as React from "react";
-import { useNameContext } from "../components/NameContext";
 
 export default function NotFound() {
   const theme = useTheme();

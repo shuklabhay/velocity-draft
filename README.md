@@ -26,4 +26,4 @@ College application essay writing scheduler
 
 - Run `npm run setup` to install dependencies
 - Run `npm run dev` to start dev server
-- Run `npm run format` to format code and fix lint issues
+- Run `npm run lint` to format code and fix lint issues

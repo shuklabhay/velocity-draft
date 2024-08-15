@@ -1,19 +1,5 @@
-import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, TableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
-
-// TODO: find a way to stagger 'writing' so that closest deadlines will be written earlier
-// throughout all colleges, also stagger writing btwn essays in each college. earliest
-// deadline = earliest done, later deadlines start later but ig still like have that # of
-// review sessions. like one writing block and then reviewing over time while for another
-// school theres a writing block after it and closer review sessions so over time theres a
-// lot of review sessions happening but break+review lengths change/wtv. closer deadlines
-// just supposed to have writing block happen then later further block- so every school
-// everything isnt being written in one week. MAKE STAGGERING REAL. ideally just try to cut
-// down or move around breaks to maximize writing and reviewing time.
-// two layers of staggering, stagger essays for school and stagger writing for diff schools
-// basically: stagger first, then events that overlap simplify down to one
-
-// TODO: all the gh error stuff
 
 export function addDays(start: Date, toAdd: number) {
   return dayjs(start).add(toAdd, "days").toDate();
@@ -41,8 +27,11 @@ export function createWritingPlan({
   const deadlines: CalendarEvent[] = [];
   const maxReviewLength = 5;
 
-  // Deadline
-  tableData.forEach(({ institution, essayCount, deadline }) => {
+  const sortedTableData = [...tableData].sort((a, b) =>
+    dayjs(a.deadline).diff(dayjs(b.deadline))
+  );
+
+  sortedTableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
       institution: "Deadline",
       title: `✉️ ${institution} Deadline`,
@@ -50,12 +39,9 @@ export function createWritingPlan({
       end: deadline,
     });
 
-    // Event Creator
     const daysUntilDeadline = daysBetween(startDate, deadline);
-    const essayTag =
-      Number(essayCount) == 1 ? "Essay 1" : `Essays 1-${essayCount}`;
+    const essayTag = Number(essayCount) == 1 ? "#1" : `#1-${essayCount}`;
     if (writingLength >= daysUntilDeadline) {
-      // Write and Review
       outputEvents.push({
         institution: institution,
         title: `💨 Write and Review ${institution} ${essayTag}`,
@@ -63,64 +49,127 @@ export function createWritingPlan({
         end: deadline,
       });
     } else {
-      for (
-        let currentEssay = 1;
-        currentEssay <= Number(essayCount);
-        currentEssay++
-      ) {
+      const essayCountNumber = Number(essayCount);
+      const maxEssaysPerDay = essayCountNumber < 5 ? 2 : 3;
+      let essayStartDate = startDate;
+
+      let currentEssay = 1;
+      while (currentEssay <= essayCountNumber) {
+        let endEssay = Math.min(
+          currentEssay + maxEssaysPerDay - 1,
+          essayCountNumber
+        );
+
         // Write
-        let finishedWritingDate = addDays(startDate, writingLength);
+        let finishedWritingDate = addDays(essayStartDate, writingLength);
         if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
           finishedWritingDate = deadline;
         }
 
+        let bestStartDate = essayStartDate;
+        let minOverlapDays = Infinity;
+        for (
+          let testDate = essayStartDate;
+          testDate < deadline;
+          testDate = addDays(testDate, 1)
+        ) {
+          let overlapDays = 0;
+          for (const event of outputEvents) {
+            if (
+              (event.title.startsWith("✍️ Write") ||
+                event.title.startsWith("📝 Review")) &&
+              isDateOnOrAfterDate(testDate, event.start) &&
+              isDateOnOrAfterDate(event.end, testDate)
+            ) {
+              overlapDays++;
+            }
+          }
+
+          if (overlapDays < minOverlapDays) {
+            minOverlapDays = overlapDays;
+            bestStartDate = testDate;
+          }
+          if (minOverlapDays === 0) {
+            break;
+          }
+        }
+
+        essayStartDate = bestStartDate;
+        finishedWritingDate = addDays(essayStartDate, writingLength);
+        if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
+          finishedWritingDate = deadline;
+        }
+
+        let writeTitle = `✍️ Write ${institution} #`;
+        if (currentEssay === endEssay) {
+          writeTitle += `${currentEssay}`;
+        } else {
+          writeTitle += `${currentEssay}-${endEssay}`;
+        }
+
         outputEvents.push({
           institution: institution,
-          title: `✍️ Write ${institution} Essay ${currentEssay}`,
-          start: startDate,
+          title: writeTitle,
+          start: essayStartDate,
           end: finishedWritingDate,
         });
 
         // Review
+        let lastProcessedDate = finishedWritingDate;
+
         const reviewPeriodLength = Math.abs(
           dayjs(finishedWritingDate).diff(dayjs(deadline), "day")
         );
-        const reviewSessionLength = Math.min(
-          maxReviewLength,
-          Math.floor(reviewPeriodLength / reviewSessionCount)
+        const totalReviewSessionTime = reviewSessionCount * maxReviewLength;
+        const totalBreakTime = Math.max(
+          0,
+          reviewPeriodLength - totalReviewSessionTime
         );
-
-        const totalReviewTime = reviewSessionCount * reviewSessionLength;
-        const totalBreakTime =
-          daysBetween(finishedWritingDate, deadline) - totalReviewTime;
         const breakLength =
           reviewSessionCount > 1
             ? Math.max(1, Math.floor(totalBreakTime / (reviewSessionCount - 1)))
             : 0;
 
-        let lastProcessedDate = finishedWritingDate;
         for (let i = 0; i < reviewSessionCount; i++) {
           if (isDateOnOrAfterDate(lastProcessedDate, deadline)) {
             break;
           }
-          let reviewEndDate = addDays(lastProcessedDate, reviewSessionLength);
-          if (isDateOnOrAfterDate(reviewEndDate, deadline)) {
+
+          let reviewEndDate = addDays(lastProcessedDate, maxReviewLength);
+
+          if (dayjs(reviewEndDate).isAfter(dayjs(deadline))) {
             reviewEndDate = deadline;
           }
 
+          let reviewTitle = `📝 Review ${institution} #`;
+          for (let j = currentEssay; j <= endEssay; j++) {
+            reviewTitle += `${j}, `;
+          }
+          reviewTitle = reviewTitle.slice(0, -2);
+
           outputEvents.push({
             institution: institution,
-            title: `📝 Review ${institution} Essay ${currentEssay}`,
+            title: reviewTitle,
             start: lastProcessedDate,
             end: reviewEndDate,
           });
+
           lastProcessedDate = addDays(
             lastProcessedDate,
-            reviewSessionLength + breakLength
+            maxReviewLength + breakLength
           );
         }
+
+        currentEssay = endEssay + 1;
+
+        const remainingDays = daysBetween(lastProcessedDate, deadline);
+        const staggerDistance =
+          writingLength > 3 ? 2 : Math.max(1, Math.floor(remainingDays / 4));
+
+        essayStartDate = addDays(essayStartDate, staggerDistance);
       }
     }
   });
+
   return [...deadlines, ...outputEvents];
 }
