@@ -1,30 +1,61 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Divider, Stack, Typography, useTheme } from "@mui/material";
 import * as React from "react";
+import { useNameContext } from "./NameContext";
 
 export default function NotFound() {
-  let navigate = useNavigate();
+  const theme = useTheme();
+  const { name } = useNameContext();
+  const navigate = useNavigate();
 
   return (
-    <div style={{ maxWidth: 350, margin: "auto" }}>
-      <Typography variant="h2" gutterBottom>
-        404
-      </Typography>
-      <Typography variant="h4" gutterBottom>
-        The page you were looking for was not found. 😞
-      </Typography>
+    <>
+      <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
+        <Button
+          disableRipple
+          onClick={() => navigate("/")}
+          sx={{
+            backgroundColor: "transparent",
+            width: 145,
+            height: 45,
+            borderRadius: 2,
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              color: theme.palette.primary.main,
+              fontWeight: "bold",
+              textAlign: "center",
+              textTransform: "none",
+              paddingTop: "6px",
+            }}
+          >
+            VelocityDraft
+          </Typography>
+        </Button>
+        <Divider
+          flexItem
+          sx={{
+            borderRadius: 5,
+            borderTopWidth: 1,
+          }}
+        />
+      </Stack>
 
-      <Button
-        fullWidth
-        variant="contained"
-        color="secondary"
-        size="large"
-        sx={{ marginBottom: 1 }}
-        onClick={() => navigate("/")}
-      >
-        Go Home
-      </Button>
-    </div>
+      <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
+        Hi{" "}
+        <span
+          style={{
+            color: theme.palette.primary.main,
+            fontWeight: "bold",
+          }}
+        >
+          user,
+        </span>{" "}
+        you've reached a page that doesn't exist.
+      </Typography>
+    </>
   );
 }
