@@ -8,7 +8,6 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  Stack,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -28,16 +27,14 @@ export default function InfoBubble() {
         onClick={toggleOpen}
         sx={{
           position: "fixed",
-          bottom: 7,
+          bottom: "auto",
+          top: 5,
           right: 8,
+          zIndex: 9999,
           color: theme.palette.primary.main,
           "&:hover": {
             color: theme.palette.primary.dark,
             backgroundColor: theme.palette.secondary.main,
-          },
-          [theme.breakpoints.down("sm")]: {
-            bottom: "auto",
-            top: 5,
           },
         }}
       >
@@ -73,7 +70,7 @@ export default function InfoBubble() {
             plans to write essays for high school applications, summer program
             applications, college applications, internship applications,
             graduate program applications, and more! If you need to write essays
-            to apply, VelocityDraft has you covered.
+            to apply to a lot of palces, VelocityDraft has you covered!
           </DialogContentText>
           <br />
           <DialogContentText>

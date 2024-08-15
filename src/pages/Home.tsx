@@ -1,47 +1,41 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import { Divider, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { TypeAnimation } from "react-type-animation";
-import { useEffect, useRef, useState } from "react";
 import ResponsiveTextField from "../components/ResponsiveTextField";
+import ApplicationTitle from "../components/ApplicationTitle";
+import { useNameContext } from "../components/NameContext";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   // Hooks
-  const theme = useTheme();
   const navigate = useNavigate();
-  const [name, setName] = useState("");
+  const { name, setName } = useNameContext();
   const isNameEntered = name.length > 0;
+  const [renderNameError, setRenderNameError] = useState(false);
 
-  // Resize based on page size
-  const desiredEdgeDistance = 20;
-  const [scaleFactor, setScaleFactor] = useState(1);
-
-  const titleStackRef = useRef<HTMLDivElement>(null);
+  const handleSubmit = useCallback(() => {
+    if (isNameEntered) {
+      navigate("/scheduler");
+    } else {
+      setRenderNameError(true);
+    }
+  }, [isNameEntered, navigate]);
 
   useEffect(() => {
-    const handleResize = () => {
-      const calculateScale = (windowWidth: number, elementWidth: number) => {
-        const maxWidth = windowWidth - desiredEdgeDistance * 2;
-        return maxWidth / elementWidth;
-      };
-
-      if (titleStackRef.current) {
-        const elementWidth = titleStackRef.current.offsetWidth;
-        const windowWidth = window.innerWidth;
-        const calculatedScale = calculateScale(windowWidth, elementWidth);
-
-        console.log(elementWidth, windowWidth, calculatedScale);
-        setScaleFactor(calculatedScale);
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === "Return") {
+        handleSubmit();
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    handleResize();
+    window.addEventListener("keydown", handleKeyPress);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleSubmit, isNameEntered]);
 
   return (
     <Grid
@@ -67,59 +61,10 @@ export default function Home() {
           marginBottom: "5vh",
         }}
       >
-        <Stack
-          ref={titleStackRef}
-          direction="row"
-          spacing={2}
-          sx={{
-            paddingRight: 2,
-            transform: scaleFactor < 1 ? `scale(${scaleFactor})` : "scale(1)",
-          }}
-        >
-          <Divider
-            aria-hidden="true"
-            orientation="vertical"
-            flexItem
-            sx={{
-              borderRightWidth: 5,
-              borderRadius: 5,
-            }}
-          />
-
-          <Stack>
-            <Typography
-              variant="h1"
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: "bold",
-                textAlign: "left",
-              }}
-            >
-              VelocityDraft
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 33,
-                fontWeight: 400,
-                textAlign: "left",
-              }}
-            >
-              <TypeAnimation
-                sequence={["Flexible Application Essay Scheduler"]}
-                speed={65}
-                style={{
-                  color: theme.palette.secondary.contrastText,
-                  fontSize: 33,
-                  fontWeight: 500,
-                  paddingLeft: 7,
-                  alignContent: "left",
-                  alignItems: "left",
-                  whiteSpace: "nowrap",
-                }}
-              />
-            </Typography>
-          </Stack>
-        </Stack>
+        <ApplicationTitle
+          title="VelocityDraft"
+          subtitle="Flexible Application Essay Scheduler"
+        />
       </Grid>
 
       <Grid item sx={{ padding: 1, paddingTop: 35 }}>
@@ -128,13 +73,16 @@ export default function Home() {
             label={"Enter your name here..."}
             borderRadius={40}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            renderAsError={renderNameError}
+            onChange={(e) => {
+              setRenderNameError(false);
+              setName(e.target.value);
+            }}
           />
           <Button
             variant="contained"
-            disabled={!isNameEntered}
             sx={{ borderRadius: 40, minWidth: 60 }}
-            onClick={() => navigate("/scheduler")}
+            onClick={handleSubmit}
           >
             <ArrowForwardIcon />
           </Button>
