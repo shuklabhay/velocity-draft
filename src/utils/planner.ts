@@ -72,7 +72,7 @@ export function createWritingPlan({
         // Write
         let finishedWritingDate = addDays(startDate, writingLength);
         if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
-          finishedWritingDate = addDays(deadline, -1);
+          finishedWritingDate = deadline;
         }
 
         outputEvents.push({
@@ -106,7 +106,7 @@ export function createWritingPlan({
           }
           let reviewEndDate = addDays(lastProcessedDate, reviewSessionLength);
           if (isDateOnOrAfterDate(reviewEndDate, deadline)) {
-            reviewEndDate = addDays(deadline, -1);
+            reviewEndDate = deadline;
           }
 
           outputEvents.push({
