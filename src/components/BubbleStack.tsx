@@ -17,10 +17,7 @@ export default function BubbleStack() {
         zIndex: 9999,
         borderRadius: 20,
         color: theme.palette.primary.main,
-        backgroundColor: {
-          xs: theme.palette.secondary.main,
-          md: theme.palette.secondary.main,
-        },
+        backgroundColor: theme.palette.secondary.main,
       }}
     >
       <DarkModeBubble />

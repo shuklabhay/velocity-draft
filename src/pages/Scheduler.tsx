@@ -23,7 +23,7 @@ import {
 } from "../utils/types";
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
-import { isTableReadyToCreateEvents } from "../utils/table";
+import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
 import { useNameContext } from "../components/NameContext";
 
 export default function Scheduler() {
@@ -57,11 +57,11 @@ export default function Scheduler() {
 
   // Error feedback
   useEffect(() => {
-    const filledInputs = [writingLength, reviewSessionCount, startDate].filter(
-      Boolean
-    ).length;
+    const isTableDataNotEmpty = tableData.some(
+      (row) => !isRowEntirelyEmpty(row)
+    );
 
-    if (filledInputs === 2) {
+    if (isTableDataNotEmpty) {
       setRenderWritingLengthError(!writingLength);
       setRenderSessionCountError(!reviewSessionCount);
       setRenderStartDateError(!startDate);
@@ -70,7 +70,7 @@ export default function Scheduler() {
       setRenderSessionCountError(false);
       setRenderStartDateError(false);
     }
-  }, [writingLength, reviewSessionCount, startDate]);
+  }, [writingLength, reviewSessionCount, startDate, tableData]);
 
   // Generate calendar events
   useEffect(() => {
@@ -230,7 +230,7 @@ export default function Scheduler() {
               </Typography>
             </Grid>
             <Grid item>
-              <Stack direction="row" spacing={2}>
+              <Stack direction="row" spacing={1}>
                 <ResponsiveDatePicker
                   label={"Start Date"}
                   minDate={dayjs()}
@@ -241,7 +241,9 @@ export default function Scheduler() {
                 <Button
                   variant="contained"
                   sx={{ textTransform: "none" }}
-                  disabled={startDate == dayjs().toDate()}
+                  disabled={
+                    startDate && dayjs(startDate).isSame(dayjs(), "day")
+                  }
                   onClick={() => {
                     setStartDate(dayjs().toDate());
                   }}
