@@ -43,7 +43,8 @@ export default function ResponsiveCalendar({
     return max;
   }, 0);
 
-  const eventStyleGetter = (event: CalendarEvent) => {
+  const eventStyleGetter = (event: CalendarEvent, start: Date, end: Date) => {
+    // Event color styling
     let color = theme.palette.primary.contrastText;
     let backgroundColor = theme.palette.primary.main;
     if (
@@ -73,24 +74,13 @@ export default function ResponsiveCalendar({
       spacing={0}
       sx={{
         paddingBottom: 2,
-        "& .rbc-month-view, & .rbc-time-view, & .rbc-agenda-view": {
-          border: `1px solid ${theme.palette.calendarLineColor.main}`,
+        "& .rbc-month-view, .rbc-agenda-view, .rbc-agenda-table": {
+          border: `2px solid ${theme.palette.calendarLineColor.main}`,
           borderRadius: 2,
         },
-        "& .rbc-month-view .rbc-month-row + .rbc-month-row": {
-          borderTop: `1px solid ${theme.palette.calendarLineColor.main}`,
+        "& .rbc-agenda-view .rbc-agenda-table": {
+          border: "none",
         },
-        "& .rbc-month-view .rbc-day-bg + .rbc-day-bg, & .rbc-time-view .rbc-time-gutter + .rbc-time-gutter":
-          {
-            borderLeft: `1px solid ${theme.palette.calendarLineColor.main}`,
-          },
-        "& .rbc-month-view .rbc-header, & .rbc-time-view .rbc-time-header": {
-          borderBottom: `1px solid ${theme.palette.calendarLineColor.main}`,
-        },
-        "& .rbc-month-view .rbc-header + .rbc-header, & .rbc-time-view .rbc-time-header + .rbc-time-header":
-          {
-            borderLeft: `1px solid ${theme.palette.calendarLineColor.main}`,
-          },
         "& .rbc-off-range-bg": {
           backgroundColor: `${theme.palette.calendarOffRangeColor.main}`,
         },

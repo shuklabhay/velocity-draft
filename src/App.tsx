@@ -23,12 +23,14 @@ declare module "@mui/material/styles" {
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
+    agendaLineColor: PaletteColor;
   }
 
   interface Palette {
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
+    agendaLineColor: PaletteColor;
   }
 }
 
@@ -59,7 +61,7 @@ function AppContent() {
         color: { main: darkMode ? "#03203a" : "#edf6fe" },
       }),
       agendaLineColor: palette.augmentColor({
-        color: { main: darkMode ? "#808080" : "#dcdcdc" },
+        color: { main: "#dcdcdc" },
       }),
       mode: darkMode ? "dark" : "light",
     },
