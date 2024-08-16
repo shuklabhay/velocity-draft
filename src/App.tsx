@@ -85,7 +85,6 @@ function AppContent() {
       <CssBaseline />
       <Container>
         <BrowserRouter>
-          <BubbleStack />
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />

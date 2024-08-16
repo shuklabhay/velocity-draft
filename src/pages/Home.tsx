@@ -7,6 +7,7 @@ import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
 import { useNameContext } from "../components/NameContext";
 import { useCallback, useEffect, useRef, useState } from "react";
+import BubbleStack from "../components/BubbleStack";
 
 export default function Home() {
   // Hooks
@@ -51,6 +52,7 @@ export default function Home() {
         paddingTop: 5,
       }}
     >
+      <BubbleStack />
       <Grid
         item
         sx={{

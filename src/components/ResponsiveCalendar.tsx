@@ -24,19 +24,38 @@ export default function ResponsiveCalendar({
 
   const minCalSize = windowHeight(2);
 
-  const maxEventsOnDay = events.reduce((max, event) => {
-    const eventsOnThisDay = events.filter((e) => {
-      const start = dayjs(e.start);
-      const end = dayjs(e.end);
-      return (
-        start.isSame(dayjs(event.start), "day") ||
-        (start.isBefore(dayjs(event.start), "day") &&
-          end.isAfter(dayjs(event.start), "day"))
-      );
-    }).length;
+  const maxEventsOnDay = events.reduce((max: number, _, index, arr) => {
+    const uniqueDays = new Set(
+      arr.flatMap((event) => {
+        const start = dayjs(event.start);
+        const end = dayjs(event.end);
+        const days: string[] = [];
+        for (
+          let d = start;
+          d.isBefore(end) || d.isSame(end, "day");
+          d = d.add(1, "day")
+        ) {
+          days.push(d.format("YYYY-MM-DD"));
+        }
+        return days;
+      })
+    );
 
-    max = Math.max(max, eventsOnThisDay);
-    return max;
+    const maxOnAnyDay = Array.from(uniqueDays).reduce(
+      (dayMax: number, date) => {
+        const eventsOnThisDay = arr.filter(
+          (event) =>
+            (dayjs(date).isSame(dayjs(event.start), "day") ||
+              dayjs(date).isAfter(dayjs(event.start), "day")) &&
+            (dayjs(date).isSame(dayjs(event.end), "day") ||
+              dayjs(date).isBefore(dayjs(event.end), "day"))
+        ).length;
+        return Math.max(dayMax, eventsOnThisDay);
+      },
+      0
+    );
+
+    return Math.max(max, maxOnAnyDay);
   }, 0);
 
   // Event styling
@@ -65,8 +84,6 @@ export default function ResponsiveCalendar({
     };
   };
 
-  console.log(maxEventsOnDay);
-
   return (
     <Stack
       spacing={0}
@@ -85,14 +102,20 @@ export default function ResponsiveCalendar({
         "& .rbc-today": {
           backgroundColor: `${theme.palette.calendarTodayColor.main}`,
         },
-        "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row:not(:first-child)":
+        "& .rbc-agenda-time-cell": {
+          display: "none",
+        },
+        "& .rbc-agenda-view .rbc-agenda-table th:nth-child(2)": {
+          display: "none",
+        },
+        "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row:not(:first-of-type)":
           {
             borderTop: `1px solid ${theme.palette.agendaLineColor.main}`,
           },
         "& .rbc-agenda-view .rbc-agenda-table td:not(:last-child)": {
           borderRight: `1px solid ${theme.palette.agendaLineColor.main}`,
         },
-        "& .rbc-agenda-view .rbc-agenda-table td:not(:first-child)": {
+        "& .rbc-agenda-view .rbc-agenda-table td:not(:first-of-type)": {
           borderLeft: "none",
         },
       }}

@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
 import { useNameContext } from "../components/NameContext";
+import AppBar from "../components/AppBar";
 
 export default function Scheduler() {
   // Hooks
@@ -99,40 +100,9 @@ export default function Scheduler() {
   if (name.length !== 0) {
     return (
       <>
-        <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-          <Button
-            disableRipple
-            onClick={() => navigate("/")}
-            sx={{
-              backgroundColor: "transparent",
-              width: 145,
-              height: 45,
-              borderRadius: 2,
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: "bold",
-                textAlign: "center",
-                textTransform: "none",
-                paddingTop: "6px",
-              }}
-            >
-              VelocityDraft
-            </Typography>
-          </Button>
-          <Divider
-            flexItem
-            sx={{
-              borderRadius: 5,
-              borderTopWidth: 1,
-            }}
-          />
-        </Stack>
+        <AppBar />
 
-        <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
+        <Typography variant="h4" sx={{ paddingTop: 7, paddingBottom: 2 }}>
           Hi{" "}
           <span
             style={{
