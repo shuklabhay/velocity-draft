@@ -5,6 +5,7 @@ import {
   Container,
   createTheme,
   CssBaseline,
+  PaletteColor,
   ThemeProvider,
 } from "@mui/material";
 import Home from "./pages/Home.tsx";
@@ -15,11 +16,25 @@ import {
   DarkModeProvider,
   useDarkMode,
 } from "./components/DarkModeContext.tsx";
-import ConfigButtons from "./components/ConfigButtons.tsx";
+import BubbleStack from "./components/BubbleStack.tsx";
+
+declare module "@mui/material/styles" {
+  interface PaletteOptions {
+    calendarLineColor: PaletteColor;
+    calendarOffRangeColor: PaletteColor;
+    calendarTodayColor: PaletteColor;
+  }
+
+  interface Palette {
+    calendarLineColor: PaletteColor;
+    calendarOffRangeColor: PaletteColor;
+    calendarTodayColor: PaletteColor;
+  }
+}
 
 function AppContent() {
   const { darkMode } = useDarkMode();
-
+  const { palette } = createTheme();
   const theme = createTheme({
     palette: {
       primary: {
@@ -34,10 +49,21 @@ function AppContent() {
         dark: darkMode ? "#212121" : "#f5f5f5",
         contrastText: darkMode ? "#ffffff" : "#000000",
       },
+      calendarLineColor: palette.augmentColor({
+        color: { main: darkMode ? "#808080" : "#dcdcdc" },
+      }),
+      calendarOffRangeColor: palette.augmentColor({
+        color: { main: darkMode ? "#1a1a1a" : "#e5e5e5" },
+      }),
+      calendarTodayColor: palette.augmentColor({
+        color: { main: darkMode ? "#03203a" : "#edf6fe" },
+      }),
+      agendaLineColor: palette.augmentColor({
+        color: { main: darkMode ? "#808080" : "#dcdcdc" },
+      }),
       mode: darkMode ? "dark" : "light",
     },
     typography: {
-      fontFamily: ["sans-serif"].join(","),
       h1: { fontSize: "6rem" },
       h2: { fontSize: "3rem" },
       h3: { fontSize: "2rem" },
@@ -52,7 +78,7 @@ function AppContent() {
       <CssBaseline />
       <Container>
         <BrowserRouter>
-          <ConfigButtons />
+          <BubbleStack />
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />

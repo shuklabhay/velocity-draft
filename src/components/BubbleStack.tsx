@@ -3,11 +3,12 @@ import InfoBubble from "./InfoBubble";
 import DarkModeBubble from "./DarkModeBubble";
 import { Stack, useTheme } from "@mui/material";
 
-export default function ConfigButtons() {
+export default function BubbleStack() {
   const theme = useTheme();
 
   return (
     <Stack
+      direction={{ xs: "row", md: "column" }}
       sx={{
         position: "fixed",
         bottom: "auto",
@@ -16,7 +17,10 @@ export default function ConfigButtons() {
         zIndex: 9999,
         borderRadius: 20,
         color: theme.palette.primary.main,
-        backgroundColor: theme.palette.secondary.dark,
+        backgroundColor: {
+          xs: theme.palette.secondary.main,
+          md: theme.palette.secondary.dark,
+        },
       }}
     >
       <DarkModeBubble />
