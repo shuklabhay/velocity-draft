@@ -2,16 +2,20 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function ApplicationTable({
   minDate,
@@ -22,8 +26,9 @@ export default function ApplicationTable({
   tableData: TableItem[];
   setTableData: Dispatch<SetStateAction<TableItem[]>>;
 }) {
-  // Helpers
+  const theme = useTheme();
 
+  // Helpers
   function arePreviousRowsEmpty(index: number) {
     for (let i = 0; i < index; i++) {
       if (tableData[i] && isRowEntirelyEmpty(tableData[i]!)) {
@@ -80,6 +85,7 @@ export default function ApplicationTable({
       }
       setTableData(newTableData);
     }
+
     // Add new row
     const lastRowAddition =
       isInfoAdded &&
@@ -92,6 +98,8 @@ export default function ApplicationTable({
       addEmptyRow();
     }
   }
+
+  function handleDelete(row: TableItem) {}
 
   return (
     <div>
@@ -147,13 +155,35 @@ export default function ApplicationTable({
             </FormControl>
           </Grid>
           <Grid item xs={4}>
-            <ResponsiveDatePicker
-              label={"Deadline"}
-              minDate={dayjs(minDate)}
-              value={row.deadline ? dayjs(row.deadline) : null}
-              renderAsError={isRowPartiallyFilled(row) && !row.deadline}
-              onChange={(newValue) => handleChange(index, "deadline", newValue)}
-            />
+            <Stack direction="row">
+              <ResponsiveDatePicker
+                label={"Deadline"}
+                minDate={dayjs(minDate)}
+                value={row.deadline ? dayjs(row.deadline) : null}
+                renderAsError={isRowPartiallyFilled(row) && !row.deadline}
+                onChange={(newValue) =>
+                  handleChange(index, "deadline", newValue)
+                }
+              />
+              <IconButton
+                onClick={() => handleDelete(row)}
+                sx={{
+                  paddingBottom: 1.4,
+                  transition: "none",
+                  color: theme.palette.iconColor.main,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    "& svg": {
+                      fill: isRowPartiallyFilled(row)
+                        ? theme.palette.error.main
+                        : theme.palette.iconColor.main,
+                    },
+                  },
+                }}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            </Stack>
           </Grid>
         </Grid>
       ))}

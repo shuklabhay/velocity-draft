@@ -20,6 +20,7 @@ import BubbleStack from "./components/BubbleStack.tsx";
 
 declare module "@mui/material/styles" {
   interface PaletteOptions {
+    iconColor: PaletteColor;
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
@@ -27,6 +28,7 @@ declare module "@mui/material/styles" {
   }
 
   interface Palette {
+    iconColor: PaletteColor;
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
@@ -51,6 +53,9 @@ function AppContent() {
         dark: darkMode ? "#212121" : "#f5f5f5",
         contrastText: darkMode ? "#ffffff" : "#000000",
       },
+      iconColor: palette.augmentColor({
+        color: { main: darkMode ? "#f4f4f4" : "#6e6e6e" },
+      }),
       calendarLineColor: palette.augmentColor({
         color: { main: darkMode ? "#808080" : "#dcdcdc" },
       }),
