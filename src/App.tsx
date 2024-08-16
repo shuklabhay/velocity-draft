@@ -10,12 +10,12 @@ import {
 import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
-import InfoBubble from "./components/InfoBubble.tsx";
 import { NameProvider } from "./components/NameContext.tsx";
 import {
   DarkModeProvider,
   useDarkMode,
 } from "./components/DarkModeContext.tsx";
+import ConfigButtons from "./components/ConfigButtons.tsx";
 
 function AppContent() {
   const { darkMode } = useDarkMode();
@@ -23,15 +23,15 @@ function AppContent() {
   const theme = createTheme({
     palette: {
       primary: {
-        light: darkMode ? "#4f7eb4" : "#96b9e3",
-        main: darkMode ? "#4f7eb4" : "#5d94d4",
-        dark: darkMode ? "#96b9e3" : "#4f7eb4",
+        light: darkMode ? "#4f7eb4" : "#4f7eb4",
+        main: darkMode ? "#4f7eb4" : "#4f7eb4",
+        dark: darkMode ? "#96b9e3" : "#96b9e3",
         contrastText: "#ffffff",
       },
       secondary: {
         light: darkMode ? "#424242" : "#ffffff",
         main: darkMode ? "#303030" : "#ffffff",
-        dark: darkMode ? "#212121" : "#ffffff",
+        dark: darkMode ? "#212121" : "#f5f5f5",
         contrastText: darkMode ? "#ffffff" : "#000000",
       },
       mode: darkMode ? "dark" : "light",
@@ -50,10 +50,9 @@ function AppContent() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-
       <Container>
         <BrowserRouter>
-          <InfoBubble />
+          <ConfigButtons />
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />

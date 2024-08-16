@@ -9,7 +9,7 @@ export default function DarkModeBubble() {
 
   return (
     <IconButton onClick={toggleDarkMode}>
-      {darkMode ? <Brightness4Icon /> : <Brightness7Icon />}
+      {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
     </IconButton>
   );
 }

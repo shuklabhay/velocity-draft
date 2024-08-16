@@ -28,21 +28,7 @@ export default function InfoBubble() {
 
   return (
     <>
-      <IconButton
-        onClick={toggleOpen}
-        sx={{
-          position: "fixed",
-          bottom: "auto",
-          top: 5,
-          right: 8,
-          zIndex: 9999,
-          color: theme.palette.primary.main,
-          "&:hover": {
-            color: theme.palette.primary.dark,
-            backgroundColor: theme.palette.secondary.main,
-          },
-        }}
-      >
+      <IconButton onClick={toggleOpen}>
         <InfoOutlinedIcon fontSize="medium" />
       </IconButton>
 
@@ -92,7 +78,8 @@ export default function InfoBubble() {
 
         <Divider
           sx={{
-            marginRight: 12,
+            marginLeft: 8,
+            marginRight: 8,
             borderRadius: 5,
           }}
         />
@@ -105,7 +92,7 @@ export default function InfoBubble() {
         </DialogTitle>
         <DialogContent>
           <Stack>
-            <DialogContentText>Change your name:</DialogContentText>
+            <DialogContentText>Modify/Enter Name:</DialogContentText>
             <ResponsiveTextField
               label={"Enter your name here..."}
               borderRadius={5}

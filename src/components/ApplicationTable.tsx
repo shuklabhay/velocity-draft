@@ -7,12 +7,11 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
-import { addDays } from "../utils/planner";
 
 export default function ApplicationTable({
   minDate,
