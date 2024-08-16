@@ -99,24 +99,29 @@ export default function ApplicationTable({
     }
   }
 
-  function handleDelete(row: TableItem) {}
+  function handleDelete(rowToDelete: TableItem) {
+    if (tableData.length > 2) {
+      const updatedTableData = tableData.filter((row) => row !== rowToDelete);
+      setTableData(updatedTableData);
+    }
+  }
 
   return (
     <div>
       <Grid container spacing={2} direction={"row"}>
-        <Grid item xs={4}>
+        <Grid item xs={3.5}>
           <Typography variant="h6">Institution</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3.5}>
           <Typography variant="h6">Essays</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Typography variant="h6">Deadline</Typography>
         </Grid>
       </Grid>
       {tableData.map((row, index) => (
         <Grid container spacing={2} key={index} sx={{ paddingBottom: 1 }}>
-          <Grid item xs={4}>
+          <Grid item xs={3.5}>
             <ResponsiveTextField
               label="Institution"
               borderRadius={5}
@@ -127,7 +132,7 @@ export default function ApplicationTable({
               }
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3.5}>
             <FormControl
               fullWidth
               error={isRowPartiallyFilled(row) && !row.essayCount}
@@ -154,7 +159,7 @@ export default function ApplicationTable({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={5}>
             <Stack direction="row">
               <ResponsiveDatePicker
                 label={"Deadline"}
@@ -166,17 +171,22 @@ export default function ApplicationTable({
                 }
               />
               <IconButton
-                onClick={() => handleDelete(row)}
+                onClick={() => {
+                  if (!isRowEntirelyEmpty(row)) {
+                    handleDelete(row);
+                  }
+                }}
+                disableRipple={true}
                 sx={{
                   paddingBottom: 1.4,
-                  transition: "none",
                   color: theme.palette.iconColor.main,
                   "&:hover": {
                     backgroundColor: "transparent",
                     "& svg": {
-                      fill: isRowPartiallyFilled(row)
-                        ? theme.palette.error.main
-                        : theme.palette.iconColor.main,
+                      fill:
+                        !isRowEntirelyEmpty(row) && tableData.length > 2
+                          ? theme.palette.error.main
+                          : theme.palette.iconColor.main,
                     },
                   },
                 }}

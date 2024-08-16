@@ -8,7 +8,7 @@ export default function BubbleStack() {
 
   return (
     <Stack
-      direction={{ xs: "row", md: "column" }}
+      direction={{ xs: "row" }}
       sx={{
         position: "fixed",
         bottom: "auto",
@@ -19,7 +19,7 @@ export default function BubbleStack() {
         color: theme.palette.primary.main,
         backgroundColor: {
           xs: theme.palette.secondary.main,
-          md: theme.palette.secondary.dark,
+          md: theme.palette.secondary.main,
         },
       }}
     >

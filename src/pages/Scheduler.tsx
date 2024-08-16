@@ -230,15 +230,28 @@ export default function Scheduler() {
               </Typography>
             </Grid>
             <Grid item>
-              <ResponsiveDatePicker
-                label={"Start Date"}
-                minDate={dayjs()}
-                renderAsError={renderStartDateError}
-                value={startDate ? dayjs(startDate) : null}
-                onChange={(newValue) => setStartDate(newValue.toDate())}
-              />
+              <Stack direction="row" spacing={2}>
+                <ResponsiveDatePicker
+                  label={"Start Date"}
+                  minDate={dayjs()}
+                  renderAsError={renderStartDateError}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={(newValue) => setStartDate(newValue.toDate())}
+                />
+                <Button
+                  variant="contained"
+                  sx={{ textTransform: "none" }}
+                  disabled={startDate == dayjs().toDate()}
+                  onClick={() => {
+                    setStartDate(dayjs().toDate());
+                  }}
+                >
+                  Today
+                </Button>
+              </Stack>
             </Grid>
           </Grid>
+
           <Grid container direction="column" sx={{ paddingBottom: 3 }}>
             <Grid item>
               <Typography variant="h5">
