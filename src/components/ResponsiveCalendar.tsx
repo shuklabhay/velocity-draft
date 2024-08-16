@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Stack, useTheme } from "@mui/material";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -9,6 +8,9 @@ import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
 import { usableColors } from "../utils/color";
+
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./calendarStyles.css";
 
 export default function ResponsiveCalendar({
   events,

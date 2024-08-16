@@ -23,14 +23,14 @@ function AppContent() {
   const theme = createTheme({
     palette: {
       primary: {
-        light: darkMode ? "#4f7eb4" : "#4f7eb4",
-        main: darkMode ? "#4f7eb4" : "#4f7eb4",
-        dark: darkMode ? "#96b9e3" : "#96b9e3",
+        light: darkMode ? "#6A9bd2" : "#3978c0",
+        main: darkMode ? "#3978c0" : "#346cad",
+        dark: darkMode ? "#3167a5" : "#2e6099",
         contrastText: "#ffffff",
       },
       secondary: {
-        light: darkMode ? "#424242" : "#ffffff",
-        main: darkMode ? "#303030" : "#ffffff",
+        light: darkMode ? "#3b3b3b" : "#ffffff",
+        main: darkMode ? "#212121" : "#ffffff",
         dark: darkMode ? "#212121" : "#f5f5f5",
         contrastText: darkMode ? "#ffffff" : "#000000",
       },
