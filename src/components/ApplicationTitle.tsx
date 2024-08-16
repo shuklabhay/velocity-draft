@@ -40,6 +40,11 @@ export default function ApplicationTitle({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const [, forceUpdate] = useState({});
+  useEffect(() => {
+    forceUpdate({});
+  }, [theme.palette.mode]);
+
   return (
     <Stack
       ref={titleStackRef}
@@ -79,6 +84,7 @@ export default function ApplicationTitle({
           }}
         >
           <TypeAnimation
+            key={theme.palette.mode}
             sequence={[subtitle]}
             speed={65}
             style={{

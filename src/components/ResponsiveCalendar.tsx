@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Stack, useTheme } from "@mui/material";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -9,6 +8,7 @@ import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
 import { usableColors } from "../utils/color";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export default function ResponsiveCalendar({
   events,
@@ -23,7 +23,7 @@ export default function ResponsiveCalendar({
   dayjs.extend(isSameOrAfter);
 
   function windowHeight(events: number) {
-    return events * 150 + 215;
+    return events * 165 + 215;
   }
 
   const minCalSize = windowHeight(2);
@@ -43,7 +43,8 @@ export default function ResponsiveCalendar({
     return max;
   }, 0);
 
-  const eventStyleGetter = (event: CalendarEvent) => {
+  const eventStyleGetter = (event: CalendarEvent, start: Date, end: Date) => {
+    // Event color styling
     let color = theme.palette.primary.contrastText;
     let backgroundColor = theme.palette.primary.main;
     if (
@@ -69,7 +70,32 @@ export default function ResponsiveCalendar({
   };
 
   return (
-    <Stack spacing={0} sx={{ paddingBottom: 2 }}>
+    <Stack
+      spacing={0}
+      sx={{
+        paddingBottom: 2,
+        "& .rbc-month-view, .rbc-agenda-view, .rbc-agenda-table": {
+          border: `2px solid ${theme.palette.calendarLineColor.main}`,
+          borderRadius: 2,
+        },
+        "& .rbc-agenda-view .rbc-agenda-table": {
+          border: "none",
+        },
+        "& .rbc-off-range-bg": {
+          backgroundColor: `${theme.palette.calendarOffRangeColor.main}`,
+        },
+        "& .rbc-today": {
+          backgroundColor: `${theme.palette.calendarTodayColor.main}`,
+        },
+        "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row + .rbc-agenda-row":
+          {
+            borderTop: `1px solid ${theme.palette.agendaLineColor.main}`,
+          },
+        "& .rbc-agenda-view .rbc-agenda-table td": {
+          borderLeft: `1px solid ${theme.palette.agendaLineColor.main}`,
+        },
+      }}
+    >
       <Calendar
         showAllEvents={true}
         localizer={localizer}

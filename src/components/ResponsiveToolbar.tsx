@@ -48,7 +48,7 @@ export default function ResponsiveToolbar(props: ToolbarProps) {
       </Grid>
 
       <Grid item>
-        <Typography variant="h3">{label}</Typography>
+        <Typography variant="h4">{label}</Typography>
       </Grid>
 
       <Grid item>
