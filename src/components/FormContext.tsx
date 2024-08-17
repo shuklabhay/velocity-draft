@@ -1,5 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import { TableItem, WriterInfo } from "../utils/types";
+import { emptyTableState } from "../utils/table";
 
 interface FormContextType {
   writerInfo: WriterInfo;
@@ -17,10 +18,7 @@ export function FormProvider({ children }: { children: React.ReactNode }) {
     reviewSessionCount: null,
     startDate: null,
   });
-  const [tableData, setTableData] = useState<TableItem[]>([
-    { institution: "", essayCount: "", deadline: null },
-    { institution: "", essayCount: "", deadline: null },
-  ]);
+  const [tableData, setTableData] = useState<TableItem[]>(emptyTableState);
 
   return (
     <FormContext.Provider

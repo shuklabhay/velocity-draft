@@ -25,6 +25,7 @@ import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
 import { useFormContext } from "../components/FormContext";
 import AppBar from "../components/AppBar";
+import ClearFormButton from "../components/ClearFormButton";
 
 export default function Scheduler() {
   // Hooks
@@ -127,7 +128,10 @@ export default function Scheduler() {
                 <Select
                   value={String(writerInfo.writingLength)}
                   onChange={(e) => {
-                    setWritingLength(Number(e.target.value));
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      writingLength: Number(e.target.value),
+                    }));
                   }}
                 >
                   <MenuItem value={1}>1 Day</MenuItem>
@@ -161,7 +165,10 @@ export default function Scheduler() {
                 <Select
                   value={String(writerInfo.reviewSessionCount)}
                   onChange={(e) => {
-                    setReviewSessionCount(Number(e.target.value));
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      reviewSessionCount: Number(e.target.value),
+                    }));
                   }}
                 >
                   <MenuItem value={1}>1 Session</MenuItem>
@@ -197,17 +204,22 @@ export default function Scheduler() {
                   value={
                     writerInfo.startDate ? dayjs(writerInfo.startDate) : null
                   }
-                  onChange={(newValue) => setStartDate(newValue.toDate())}
+                  onChange={(newValue) => {
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      startDate: newValue.toDate(),
+                    }));
+                  }}
                 />
                 <Button
                   variant="contained"
                   sx={{ textTransform: "none" }}
-                  disabled={
-                    writerInfo.startDate &&
-                    dayjs(writerInfo.startDate).isSame(dayjs(), "day")
-                  }
+                  disabled={dayjs(writerInfo.startDate).isSame(dayjs(), "day")}
                   onClick={() => {
-                    setStartDate(dayjs().toDate());
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      startDate: dayjs().toDate(),
+                    }));
                   }}
                 >
                   Today
@@ -218,17 +230,20 @@ export default function Scheduler() {
 
           <Grid container direction="column" sx={{ paddingBottom: 3 }}>
             <Grid item>
-              <Typography variant="h5">
-                <span
-                  style={{
-                    color: theme.palette.primary.main,
-                    fontWeight: "bold",
-                  }}
-                >
-                  What
-                </span>{" "}
-                are you applying to?
-              </Typography>
+              <Stack direction="row" spacing={0}>
+                <Typography variant="h5">
+                  <span
+                    style={{
+                      color: theme.palette.primary.main,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    What
+                  </span>{" "}
+                  are you applying to?
+                </Typography>
+                <ClearFormButton />
+              </Stack>
             </Grid>
             <Grid item>
               <ApplicationTable

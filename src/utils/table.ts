@@ -1,5 +1,10 @@
 import { TableItem } from "./types";
 
+export const emptyTableState: TableItem[] = [
+  { institution: "", essayCount: "", deadline: null },
+  { institution: "", essayCount: "", deadline: null },
+];
+
 export function isRowPartiallyFilled(row: TableItem) {
   const filledFields = [row.institution, row.essayCount, row.deadline].filter(
     Boolean
@@ -11,6 +16,10 @@ export function isRowEntirelyEmpty(row: TableItem) {
   return (
     row.institution === "" && row.essayCount === "" && row.deadline === null
   );
+}
+
+export function isTableEntirelyEmpty(table: TableItem[]) {
+  return table.every((row) => isRowEntirelyEmpty(row));
 }
 
 export function isRowEntirelyFull(row: TableItem) {
