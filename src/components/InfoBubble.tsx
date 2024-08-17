@@ -1,4 +1,3 @@
-import * as React from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   Button,
@@ -16,15 +15,21 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { useNameContext } from "./NameContext";
+import { useState } from "react";
 
 export default function InfoBubble() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { name, setName } = useNameContext();
+  const [tempName, setTempName] = useState(name);
   const theme = useTheme();
 
-  const toggleOpen = () => {
+  function toggleOpen() {
+    if (tempName && tempName !== name) {
+      setName(tempName);
+    }
+
     setOpen(!open);
-  };
+  }
 
   return (
     <>
@@ -84,10 +89,7 @@ export default function InfoBubble() {
           }}
         />
 
-        <DialogTitle
-          variant="subtitle1"
-          sx={{ paddingtop: 0, paddingBottom: 1 }}
-        >
+        <DialogTitle sx={{ paddingtop: 0, paddingBottom: 1 }}>
           Config
         </DialogTitle>
         <DialogContent>
@@ -96,18 +98,23 @@ export default function InfoBubble() {
             <ResponsiveTextField
               label={"Enter your name here..."}
               borderRadius={5}
-              value={name}
+              value={tempName}
               renderAsError={false}
               onChange={(e) => {
-                setName(e.target.value);
+                setTempName(e.target.value);
               }}
             />
           </Stack>
         </DialogContent>
 
         <DialogActions>
-          <Button autoFocus variant="contained" onClick={toggleOpen}>
-            <Typography textTransform="none">Close Menu</Typography>
+          <Button
+            autoFocus
+            variant="contained"
+            onClick={toggleOpen}
+            sx={{ padding: 1, textTransform: "none" }}
+          >
+            Close
           </Button>
         </DialogActions>
       </Dialog>
