@@ -1,17 +1,21 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
 import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function ApplicationTable({
   minDate,
@@ -22,8 +26,9 @@ export default function ApplicationTable({
   tableData: TableItem[];
   setTableData: Dispatch<SetStateAction<TableItem[]>>;
 }) {
-  // Helpers
+  const theme = useTheme();
 
+  // Helpers
   function arePreviousRowsEmpty(index: number) {
     for (let i = 0; i < index; i++) {
       if (tableData[i] && isRowEntirelyEmpty(tableData[i]!)) {
@@ -80,6 +85,7 @@ export default function ApplicationTable({
       }
       setTableData(newTableData);
     }
+
     // Add new row
     const lastRowAddition =
       isInfoAdded &&
@@ -93,22 +99,29 @@ export default function ApplicationTable({
     }
   }
 
+  function handleDelete(rowToDelete: TableItem) {
+    if (tableData.length > 2) {
+      const updatedTableData = tableData.filter((row) => row !== rowToDelete);
+      setTableData(updatedTableData);
+    }
+  }
+
   return (
     <div>
       <Grid container spacing={2} direction={"row"}>
-        <Grid item xs={4}>
+        <Grid item xs={3.5}>
           <Typography variant="h6">Institution</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3.5}>
           <Typography variant="h6">Essays</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Typography variant="h6">Deadline</Typography>
         </Grid>
       </Grid>
       {tableData.map((row, index) => (
         <Grid container spacing={2} key={index} sx={{ paddingBottom: 1 }}>
-          <Grid item xs={4}>
+          <Grid item xs={3.5}>
             <ResponsiveTextField
               label="Institution"
               borderRadius={5}
@@ -119,7 +132,7 @@ export default function ApplicationTable({
               }
             />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3.5}>
             <FormControl
               fullWidth
               error={isRowPartiallyFilled(row) && !row.essayCount}
@@ -146,14 +159,41 @@ export default function ApplicationTable({
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={4}>
-            <ResponsiveDatePicker
-              label={"Deadline"}
-              minDate={dayjs(minDate)}
-              value={row.deadline ? dayjs(row.deadline) : null}
-              renderAsError={isRowPartiallyFilled(row) && !row.deadline}
-              onChange={(newValue) => handleChange(index, "deadline", newValue)}
-            />
+          <Grid item xs={5}>
+            <Stack direction="row">
+              <ResponsiveDatePicker
+                label={"Deadline"}
+                minDate={dayjs(minDate)}
+                value={row.deadline ? dayjs(row.deadline) : null}
+                renderAsError={isRowPartiallyFilled(row) && !row.deadline}
+                onChange={(newValue) =>
+                  handleChange(index, "deadline", newValue)
+                }
+              />
+              <IconButton
+                onClick={() => {
+                  if (!isRowEntirelyEmpty(row)) {
+                    handleDelete(row);
+                  }
+                }}
+                disableRipple={true}
+                sx={{
+                  paddingBottom: 1.4,
+                  color: theme.palette.iconColor.main,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    "& svg": {
+                      fill:
+                        !isRowEntirelyEmpty(row) && tableData.length > 2
+                          ? theme.palette.error.main
+                          : theme.palette.iconColor.main,
+                    },
+                  },
+                }}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            </Stack>
           </Grid>
         </Grid>
       ))}

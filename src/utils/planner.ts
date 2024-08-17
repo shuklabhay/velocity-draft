@@ -1,4 +1,4 @@
-import { CalendarEvent, StrictTableItem, TableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 export function addDays(start: Date, toAdd: number) {
@@ -14,6 +14,51 @@ export function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
   const dateIsOn = dayjs(dateToCheck).isSame(dayjs(referenceDate), "day");
 
   return dateIsAfter || dateIsOn;
+}
+
+function isDateOverlap(start1: Date, end1: Date, start2: Date, end2: Date) {
+  return start1 <= end2 && end1 >= start2;
+}
+
+function findBestStartDate(
+  startDate: Date,
+  deadline: Date,
+  events: CalendarEvent[],
+  writingLength: number
+) {
+  let bestStartDate = startDate;
+  let minOverlapDays = Infinity;
+
+  for (
+    let testDate = startDate;
+    testDate < deadline;
+    testDate = addDays(testDate, 1)
+  ) {
+    let overlapDays = 0;
+    for (const event of events) {
+      if (
+        event.title.startsWith("✍️ Write") &&
+        isDateOverlap(
+          testDate,
+          addDays(testDate, writingLength - 1),
+          event.start,
+          event.end
+        )
+      ) {
+        overlapDays++;
+      }
+    }
+
+    if (overlapDays < minOverlapDays) {
+      minOverlapDays = overlapDays;
+      bestStartDate = testDate;
+    }
+    if (minOverlapDays === 0) {
+      break;
+    }
+  }
+
+  return bestStartDate;
 }
 
 export function createWritingPlan({
@@ -60,42 +105,14 @@ export function createWritingPlan({
           essayCountNumber
         );
 
-        // Write
-        let finishedWritingDate = addDays(essayStartDate, writingLength);
-        if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
-          finishedWritingDate = deadline;
-        }
+        let bestStartDate = findBestStartDate(
+          essayStartDate,
+          deadline,
+          outputEvents,
+          writingLength
+        );
 
-        let bestStartDate = essayStartDate;
-        let minOverlapDays = Infinity;
-        for (
-          let testDate = essayStartDate;
-          testDate < deadline;
-          testDate = addDays(testDate, 1)
-        ) {
-          let overlapDays = 0;
-          for (const event of outputEvents) {
-            if (
-              (event.title.startsWith("✍️ Write") ||
-                event.title.startsWith("📝 Review")) &&
-              isDateOnOrAfterDate(testDate, event.start) &&
-              isDateOnOrAfterDate(event.end, testDate)
-            ) {
-              overlapDays++;
-            }
-          }
-
-          if (overlapDays < minOverlapDays) {
-            minOverlapDays = overlapDays;
-            bestStartDate = testDate;
-          }
-          if (minOverlapDays === 0) {
-            break;
-          }
-        }
-
-        essayStartDate = bestStartDate;
-        finishedWritingDate = addDays(essayStartDate, writingLength);
+        let finishedWritingDate = addDays(bestStartDate, writingLength);
         if (isDateOnOrAfterDate(finishedWritingDate, deadline)) {
           finishedWritingDate = deadline;
         }
@@ -110,7 +127,7 @@ export function createWritingPlan({
         outputEvents.push({
           institution: institution,
           title: writeTitle,
-          start: essayStartDate,
+          start: bestStartDate,
           end: finishedWritingDate,
         });
 

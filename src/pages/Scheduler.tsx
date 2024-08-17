@@ -23,8 +23,9 @@ import {
 } from "../utils/types";
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
-import { isTableReadyToCreateEvents } from "../utils/table";
+import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
 import { useNameContext } from "../components/NameContext";
+import AppBar from "../components/AppBar";
 
 export default function Scheduler() {
   // Hooks
@@ -57,11 +58,11 @@ export default function Scheduler() {
 
   // Error feedback
   useEffect(() => {
-    const filledInputs = [writingLength, reviewSessionCount, startDate].filter(
-      Boolean
-    ).length;
+    const isTableDataNotEmpty = tableData.some(
+      (row) => !isRowEntirelyEmpty(row)
+    );
 
-    if (filledInputs === 2) {
+    if (isTableDataNotEmpty) {
       setRenderWritingLengthError(!writingLength);
       setRenderSessionCountError(!reviewSessionCount);
       setRenderStartDateError(!startDate);
@@ -70,7 +71,7 @@ export default function Scheduler() {
       setRenderSessionCountError(false);
       setRenderStartDateError(false);
     }
-  }, [writingLength, reviewSessionCount, startDate]);
+  }, [writingLength, reviewSessionCount, startDate, tableData]);
 
   // Generate calendar events
   useEffect(() => {
@@ -99,40 +100,9 @@ export default function Scheduler() {
   if (name.length !== 0) {
     return (
       <>
-        <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-          <Button
-            disableRipple
-            onClick={() => navigate("/")}
-            sx={{
-              backgroundColor: "transparent",
-              width: 145,
-              height: 45,
-              borderRadius: 2,
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: "bold",
-                textAlign: "center",
-                textTransform: "none",
-                paddingTop: "6px",
-              }}
-            >
-              VelocityDraft
-            </Typography>
-          </Button>
-          <Divider
-            flexItem
-            sx={{
-              borderRadius: 5,
-              borderTopWidth: 1,
-            }}
-          />
-        </Stack>
+        <AppBar />
 
-        <Typography variant="h4" sx={{ paddingTop: 1, paddingBottom: 2 }}>
+        <Typography variant="h4" sx={{ paddingTop: 7, paddingBottom: 2 }}>
           Hi{" "}
           <span
             style={{
@@ -230,15 +200,30 @@ export default function Scheduler() {
               </Typography>
             </Grid>
             <Grid item>
-              <ResponsiveDatePicker
-                label={"Start Date"}
-                minDate={dayjs()}
-                renderAsError={renderStartDateError}
-                value={startDate ? dayjs(startDate) : null}
-                onChange={(newValue) => setStartDate(newValue.toDate())}
-              />
+              <Stack direction="row" spacing={1}>
+                <ResponsiveDatePicker
+                  label={"Start Date"}
+                  minDate={dayjs()}
+                  renderAsError={renderStartDateError}
+                  value={startDate ? dayjs(startDate) : null}
+                  onChange={(newValue) => setStartDate(newValue.toDate())}
+                />
+                <Button
+                  variant="contained"
+                  sx={{ textTransform: "none" }}
+                  disabled={
+                    startDate && dayjs(startDate).isSame(dayjs(), "day")
+                  }
+                  onClick={() => {
+                    setStartDate(dayjs().toDate());
+                  }}
+                >
+                  Today
+                </Button>
+              </Stack>
             </Grid>
           </Grid>
+
           <Grid container direction="column" sx={{ paddingBottom: 3 }}>
             <Grid item>
               <Typography variant="h5">

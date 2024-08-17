@@ -1,13 +1,10 @@
-import * as React from "react";
 import { Stack, useTheme } from "@mui/material";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
-import { usableColors } from "../utils/color";
+import { generatedColors } from "../utils/color";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export default function ResponsiveCalendar({
@@ -19,8 +16,6 @@ export default function ResponsiveCalendar({
 }) {
   const localizer = dayjsLocalizer(dayjs);
   const theme = useTheme();
-  dayjs.extend(isSameOrBefore);
-  dayjs.extend(isSameOrAfter);
 
   function windowHeight(events: number) {
     return events * 165 + 215;
@@ -28,23 +23,42 @@ export default function ResponsiveCalendar({
 
   const minCalSize = windowHeight(2);
 
-  const maxEventsOnDay = events.reduce((max, event) => {
-    const eventsOnThisDay = events.filter((e) => {
-      const start = dayjs(e.start);
-      const end = dayjs(e.end);
-      return (
-        start.isSame(dayjs(event.start), "day") ||
-        (start.isBefore(dayjs(event.start), "day") &&
-          end.isAfter(dayjs(event.start), "day"))
-      );
-    }).length;
+  const maxEventsOnDay = events.reduce((max: number, _, index, arr) => {
+    const uniqueDays = new Set(
+      arr.flatMap((event) => {
+        const start = dayjs(event.start);
+        const end = dayjs(event.end);
+        const days: string[] = [];
+        for (
+          let d = start;
+          d.isBefore(end) || d.isSame(end, "day");
+          d = d.add(1, "day")
+        ) {
+          days.push(d.format("YYYY-MM-DD"));
+        }
+        return days;
+      })
+    );
 
-    max = Math.max(max, eventsOnThisDay);
-    return max;
+    const maxOnAnyDay = Array.from(uniqueDays).reduce(
+      (dayMax: number, date) => {
+        const eventsOnThisDay = arr.filter(
+          (event) =>
+            (dayjs(date).isSame(dayjs(event.start), "day") ||
+              dayjs(date).isAfter(dayjs(event.start), "day")) &&
+            (dayjs(date).isSame(dayjs(event.end), "day") ||
+              dayjs(date).isBefore(dayjs(event.end), "day"))
+        ).length;
+        return Math.max(dayMax, eventsOnThisDay);
+      },
+      0
+    );
+
+    return Math.max(max, maxOnAnyDay);
   }, 0);
 
+  // Event styling
   const eventStyleGetter = (event: CalendarEvent, start: Date, end: Date) => {
-    // Event color styling
     let color = theme.palette.primary.contrastText;
     let backgroundColor = theme.palette.primary.main;
     if (
@@ -57,7 +71,7 @@ export default function ResponsiveCalendar({
         (institution) => event.institution == institution
       );
       const colorToUse =
-        usableColors[currenetInstitutionIndex % usableColors.length];
+        generatedColors[currenetInstitutionIndex % generatedColors.length];
       backgroundColor = colorToUse ? colorToUse : theme.palette.primary.main;
     }
 
@@ -87,12 +101,21 @@ export default function ResponsiveCalendar({
         "& .rbc-today": {
           backgroundColor: `${theme.palette.calendarTodayColor.main}`,
         },
-        "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row + .rbc-agenda-row":
+        "& .rbc-agenda-time-cell": {
+          display: "none",
+        },
+        "& .rbc-agenda-view .rbc-agenda-table th:nth-of-type(2)": {
+          display: "none",
+        },
+        "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row:not(:first-of-type)":
           {
             borderTop: `1px solid ${theme.palette.agendaLineColor.main}`,
           },
-        "& .rbc-agenda-view .rbc-agenda-table td": {
-          borderLeft: `1px solid ${theme.palette.agendaLineColor.main}`,
+        "& .rbc-agenda-view .rbc-agenda-table td:not(:last-child)": {
+          borderRight: `1px solid ${theme.palette.agendaLineColor.main}`,
+        },
+        "& .rbc-agenda-view .rbc-agenda-table td:not(:first-of-type)": {
+          borderLeft: "none",
         },
       }}
     >
