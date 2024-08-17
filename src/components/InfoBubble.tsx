@@ -17,10 +17,10 @@ import { useFormContext } from "./FormContext";
 import { useState } from "react";
 
 export default function InfoBubble() {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const { writerInfo, setWriterInfo } = useFormContext();
   const [tempName, setTempName] = useState(writerInfo.name);
-  const theme = useTheme();
 
   function toggleOpen() {
     if (tempName && tempName !== writerInfo.name) {

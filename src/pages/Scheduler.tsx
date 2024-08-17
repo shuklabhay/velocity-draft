@@ -230,7 +230,11 @@ export default function Scheduler() {
 
           <Grid container direction="column" sx={{ paddingBottom: 3 }}>
             <Grid item>
-              <Stack direction="row" spacing={0}>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: "space-between", alignItems: "center" }}
+              >
                 <Typography variant="h5">
                   <span
                     style={{

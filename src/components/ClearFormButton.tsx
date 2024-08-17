@@ -5,11 +5,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
+  useTheme,
+  DialogContentText,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFormContext } from "./FormContext";
 import { emptyTableState, isTableEntirelyEmpty } from "../utils/table";
 
 export default function ClearFormButton() {
+  const theme = useTheme();
   const { tableData, setTableData } = useFormContext();
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -17,7 +22,7 @@ export default function ClearFormButton() {
     !(tableData.length > 2) || isTableEntirelyEmpty(tableData);
 
   const handleResetTable = () => {
-    setTableData(emptyTableState);
+    setTableData({ ...emptyTableState });
     setOpenDialog(false);
   };
 
@@ -32,14 +37,43 @@ export default function ClearFormButton() {
         Reset Table
       </Button>
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Confirm Reset</DialogTitle>
-        <DialogContent>
-          Are you sure you want to reset the table? This will clear all entered
-          data.
+        <DialogTitle>Reset Table</DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={() => setOpenDialog(false)}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            "&:hover": {
+              color: theme.palette.primary.dark,
+              backgroundColor: theme.palette.secondary.main,
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent sx={{ paddingTop: 0 }}>
+          <DialogContentText>
+            Are you sure you want to clear all your entered institution
+            information?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button onClick={handleResetTable}>Yes</Button>
+          <Button
+            variant="contained"
+            onClick={() => setOpenDialog(false)}
+            sx={{ textTransform: "none" }}
+          >
+            No
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleResetTable}
+            sx={{ textTransform: "none" }}
+          >
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </>

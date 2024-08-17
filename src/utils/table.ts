@@ -1,9 +1,12 @@
 import { TableItem } from "./types";
 
-export const emptyTableState: TableItem[] = [
-  { institution: "", essayCount: "", deadline: null },
-  { institution: "", essayCount: "", deadline: null },
-];
+export const emptyRow: TableItem = {
+  institution: "",
+  essayCount: "",
+  deadline: null,
+};
+
+export const emptyTableState: TableItem[] = [{ ...emptyRow }, { ...emptyRow }];
 
 export function isRowPartiallyFilled(row: TableItem) {
   const filledFields = [row.institution, row.essayCount, row.deadline].filter(

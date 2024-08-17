@@ -14,7 +14,11 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
-import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
+import {
+  emptyRow,
+  isRowEntirelyEmpty,
+  isRowPartiallyFilled,
+} from "../utils/table";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function ApplicationTable({
@@ -39,14 +43,7 @@ export default function ApplicationTable({
   }
 
   function addEmptyRow() {
-    setTableData([
-      ...tableData,
-      {
-        institution: "",
-        essayCount: "",
-        deadline: null,
-      },
-    ]);
+    setTableData([...tableData, { ...emptyRow }]);
   }
 
   function handleChange(
