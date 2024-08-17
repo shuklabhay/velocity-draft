@@ -13,9 +13,9 @@ export const FormContext = createContext<FormContextType | null>(null);
 export function FormProvider({ children }: { children: React.ReactNode }) {
   const [writerInfo, setWriterInfo] = useState<WriterInfo>({
     name: "",
-    writingLength: 0, // Provide default values as needed
-    reviewSessionCount: 0,
-    startDate: new Date(),
+    writingLength: null,
+    reviewSessionCount: null,
+    startDate: null,
   });
   const [tableData, setTableData] = useState<TableItem[]>([
     { institution: "", essayCount: "", deadline: null },

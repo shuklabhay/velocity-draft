@@ -1,4 +1,4 @@
-import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, StrictWriterInfo } from "./types";
 import dayjs from "dayjs";
 
 export function addDays(start: Date, toAdd: number) {
@@ -65,7 +65,7 @@ export function createWritingPlan({
   writerInfo: { writingLength, reviewSessionCount, startDate },
   tableData,
 }: {
-  writerInfo: WriterInfo;
+  writerInfo: StrictWriterInfo;
   tableData: StrictTableItem[];
 }) {
   const outputEvents: CalendarEvent[] = [];

@@ -100,6 +100,7 @@ export default function InfoBubble() {
             <ResponsiveTextField
               label={"Enter your name here..."}
               borderRadius={5}
+              inputRef={null}
               value={tempName}
               renderAsError={false}
               onChange={(e) => {

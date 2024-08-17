@@ -18,8 +18,7 @@ import ResponsiveCalendar from "../components/ResponsiveCalendar";
 import {
   CalendarEvent,
   StrictTableItem,
-  TableItem,
-  WriterInfo,
+  StrictWriterInfo,
 } from "../utils/types";
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
@@ -39,31 +38,16 @@ export default function Scheduler() {
   const [renderStartDateError, setRenderStartDateError] = useState(false);
 
   // Form Info
-  const {
-    name,
-    writingLength,
-    setWritingLength,
-    reviewSessionCount,
-    setReviewSessionCount,
-    startDate,
-    setStartDate,
-  } = useFormContext();
-  // const [writingLength, setWritingLength] = useState<number>();
-  // const [reviewSessionCount, setReviewSessionCount] = useState<number>();
-  // const [startDate, setStartDate] = useState<Date>();
-
-  const [tableData, setTableData] = useState<TableItem[]>([
-    { institution: "", essayCount: "", deadline: null },
-    { institution: "", essayCount: "", deadline: null },
-  ]);
+  const { writerInfo, setWriterInfo, tableData, setTableData } =
+    useFormContext();
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
   // Error handling
   useEffect(() => {
-    if (name.length === 0) {
+    if (writerInfo.name.length === 0) {
       navigate("/");
     }
-  }, [name, navigate]);
+  }, [writerInfo.name, navigate]);
 
   useEffect(() => {
     const isTableDataNotEmpty = tableData.some(
@@ -71,41 +55,38 @@ export default function Scheduler() {
     );
 
     if (isTableDataNotEmpty) {
-      setRenderWritingLengthError(!writingLength);
-      setRenderSessionCountError(!reviewSessionCount);
-      setRenderStartDateError(!startDate);
+      setRenderWritingLengthError(!writerInfo.writingLength);
+      setRenderSessionCountError(!writerInfo.reviewSessionCount);
+      setRenderStartDateError(!writerInfo.startDate);
     } else {
       setRenderWritingLengthError(false);
       setRenderSessionCountError(false);
       setRenderStartDateError(false);
     }
-  }, [writingLength, reviewSessionCount, startDate, tableData]);
+  }, [writerInfo, tableData]);
 
   // Generate calendar events
   useEffect(() => {
-    if (
-      writingLength &&
-      reviewSessionCount &&
-      startDate &&
-      isTableReadyToCreateEvents(tableData) // Checks for null date
-    ) {
-      const writerInfo: WriterInfo = {
-        name: name,
-        writingLength: writingLength,
-        reviewSessionCount: reviewSessionCount,
-        startDate: startDate,
-      };
-      const strictTableData = tableData as StrictTableItem[]; // isTableReadyToCreateEvents checks for null date
+    // Strict type checks
+    const isWriterInfoStrict =
+      writerInfo.writingLength &&
+      writerInfo.reviewSessionCount &&
+      writerInfo.startDate;
+    const isTableDataStrict = isTableReadyToCreateEvents(tableData);
+
+    if (isWriterInfoStrict && isTableDataStrict) {
+      const strictWriterInfo = writerInfo as StrictWriterInfo;
+      const strictTableData = tableData as StrictTableItem[];
       setWritingPlan(
         createWritingPlan({
-          writerInfo: writerInfo,
+          writerInfo: strictWriterInfo,
           tableData: strictTableData,
         })
       );
     }
-  }, [writingLength, reviewSessionCount, startDate, tableData]);
+  }, [writerInfo, tableData]);
 
-  if (name.length !== 0) {
+  if (writerInfo.name.length !== 0) {
     return (
       <>
         <AppBar />
@@ -118,7 +99,7 @@ export default function Scheduler() {
               fontWeight: "bold",
             }}
           >
-            {name},
+            {writerInfo.name},
           </span>{" "}
           tell me a little more about yourself:
         </Typography>
@@ -140,11 +121,11 @@ export default function Scheduler() {
             </Grid>
             <Grid item>
               <FormControl fullWidth error={renderWritingLengthError}>
-                {!writingLength && (
+                {!writerInfo.writingLength && (
                   <InputLabel shrink={false}>Writing Length</InputLabel>
                 )}
                 <Select
-                  value={String(writingLength)}
+                  value={String(writerInfo.writingLength)}
                   onChange={(e) => {
                     setWritingLength(Number(e.target.value));
                   }}
@@ -174,11 +155,11 @@ export default function Scheduler() {
             </Grid>
             <Grid item>
               <FormControl fullWidth error={renderSessionCountError}>
-                {!reviewSessionCount && (
+                {!writerInfo.reviewSessionCount && (
                   <InputLabel shrink={false}>Review sessions</InputLabel>
                 )}
                 <Select
-                  value={String(reviewSessionCount)}
+                  value={String(writerInfo.reviewSessionCount)}
                   onChange={(e) => {
                     setReviewSessionCount(Number(e.target.value));
                   }}
@@ -213,14 +194,17 @@ export default function Scheduler() {
                   label={"Start Date"}
                   minDate={dayjs()}
                   renderAsError={renderStartDateError}
-                  value={startDate ? dayjs(startDate) : null}
+                  value={
+                    writerInfo.startDate ? dayjs(writerInfo.startDate) : null
+                  }
                   onChange={(newValue) => setStartDate(newValue.toDate())}
                 />
                 <Button
                   variant="contained"
                   sx={{ textTransform: "none" }}
                   disabled={
-                    startDate && dayjs(startDate).isSame(dayjs(), "day")
+                    writerInfo.startDate &&
+                    dayjs(writerInfo.startDate).isSame(dayjs(), "day")
                   }
                   onClick={() => {
                     setStartDate(dayjs().toDate());
@@ -249,8 +233,8 @@ export default function Scheduler() {
             <Grid item>
               <ApplicationTable
                 minDate={
-                  startDate
-                    ? addDays(startDate, 1)
+                  writerInfo.startDate
+                    ? addDays(writerInfo.startDate, 1)
                     : addDays(dayjs().toDate(), 1)
                 }
                 tableData={tableData}
