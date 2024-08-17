@@ -1,11 +1,10 @@
-import * as React from "react";
 import { Stack, useTheme } from "@mui/material";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import ResponsiveToolbar from "./ResponsiveToolbar";
 import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
-import { usableColors } from "../utils/color";
+import { generatedColors } from "../utils/color";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export default function ResponsiveCalendar({
@@ -72,7 +71,7 @@ export default function ResponsiveCalendar({
         (institution) => event.institution == institution
       );
       const colorToUse =
-        usableColors[currenetInstitutionIndex % usableColors.length];
+        generatedColors[currenetInstitutionIndex % generatedColors.length];
       backgroundColor = colorToUse ? colorToUse : theme.palette.primary.main;
     }
 
@@ -105,7 +104,7 @@ export default function ResponsiveCalendar({
         "& .rbc-agenda-time-cell": {
           display: "none",
         },
-        "& .rbc-agenda-view .rbc-agenda-table th:nth-child(2)": {
+        "& .rbc-agenda-view .rbc-agenda-table th:nth-of-type(2)": {
           display: "none",
         },
         "& .rbc-agenda-view .rbc-agenda-table .rbc-agenda-row:not(:first-of-type)":

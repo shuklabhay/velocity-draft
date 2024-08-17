@@ -8,21 +8,21 @@ function shuffle(array: string[]) {
     .map((a) => a.value);
 }
 
-function colorDifference(color1: Color, color2: Color): number {
+function colorDifference(color1: Color, color2: Color) {
   const hDiff = Math.abs(color1.hue() - color2.hue());
   const sDiff = Math.abs(color1.saturationl() - color2.saturationl());
   const lDiff = Math.abs(color1.lightness() - color2.lightness());
   return hDiff + sDiff + lDiff;
 }
 
-export function generateColorArray(count: number): string[] {
+export function generateColorArray(count: number) {
   const theme = useTheme();
   const baseColor = Color(theme.palette.primary.main);
   const colors: string[] = [];
   const hueStep = 360 / count;
 
-  const minDifference = 40; // Reduced for more flexibility
-  const contrastThreshold = 4; // Slightly reduced for more options
+  const minDifference = 40;
+  const contrastThreshold = 4;
 
   for (let i = 0; i < count; i++) {
     let attempts = 0;
@@ -30,19 +30,16 @@ export function generateColorArray(count: number): string[] {
 
     while (attempts < maxAttempts) {
       const hue = (i * hueStep + Math.random() * hueStep) % 360;
-      const saturation = 50 + Math.random() * 50; // 50-100%
-      const lightness = 25 + Math.random() * 50; // 25-75%
+      const saturation = 50 + Math.random() * 50;
+      const lightness = 25 + Math.random() * 50;
 
       const newColor = Color.hsl(hue, saturation, lightness);
 
-      // Check if the color is not too close to red
       if (
         Math.abs(newColor.hue() - 0) > 15 &&
         Math.abs(newColor.hue() - 360) > 15
       ) {
-        // Check contrast with white
         if (newColor.contrast(Color("white")) >= contrastThreshold) {
-          // Check if it's not too similar to the base color and other generated colors
           if (
             colorDifference(newColor, baseColor) > minDifference &&
             colors.every(
@@ -62,7 +59,7 @@ export function generateColorArray(count: number): string[] {
     }
   }
 
-  return colors;
+  return shuffle(colors);
 }
 
 export function ColorBoxes({ hexCodes }: { hexCodes: string[] }) {
@@ -84,46 +81,39 @@ export function ColorBoxes({ hexCodes }: { hexCodes: string[] }) {
 }
 
 export const generatedColors = [
-  "#3E11C9",
-  "#7F1B71",
-  "#9B6314",
-  "#2E851C",
-  "#BE3B79",
-  "#066EA2",
-  "#5959D3",
-  "#B547D0",
-  "#C80264",
-  "#23825D",
-  "#737927",
-  "#8904AC",
-  "#578C10",
-  "#029B45",
-  "#BE6937",
-  "#268EE5",
-  "#0E228E",
-  "#18929B",
-  "#6452FD",
-  "#F50DDD",
-  "#955BE9",
-  "#F26019",
-  "#13A02C",
-  "#48287E",
-  "#E35ED4",
-  "#B333F0",
-  "#D8436A",
-  "#AE13A6",
-  "#5976E5",
-  "#286A7A",
-  "#9B037B",
-  "#9A4301",
-  "#F35C8A",
-  "#0A9806",
-  "#C95BB1",
-  "#10A073",
-  "#4A7526",
-  "#89124B",
-  "#7E1AB6",
-  "#993099",
+  "#3972F1",
+  "#BD1DB0",
+  "#AF642C",
+  "#3A0EC2",
+  "#8551DD",
+  "#BC47CE",
+  "#992956",
+  "#A223FA",
+  "#020A87",
+  "#19718C",
+  "#E7278C",
+  "#438A2B",
+  "#206D35",
+  "#038132",
+  "#6977D8",
+  "#7A074D",
+  "#807622",
+  "#201E6D",
+  "#547A18",
+  "#A801AE",
+  "#0181DA",
+  "#5F2D90",
+  "#6F5CFA",
+  "#148611",
+  "#398204",
+  "#5A0F82",
+  "#17905F",
+  "#BB0232",
+  "#1938A3",
+  "#652258",
+  "#B26D08",
+  "#087D73",
+  "#70760A",
+  "#27756D",
+  "#7B2C10",
 ];
-
-export const usableColors = shuffle(generatedColors);

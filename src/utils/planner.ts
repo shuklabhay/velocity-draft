@@ -1,4 +1,4 @@
-import { CalendarEvent, StrictTableItem, TableItem, WriterInfo } from "./types";
+import { CalendarEvent, StrictTableItem, WriterInfo } from "./types";
 import dayjs from "dayjs";
 
 export function addDays(start: Date, toAdd: number) {
@@ -16,12 +16,7 @@ export function isDateOnOrAfterDate(dateToCheck: Date, referenceDate: Date) {
   return dateIsAfter || dateIsOn;
 }
 
-function isDateOverlap(
-  start1: Date,
-  end1: Date,
-  start2: Date,
-  end2: Date
-): boolean {
+function isDateOverlap(start1: Date, end1: Date, start2: Date, end2: Date) {
   return start1 <= end2 && end1 >= start2;
 }
 
@@ -30,7 +25,7 @@ function findBestStartDate(
   deadline: Date,
   events: CalendarEvent[],
   writingLength: number
-): Date {
+) {
   let bestStartDate = startDate;
   let minOverlapDays = Infinity;
 

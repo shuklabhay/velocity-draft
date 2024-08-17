@@ -9,7 +9,6 @@ import {
   Divider,
   IconButton,
   Stack,
-  Typography,
   useTheme,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";

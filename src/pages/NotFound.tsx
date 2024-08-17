@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { Grid, Typography, useTheme } from "@mui/material";
-import * as React from "react";
 import AppBar from "../components/AppBar";
 
 export default function NotFound() {

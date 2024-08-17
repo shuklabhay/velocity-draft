@@ -8,7 +8,6 @@ import ApplicationTitle from "../components/ApplicationTitle";
 import { useNameContext } from "../components/NameContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BubbleStack from "../components/BubbleStack";
-import { ColorBoxes, generateColorArray } from "../utils/color";
 
 export default function Home() {
   // Hooks
@@ -40,9 +39,6 @@ export default function Home() {
     };
   }, [handleSubmit, isNameEntered]);
 
-  let color = generateColorArray(60);
-  console.log(color);
-
   return (
     <Grid
       container
@@ -73,8 +69,6 @@ export default function Home() {
           subtitle="Flexible Application Essay Scheduler"
         />
       </Grid>
-
-      <ColorBoxes hexCodes={color}></ColorBoxes>
 
       <Grid item sx={{ padding: 1, paddingTop: 35 }}>
         <Stack direction="row" spacing={1}>
