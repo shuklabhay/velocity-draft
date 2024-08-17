@@ -20,6 +20,7 @@ import {
 declare module "@mui/material/styles" {
   interface PaletteOptions {
     iconColor: PaletteColor;
+    disabledIconColor: PaletteColor;
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
@@ -28,6 +29,7 @@ declare module "@mui/material/styles" {
 
   interface Palette {
     iconColor: PaletteColor;
+    disabledIconColor: PaletteColor;
     calendarLineColor: PaletteColor;
     calendarOffRangeColor: PaletteColor;
     calendarTodayColor: PaletteColor;
@@ -53,7 +55,10 @@ function AppContent() {
         contrastText: darkMode ? "#ffffff" : "#000000",
       },
       iconColor: palette.augmentColor({
-        color: { main: darkMode ? "#f4f4f4" : "#6e6e6e" },
+        color: { main: darkMode ? "#f4f4f4" : "#828282" },
+      }),
+      disabledIconColor: palette.augmentColor({
+        color: { main: "#a9a9a9" },
       }),
       calendarLineColor: palette.augmentColor({
         color: { main: darkMode ? "#808080" : "#dcdcdc" },

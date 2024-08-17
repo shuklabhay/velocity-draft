@@ -6,8 +6,6 @@ export const emptyRow: TableItem = {
   deadline: null,
 };
 
-export const emptyTableState: TableItem[] = [{ ...emptyRow }, { ...emptyRow }];
-
 export function isRowPartiallyFilled(row: TableItem) {
   const filledFields = [row.institution, row.essayCount, row.deadline].filter(
     Boolean

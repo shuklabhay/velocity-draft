@@ -182,13 +182,15 @@ export default function ApplicationTable({
                 disableRipple={true}
                 sx={{
                   paddingBottom: 1.4,
-                  color: theme.palette.iconColor.main,
+                  color: deleteCriteria(row)
+                    ? theme.palette.iconColor.main
+                    : theme.palette.disabledIconColor.main,
                   "&:hover": {
                     backgroundColor: "transparent",
                     "& svg": {
                       fill: deleteCriteria(row)
                         ? theme.palette.error.main
-                        : theme.palette.iconColor.main,
+                        : theme.palette.disabledIconColor.main,
                     },
                   },
                 }}

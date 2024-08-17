@@ -11,18 +11,15 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useFormContext } from "./FormContext";
-import { emptyTableState, isTableEntirelyEmpty } from "../utils/table";
+import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 
 export default function ClearFormButton() {
   const theme = useTheme();
   const { tableData, setTableData } = useFormContext();
   const [openDialog, setOpenDialog] = useState(false);
 
-  const disableConditon =
-    !(tableData.length > 2) || isTableEntirelyEmpty(tableData);
-
   const handleResetTable = () => {
-    setTableData({ ...emptyTableState });
+    setTableData([{ ...emptyRow }, { ...emptyRow }]);
     setOpenDialog(false);
   };
 
@@ -30,7 +27,7 @@ export default function ClearFormButton() {
     <>
       <Button
         variant="contained"
-        disabled={disableConditon}
+        disabled={isTableEntirelyEmpty(tableData)}
         onClick={() => setOpenDialog(true)}
         sx={{ textTransform: "none" }}
       >
@@ -65,14 +62,14 @@ export default function ClearFormButton() {
             onClick={() => setOpenDialog(false)}
             sx={{ textTransform: "none" }}
           >
-            No
+            Cancel
           </Button>
           <Button
             variant="contained"
             onClick={handleResetTable}
             sx={{ textTransform: "none" }}
           >
-            Yes
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
