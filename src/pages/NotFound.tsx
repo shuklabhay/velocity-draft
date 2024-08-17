@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Typography, useTheme } from "@mui/material";
 import * as React from "react";
 import AppBar from "../components/AppBar";
-import ApplicationTitle from "../components/ApplicationTitle";
 
 export default function NotFound() {
   const theme = useTheme();
