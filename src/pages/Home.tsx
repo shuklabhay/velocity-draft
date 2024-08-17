@@ -5,16 +5,17 @@ import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
-import { useNameContext } from "../components/NameContext";
+import { useFormContext } from "../components/FormContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BubbleStack from "../components/BubbleStack";
 
 export default function Home() {
   // Hooks
   const navigate = useNavigate();
-  const { name, setName } = useNameContext();
-  const isNameEntered = name.length > 0;
+  const { writerInfo, setWriterInfo } = useFormContext();
+  const isNameEntered = writerInfo.name.length > 0;
   const [renderNameError, setRenderNameError] = useState(false);
+  const nameEntryRef = useRef<HTMLInputElement>(null);
 
   // Helpers
   const handleSubmit = useCallback(() => {
@@ -22,6 +23,9 @@ export default function Home() {
       navigate("/scheduler");
     } else {
       setRenderNameError(true);
+      if (nameEntryRef.current) {
+        nameEntryRef.current.focus();
+      }
     }
   }, [isNameEntered, navigate]);
 
@@ -75,11 +79,15 @@ export default function Home() {
           <ResponsiveTextField
             label={"Enter your name here..."}
             borderRadius={40}
-            value={name}
+            inputRef={nameEntryRef}
+            value={writerInfo.name}
             renderAsError={renderNameError}
             onChange={(e) => {
               setRenderNameError(false);
-              setName(e.target.value);
+              setWriterInfo((prevWriterInfo) => ({
+                ...prevWriterInfo,
+                name: e.target.value,
+              }));
             }}
           />
           <Button

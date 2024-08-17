@@ -11,12 +11,11 @@ import {
 import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
-import { NameProvider } from "./components/NameContext.tsx";
+import { FormProvider } from "./components/FormContext.tsx";
 import {
   DarkModeProvider,
   useDarkMode,
 } from "./components/DarkModeContext.tsx";
-import BubbleStack from "./components/BubbleStack.tsx";
 
 declare module "@mui/material/styles" {
   interface PaletteOptions {
@@ -101,9 +100,9 @@ function AppContent() {
 export default function App() {
   return (
     <DarkModeProvider>
-      <NameProvider>
+      <FormProvider>
         <AppContent />
-      </NameProvider>
+      </FormProvider>
     </DarkModeProvider>
   );
 }

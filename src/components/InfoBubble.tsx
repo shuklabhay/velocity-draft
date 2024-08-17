@@ -13,18 +13,21 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ResponsiveTextField from "./ResponsiveTextField";
-import { useNameContext } from "./NameContext";
+import { useFormContext } from "./FormContext";
 import { useState } from "react";
 
 export default function InfoBubble() {
   const [open, setOpen] = useState(false);
-  const { name, setName } = useNameContext();
-  const [tempName, setTempName] = useState(name);
+  const { writerInfo, setWriterInfo } = useFormContext();
+  const [tempName, setTempName] = useState(writerInfo.name);
   const theme = useTheme();
 
   function toggleOpen() {
-    if (tempName && tempName !== name) {
-      setName(tempName);
+    if (tempName && tempName !== writerInfo.name) {
+      setWriterInfo((prevWriterInfo) => ({
+        ...prevWriterInfo,
+        name: tempName,
+      }));
     }
 
     setOpen(!open);

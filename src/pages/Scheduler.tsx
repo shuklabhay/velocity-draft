@@ -24,13 +24,12 @@ import {
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
-import { useNameContext } from "../components/NameContext";
+import { useFormContext } from "../components/FormContext";
 import AppBar from "../components/AppBar";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
-  const { name } = useNameContext();
   const navigate = useNavigate();
   const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
 
@@ -39,16 +38,19 @@ export default function Scheduler() {
   const [renderSessionCountError, setRenderSessionCountError] = useState(false);
   const [renderStartDateError, setRenderStartDateError] = useState(false);
 
-  useEffect(() => {
-    if (name.length === 0) {
-      navigate("/");
-    }
-  }, [name, navigate]);
-
   // Form Info
-  const [writingLength, setWritingLength] = useState<number>();
-  const [reviewSessionCount, setReviewSessionCount] = useState<number>();
-  const [startDate, setStartDate] = useState<Date>();
+  const {
+    name,
+    writingLength,
+    setWritingLength,
+    reviewSessionCount,
+    setReviewSessionCount,
+    startDate,
+    setStartDate,
+  } = useFormContext();
+  // const [writingLength, setWritingLength] = useState<number>();
+  // const [reviewSessionCount, setReviewSessionCount] = useState<number>();
+  // const [startDate, setStartDate] = useState<Date>();
 
   const [tableData, setTableData] = useState<TableItem[]>([
     { institution: "", essayCount: "", deadline: null },
@@ -56,7 +58,13 @@ export default function Scheduler() {
   ]);
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
-  // Error feedback
+  // Error handling
+  useEffect(() => {
+    if (name.length === 0) {
+      navigate("/");
+    }
+  }, [name, navigate]);
+
   useEffect(() => {
     const isTableDataNotEmpty = tableData.some(
       (row) => !isRowEntirelyEmpty(row)

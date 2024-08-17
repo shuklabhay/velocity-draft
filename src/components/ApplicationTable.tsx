@@ -99,11 +99,16 @@ export default function ApplicationTable({
     }
   }
 
+  // Handle delete
+  function deleteCriteria(row: TableItem) {
+    const removeFilledRow = !isRowEntirelyEmpty(row) && tableData.length > 2;
+
+    return removeFilledRow;
+  }
+
   function handleDelete(rowToDelete: TableItem) {
-    if (tableData.length > 2) {
-      const updatedTableData = tableData.filter((row) => row !== rowToDelete);
-      setTableData(updatedTableData);
-    }
+    const updatedTableData = tableData.filter((row) => row !== rowToDelete);
+    setTableData(updatedTableData);
   }
 
   return (
@@ -125,6 +130,7 @@ export default function ApplicationTable({
             <ResponsiveTextField
               label="Institution"
               borderRadius={5}
+              inputRef={null}
               value={row.institution}
               renderAsError={isRowPartiallyFilled(row) && !row.institution}
               onChange={(e) =>
@@ -172,7 +178,7 @@ export default function ApplicationTable({
               />
               <IconButton
                 onClick={() => {
-                  if (!isRowEntirelyEmpty(row)) {
+                  if (deleteCriteria(row)) {
                     handleDelete(row);
                   }
                 }}
@@ -183,10 +189,9 @@ export default function ApplicationTable({
                   "&:hover": {
                     backgroundColor: "transparent",
                     "& svg": {
-                      fill:
-                        !isRowEntirelyEmpty(row) && tableData.length > 2
-                          ? theme.palette.error.main
-                          : theme.palette.iconColor.main,
+                      fill: deleteCriteria(row)
+                        ? theme.palette.error.main
+                        : theme.palette.iconColor.main,
                     },
                   },
                 }}
