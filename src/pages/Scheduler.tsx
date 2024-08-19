@@ -23,7 +23,7 @@ import {
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
-import { useFormContext } from "../components/FormContext";
+import { useAppContext } from "../components/AppContext";
 import AppBar from "../components/AppBar";
 import ClearFormButton from "../components/ClearFormButton";
 
@@ -40,7 +40,7 @@ export default function Scheduler() {
 
   // Form Info
   const { writerInfo, setWriterInfo, tableData, setTableData } =
-    useFormContext();
+    useAppContext();
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
   // Error handling

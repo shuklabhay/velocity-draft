@@ -5,14 +5,14 @@ import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
-import { useFormContext } from "../components/FormContext";
+import { useAppContext } from "../components/AppContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BubbleStack from "../components/BubbleStack";
 
 export default function Home() {
   // Hooks
   const navigate = useNavigate();
-  const { writerInfo, setWriterInfo } = useFormContext();
+  const { writerInfo, setWriterInfo } = useAppContext();
   const isNameEntered = writerInfo.name.length > 0;
   const [renderNameError, setRenderNameError] = useState(false);
   const nameEntryRef = useRef<HTMLInputElement>(null);

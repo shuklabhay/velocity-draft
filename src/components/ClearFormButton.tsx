@@ -10,12 +10,12 @@ import {
   DialogContentText,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useFormContext } from "./FormContext";
+import { useAppContext } from "./AppContext";
 import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 
 export default function ClearFormButton() {
   const theme = useTheme();
-  const { tableData, setTableData } = useFormContext();
+  const { tableData, setTableData } = useAppContext();
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleResetTable = () => {

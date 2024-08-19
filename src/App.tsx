@@ -11,11 +11,7 @@ import {
 import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
-import { FormProvider } from "./components/FormContext.tsx";
-import {
-  DarkModeProvider,
-  useDarkMode,
-} from "./components/DarkModeContext.tsx";
+import { AppProvider, useAppContext } from "./components/AppContext.tsx";
 
 declare module "@mui/material/styles" {
   interface PaletteOptions {
@@ -38,7 +34,7 @@ declare module "@mui/material/styles" {
 }
 
 function AppContent() {
-  const { darkMode } = useDarkMode();
+  const { darkMode } = useAppContext();
   const { palette } = createTheme();
   const theme = createTheme({
     palette: {
@@ -82,6 +78,15 @@ function AppContent() {
       h5: { fontSize: "1.25rem" },
       h6: { fontSize: "1rem" },
     },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: `
+          * {
+            transition: none;
+          }
+        `,
+      },
+    },
   });
 
   return (
@@ -104,10 +109,8 @@ function AppContent() {
 
 export default function App() {
   return (
-    <DarkModeProvider>
-      <FormProvider>
-        <AppContent />
-      </FormProvider>
-    </DarkModeProvider>
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
