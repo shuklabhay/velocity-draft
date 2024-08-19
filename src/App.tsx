@@ -9,7 +9,6 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import Home from "./pages/Home.tsx";
-import NotFound from "./pages/NotFound.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
 import { AppProvider, useAppContext } from "./components/AppContext.tsx";
 
@@ -111,7 +110,6 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/scheduler" element={<Scheduler />} />
-              <Route path="/*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
