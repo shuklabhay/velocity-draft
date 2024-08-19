@@ -106,7 +106,7 @@ function AppContent() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container>
-        <BrowserRouter>
+        <BrowserRouter basename="/velocity-draft">
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />
