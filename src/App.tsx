@@ -110,7 +110,7 @@ function AppContent() {
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/Scheduler" element={<Scheduler />} />
+              <Route path="/scheduler" element={<Scheduler />} />
               <Route path="/*" element={<NotFound />} />
             </Routes>
           </Suspense>

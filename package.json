@@ -1,6 +1,6 @@
 {
   "homepage": "https://shuklabhay.github.io/velocity-draft",
-  "name": "velocitydraft",
+  "name": "velocity-draft",
   "version": "2.0.0",
   "scripts": {
     "setup": "npm ci && npm --prefix functions ci",
