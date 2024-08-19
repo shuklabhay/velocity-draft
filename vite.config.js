@@ -4,5 +4,6 @@ import react from "@vitejs/plugin-react";
 export default () => {
   return defineConfig({
     plugins: [react()],
+    base: "/velocity-draft",
   });
 };
