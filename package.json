@@ -1,10 +1,12 @@
 {
+  "homepage": "https://shuklabhay.github.io/velocity-draft",
   "name": "velocitydraft",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
     "setup": "npm ci && npm --prefix functions ci",
     "dev": "vite --host",
     "build": "vite build",
+    "preview": "vite preview",
     "lint": "prettier ./ --write",
     "format-check": "prettier ./ --check"
   },
