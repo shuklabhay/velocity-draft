@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import {
   Container,
@@ -22,7 +22,6 @@ declare module "@mui/material/styles" {
     calendarTodayColor: PaletteColor;
     agendaLineColor: PaletteColor;
   }
-
   interface Palette {
     iconColor: PaletteColor;
     disabledIconColor: PaletteColor;
@@ -36,6 +35,20 @@ declare module "@mui/material/styles" {
 function AppContent() {
   const { darkMode } = useAppContext();
   const { palette } = createTheme();
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -54,7 +67,7 @@ function AppContent() {
         color: { main: darkMode ? "#f4f4f4" : "#828282" },
       }),
       disabledIconColor: palette.augmentColor({
-        color: { main: "#a9a9a9" },
+        color: { main: darkMode ? "#595959" : "#cfcfcf" },
       }),
       calendarLineColor: palette.augmentColor({
         color: { main: darkMode ? "#808080" : "#dcdcdc" },
@@ -82,7 +95,7 @@ function AppContent() {
       MuiCssBaseline: {
         styleOverrides: `
           * {
-            transition: none;
+            transition: none !important;
           }
         `,
       },

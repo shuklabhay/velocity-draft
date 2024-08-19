@@ -14,12 +14,14 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { useAppContext } from "./AppContext";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 
 export default function InfoBubble() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const { writerInfo, setWriterInfo } = useAppContext();
+  const { writerInfo, setWriterInfo, tableData, setTableData } =
+    useAppContext();
   const [tempName, setTempName] = useState(writerInfo.name);
 
   function toggleOpen() {
@@ -31,6 +33,28 @@ export default function InfoBubble() {
     }
 
     setOpen(!open);
+  }
+
+  const isAppDataEmpty = useMemo(() => {
+    const isWriterInfoEmpty =
+      !writerInfo.name &&
+      !writerInfo.writingLength &&
+      !writerInfo.reviewSessionCount &&
+      !writerInfo.startDate &&
+      !tempName;
+
+    return isWriterInfoEmpty && isTableEntirelyEmpty(tableData);
+  }, [writerInfo, tableData, tempName]);
+
+  function resetAppData() {
+    setTempName("");
+    setWriterInfo({
+      name: "",
+      writingLength: null,
+      reviewSessionCount: null,
+      startDate: null,
+    });
+    setTableData([{ ...emptyRow }, { ...emptyRow }]);
   }
 
   return (
@@ -111,6 +135,15 @@ export default function InfoBubble() {
         </DialogContent>
 
         <DialogActions>
+          <Button
+            color="error"
+            variant="contained"
+            disabled={isAppDataEmpty}
+            onClick={resetAppData}
+            sx={{ padding: 1, textTransform: "none", marginRight: "auto" }}
+          >
+            Reset App Data
+          </Button>
           <Button
             autoFocus
             variant="contained"
