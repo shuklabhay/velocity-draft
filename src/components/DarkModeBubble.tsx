@@ -2,10 +2,10 @@ import React from "react";
 import { IconButton } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { useDarkMode } from "./DarkModeContext";
+import { useAppContext } from "./AppContext";
 
 export default function DarkModeBubble() {
-  const { darkMode, toggleDarkMode } = useDarkMode();
+  const { darkMode, toggleDarkMode } = useAppContext();
 
   return (
     <IconButton onClick={toggleDarkMode}>

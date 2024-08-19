@@ -14,7 +14,11 @@ import dayjs from "dayjs";
 import ResponsiveDatePicker from "./ResponsiveDatePicker";
 import ResponsiveTextField from "./ResponsiveTextField";
 import { TableItem } from "../utils/types";
-import { isRowEntirelyEmpty, isRowPartiallyFilled } from "../utils/table";
+import {
+  emptyRow,
+  isRowEntirelyEmpty,
+  isRowPartiallyFilled,
+} from "../utils/table";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function ApplicationTable({
@@ -39,14 +43,7 @@ export default function ApplicationTable({
   }
 
   function addEmptyRow() {
-    setTableData([
-      ...tableData,
-      {
-        institution: "",
-        essayCount: "",
-        deadline: null,
-      },
-    ]);
+    setTableData([...tableData, { ...emptyRow }]);
   }
 
   function handleChange(
@@ -99,11 +96,16 @@ export default function ApplicationTable({
     }
   }
 
+  // Handle delete
+  function deleteCriteria(row: TableItem) {
+    const removeFilledRow = !isRowEntirelyEmpty(row) && tableData.length > 2;
+
+    return removeFilledRow;
+  }
+
   function handleDelete(rowToDelete: TableItem) {
-    if (tableData.length > 2) {
-      const updatedTableData = tableData.filter((row) => row !== rowToDelete);
-      setTableData(updatedTableData);
-    }
+    const updatedTableData = tableData.filter((row) => row !== rowToDelete);
+    setTableData(updatedTableData);
   }
 
   return (
@@ -125,6 +127,7 @@ export default function ApplicationTable({
             <ResponsiveTextField
               label="Institution"
               borderRadius={5}
+              inputRef={null}
               value={row.institution}
               renderAsError={isRowPartiallyFilled(row) && !row.institution}
               onChange={(e) =>
@@ -172,21 +175,22 @@ export default function ApplicationTable({
               />
               <IconButton
                 onClick={() => {
-                  if (!isRowEntirelyEmpty(row)) {
+                  if (deleteCriteria(row)) {
                     handleDelete(row);
                   }
                 }}
                 disableRipple={true}
                 sx={{
                   paddingBottom: 1.4,
-                  color: theme.palette.iconColor.main,
+                  color: deleteCriteria(row)
+                    ? theme.palette.iconColor.main
+                    : theme.palette.disabledIconColor.main,
                   "&:hover": {
                     backgroundColor: "transparent",
                     "& svg": {
-                      fill:
-                        !isRowEntirelyEmpty(row) && tableData.length > 2
-                          ? theme.palette.error.main
-                          : theme.palette.iconColor.main,
+                      fill: deleteCriteria(row)
+                        ? theme.palette.error.main
+                        : theme.palette.disabledIconColor.main,
                     },
                   },
                 }}

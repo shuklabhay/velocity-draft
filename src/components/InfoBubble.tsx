@@ -13,21 +13,48 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ResponsiveTextField from "./ResponsiveTextField";
-import { useNameContext } from "./NameContext";
-import { useState } from "react";
+import { useAppContext } from "./AppContext";
+import { useMemo, useState } from "react";
+import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 
 export default function InfoBubble() {
-  const [open, setOpen] = useState(false);
-  const { name, setName } = useNameContext();
-  const [tempName, setTempName] = useState(name);
   const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const { writerInfo, setWriterInfo, tableData, setTableData } =
+    useAppContext();
+  const [tempName, setTempName] = useState(writerInfo.name);
 
   function toggleOpen() {
-    if (tempName && tempName !== name) {
-      setName(tempName);
+    if (tempName && tempName !== writerInfo.name) {
+      setWriterInfo((prevWriterInfo) => ({
+        ...prevWriterInfo,
+        name: tempName,
+      }));
     }
 
     setOpen(!open);
+  }
+
+  const isAppDataEmpty = useMemo(() => {
+    const isWriterInfoEmpty =
+      !writerInfo.name &&
+      !writerInfo.writingLength &&
+      !writerInfo.reviewSessionCount &&
+      !writerInfo.startDate &&
+      !tempName;
+
+    return isWriterInfoEmpty && isTableEntirelyEmpty(tableData);
+  }, [writerInfo, tableData, tempName]);
+
+  function resetAppData() {
+    setTempName("");
+    setWriterInfo({
+      name: "",
+      writingLength: null,
+      reviewSessionCount: null,
+      startDate: null,
+    });
+    setTableData([{ ...emptyRow }, { ...emptyRow }]);
   }
 
   return (
@@ -97,6 +124,7 @@ export default function InfoBubble() {
             <ResponsiveTextField
               label={"Enter your name here..."}
               borderRadius={5}
+              inputRef={null}
               value={tempName}
               renderAsError={false}
               onChange={(e) => {
@@ -107,6 +135,15 @@ export default function InfoBubble() {
         </DialogContent>
 
         <DialogActions>
+          <Button
+            color="error"
+            variant="contained"
+            disabled={isAppDataEmpty}
+            onClick={resetAppData}
+            sx={{ padding: 1, textTransform: "none", marginRight: "auto" }}
+          >
+            Reset App Data
+          </Button>
           <Button
             autoFocus
             variant="contained"

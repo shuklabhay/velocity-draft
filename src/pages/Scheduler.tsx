@@ -18,19 +18,18 @@ import ResponsiveCalendar from "../components/ResponsiveCalendar";
 import {
   CalendarEvent,
   StrictTableItem,
-  TableItem,
-  WriterInfo,
+  StrictWriterInfo,
 } from "../utils/types";
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
-import { useNameContext } from "../components/NameContext";
+import { useAppContext } from "../components/AppContext";
 import AppBar from "../components/AppBar";
+import ClearFormButton from "../components/ClearFormButton";
 
 export default function Scheduler() {
   // Hooks
   const theme = useTheme();
-  const { name } = useNameContext();
   const navigate = useNavigate();
   const [writingPlan, setWritingPlan] = useState<CalendarEvent[]>([]);
 
@@ -39,65 +38,56 @@ export default function Scheduler() {
   const [renderSessionCountError, setRenderSessionCountError] = useState(false);
   const [renderStartDateError, setRenderStartDateError] = useState(false);
 
-  useEffect(() => {
-    if (name.length === 0) {
-      navigate("/");
-    }
-  }, [name, navigate]);
-
   // Form Info
-  const [writingLength, setWritingLength] = useState<number>();
-  const [reviewSessionCount, setReviewSessionCount] = useState<number>();
-  const [startDate, setStartDate] = useState<Date>();
-
-  const [tableData, setTableData] = useState<TableItem[]>([
-    { institution: "", essayCount: "", deadline: null },
-    { institution: "", essayCount: "", deadline: null },
-  ]);
+  const { writerInfo, setWriterInfo, tableData, setTableData } =
+    useAppContext();
   const institutionsAppliedTo = tableData.map((item) => item.institution);
 
-  // Error feedback
+  // Error handling
+  useEffect(() => {
+    if (writerInfo.name.length === 0) {
+      navigate("/");
+    }
+  }, [writerInfo.name, navigate]);
+
   useEffect(() => {
     const isTableDataNotEmpty = tableData.some(
       (row) => !isRowEntirelyEmpty(row)
     );
 
     if (isTableDataNotEmpty) {
-      setRenderWritingLengthError(!writingLength);
-      setRenderSessionCountError(!reviewSessionCount);
-      setRenderStartDateError(!startDate);
+      setRenderWritingLengthError(!writerInfo.writingLength);
+      setRenderSessionCountError(!writerInfo.reviewSessionCount);
+      setRenderStartDateError(!writerInfo.startDate);
     } else {
       setRenderWritingLengthError(false);
       setRenderSessionCountError(false);
       setRenderStartDateError(false);
     }
-  }, [writingLength, reviewSessionCount, startDate, tableData]);
+  }, [writerInfo, tableData]);
 
   // Generate calendar events
   useEffect(() => {
-    if (
-      writingLength &&
-      reviewSessionCount &&
-      startDate &&
-      isTableReadyToCreateEvents(tableData) // Checks for null date
-    ) {
-      const writerInfo: WriterInfo = {
-        name: name,
-        writingLength: writingLength,
-        reviewSessionCount: reviewSessionCount,
-        startDate: startDate,
-      };
-      const strictTableData = tableData as StrictTableItem[]; // isTableReadyToCreateEvents checks for null date
+    // Strict type checks
+    const isWriterInfoStrict =
+      writerInfo.writingLength &&
+      writerInfo.reviewSessionCount &&
+      writerInfo.startDate;
+    const isTableDataStrict = isTableReadyToCreateEvents(tableData);
+
+    if (isWriterInfoStrict && isTableDataStrict) {
+      const strictWriterInfo = writerInfo as StrictWriterInfo;
+      const strictTableData = tableData as StrictTableItem[];
       setWritingPlan(
         createWritingPlan({
-          writerInfo: writerInfo,
+          writerInfo: strictWriterInfo,
           tableData: strictTableData,
         })
       );
     }
-  }, [writingLength, reviewSessionCount, startDate, tableData]);
+  }, [writerInfo, tableData]);
 
-  if (name.length !== 0) {
+  if (writerInfo.name.length !== 0) {
     return (
       <>
         <AppBar />
@@ -110,7 +100,7 @@ export default function Scheduler() {
               fontWeight: "bold",
             }}
           >
-            {name},
+            {writerInfo.name},
           </span>{" "}
           tell me a little more about yourself:
         </Typography>
@@ -132,13 +122,16 @@ export default function Scheduler() {
             </Grid>
             <Grid item>
               <FormControl fullWidth error={renderWritingLengthError}>
-                {!writingLength && (
+                {!writerInfo.writingLength && (
                   <InputLabel shrink={false}>Writing Length</InputLabel>
                 )}
                 <Select
-                  value={String(writingLength)}
+                  value={String(writerInfo.writingLength)}
                   onChange={(e) => {
-                    setWritingLength(Number(e.target.value));
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      writingLength: Number(e.target.value),
+                    }));
                   }}
                 >
                   <MenuItem value={1}>1 Day</MenuItem>
@@ -166,13 +159,16 @@ export default function Scheduler() {
             </Grid>
             <Grid item>
               <FormControl fullWidth error={renderSessionCountError}>
-                {!reviewSessionCount && (
+                {!writerInfo.reviewSessionCount && (
                   <InputLabel shrink={false}>Review sessions</InputLabel>
                 )}
                 <Select
-                  value={String(reviewSessionCount)}
+                  value={String(writerInfo.reviewSessionCount)}
                   onChange={(e) => {
-                    setReviewSessionCount(Number(e.target.value));
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      reviewSessionCount: Number(e.target.value),
+                    }));
                   }}
                 >
                   <MenuItem value={1}>1 Session</MenuItem>
@@ -205,17 +201,25 @@ export default function Scheduler() {
                   label={"Start Date"}
                   minDate={dayjs()}
                   renderAsError={renderStartDateError}
-                  value={startDate ? dayjs(startDate) : null}
-                  onChange={(newValue) => setStartDate(newValue.toDate())}
+                  value={
+                    writerInfo.startDate ? dayjs(writerInfo.startDate) : null
+                  }
+                  onChange={(newValue) => {
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      startDate: newValue.toDate(),
+                    }));
+                  }}
                 />
                 <Button
                   variant="contained"
                   sx={{ textTransform: "none" }}
-                  disabled={
-                    startDate && dayjs(startDate).isSame(dayjs(), "day")
-                  }
+                  disabled={dayjs(writerInfo.startDate).isSame(dayjs(), "day")}
                   onClick={() => {
-                    setStartDate(dayjs().toDate());
+                    setWriterInfo((prevWriterInfo) => ({
+                      ...prevWriterInfo,
+                      startDate: dayjs().toDate(),
+                    }));
                   }}
                 >
                   Today
@@ -226,23 +230,30 @@ export default function Scheduler() {
 
           <Grid container direction="column" sx={{ paddingBottom: 3 }}>
             <Grid item>
-              <Typography variant="h5">
-                <span
-                  style={{
-                    color: theme.palette.primary.main,
-                    fontWeight: "bold",
-                  }}
-                >
-                  What
-                </span>{" "}
-                are you applying to?
-              </Typography>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ justifyContent: "space-between", alignItems: "center" }}
+              >
+                <Typography variant="h5">
+                  <span
+                    style={{
+                      color: theme.palette.primary.main,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    What
+                  </span>{" "}
+                  are you applying to?
+                </Typography>
+                <ClearFormButton />
+              </Stack>
             </Grid>
             <Grid item>
               <ApplicationTable
                 minDate={
-                  startDate
-                    ? addDays(startDate, 1)
+                  writerInfo.startDate
+                    ? addDays(writerInfo.startDate, 1)
                     : addDays(dayjs().toDate(), 1)
                 }
                 tableData={tableData}
