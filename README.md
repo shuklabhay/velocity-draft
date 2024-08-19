@@ -5,7 +5,7 @@
 
 ## App Info
 
-College application essay writing scheduler
+Flexible application essay scheduler
 
 3rd place submission at OneHacks III, view project on [Devpost](https://devpost.com/software/velocitydraft)!
 
