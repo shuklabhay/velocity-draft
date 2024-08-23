@@ -7,7 +7,7 @@
 
 Flexible application essay scheduler
 
-3rd place submission at OneHacks III, view project on [Devpost](https://devpost.com/software/velocitydraft)!
+3rd place submission at OneHacks III, view original project on [Devpost](https://devpost.com/software/velocitydraft)!
 
 ## Setup
 
