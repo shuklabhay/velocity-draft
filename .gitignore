@@ -1,9 +1,3 @@
-
 /node_modules
 
-# backend
-backend/node_modules
-backend/serviceAccountKey.json
-frontend/src/firebaseConfig.js
-frontend/src/firestore.js
 .DS_Store
