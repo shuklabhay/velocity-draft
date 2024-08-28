@@ -7,6 +7,8 @@
 
 Flexible application essay scheduler
 
+![Application Interfaces](public/app-interfaces.png)
+
 3rd place submission at OneHacks III, view original project on [Devpost](https://devpost.com/software/velocitydraft)!
 
 ## Setup
