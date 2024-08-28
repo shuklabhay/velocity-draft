@@ -5,7 +5,7 @@
 
 ## App Info
 
-Flexible application essay scheduler
+Flexible application essay scheduler. Use the application [here](shuklabhay.github.io/velocity-draft/).
 
 ![Application Interfaces](public/app-interfaces.png)
 
