@@ -10,6 +10,7 @@ Flexible application essay scheduler, access application [here](shuklabhay.githu
 ![Application Interfaces](public/app-interfaces.png)
 
 Originally 3rd place submission at [2023 OneHacks III Hackathon,](https://devpost.com/software/velocitydraft) completely rewritten for 2024 Hack Club Arcade.
+
 ## Setup
 
 - [Install](https://nodejs.org/en/download) Node.js 18 or higher
