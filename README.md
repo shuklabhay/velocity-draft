@@ -5,9 +5,9 @@
 
 ## App Info
 
-Flexible application essay scheduler webapp. Access application [here.](shuklabhay.github.io/velocity-draft/)
+Flexible application essay scheduler webapp. Access application [here.](https://shuklabhay.github.io/velocity-draft/)
 
-![Application Interfaces](public/app-interfaces.png)
+[![Application Interfaces](public/app-interfaces.png)](https://shuklabhay.github.io/velocity-draft/)
 
 Originally 3rd place submission at [2023 OneHacks III Hackathon,](https://devpost.com/software/velocitydraft) completely rewritten for 2024 Hack Club Arcade.
 
