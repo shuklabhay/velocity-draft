@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Suspense, useEffect } from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import {
   Container,
   createTheme,
@@ -105,14 +105,14 @@ function AppContent() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container>
-        <BrowserRouter basename="/velocity-draft">
+        <HashRouter basename="/velocity-draft">
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/scheduler" element={<Scheduler />} />
             </Routes>
           </Suspense>
-        </BrowserRouter>
+        </HashRouter>
       </Container>
     </ThemeProvider>
   );
