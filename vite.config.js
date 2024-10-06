@@ -5,6 +5,6 @@ export default () => {
   return defineConfig({
     plugins: [react()],
     base: "/velocity-draft/",
-    '404': './404.html',
+    404: "./404.html",
   });
 };
