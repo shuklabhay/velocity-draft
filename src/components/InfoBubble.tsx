@@ -103,7 +103,15 @@ export default function InfoBubble() {
           <br />
           <DialogContentText>
             VelocityDraft won third place in the 2023 OneHacks III hackathon. No
-            user data is ever stored or saved.
+            user data is ever stored or saved. Application is 100% open source,
+            <a
+              href="https://github.com/shuklabhay/velocity-draft"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              view on GitHub
+            </a>
+            .
           </DialogContentText>
         </DialogContent>
 
