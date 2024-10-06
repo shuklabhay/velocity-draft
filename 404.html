@@ -1,27 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="./favicon.ico" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="apple-touch-icon" href="./logo192.png" />
     <title>VelocityDraft</title>
     <script type="text/javascript">
-      var segmentCount = 1;
-      var l = window.location;
+      // Single Page Apps for GitHub Pages
+      var pathSegmentsToKeep = 1;
 
+      var l = window.location;
       var repoName = "/velocity-draft";
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        repoName + '/?/' +
-        l.pathname.slice(repoName.length).split('/').slice(segmentCount).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      var newPath =
+        l.protocol +
+        "//" +
+        l.hostname +
+        (l.port ? ":" + l.port : "") +
+        repoName +
+        "/?/" +
+        l.pathname
+          .replace(repoName, "")
+          .split("/")
+          .slice(pathSegmentsToKeep)
+          .join("/")
+          .replace(/&/g, "~and~") +
+        (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+        l.hash;
+
+      l.replace(newPath);
     </script>
-    <meta name="description" content="Flexible Application Essay Scheduler" />
   </head>
   <body>
+    Redirecting...
   </body>
 </html>
