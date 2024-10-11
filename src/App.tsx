@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Suspense, useEffect } from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom";
 import {
   Container,
   createTheme,
@@ -10,7 +10,27 @@ import {
 } from "@mui/material";
 import Home from "./pages/Home.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
-import { AppProvider, useAppContext } from "./components/AppContext.tsx";
+import ReactGA from "react-ga4";
+import { AppProvider, useAppContext } from "./utils/AppContext.tsx";
+
+// Route Tracking
+const AnalyticsTrackingID = import.meta.env.VITE_TRACKING_ID;
+ReactGA.initialize(AnalyticsTrackingID);
+
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({
+      hitType: "pageview",
+      page: location.pathname,
+      title: location.pathname,
+      location: location.pathname,
+    });
+  }, [location]);
+
+  return null;
+}
 
 declare module "@mui/material/styles" {
   interface PaletteOptions {
@@ -106,6 +126,7 @@ function AppContent() {
       <CssBaseline />
       <Container>
         <BrowserRouter basename="/velocity-draft">
+          <RouteTracker />
           <Suspense>
             <Routes>
               <Route path="/" element={<Home />} />
