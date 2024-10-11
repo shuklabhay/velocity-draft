@@ -23,7 +23,7 @@ import {
 import { useEffect, useState } from "react";
 import { addDays, createWritingPlan } from "../utils/planner";
 import { isRowEntirelyEmpty, isTableReadyToCreateEvents } from "../utils/table";
-import { useAppContext } from "../components/AppContext";
+import { useAppContext } from "../utils/AppContext";
 import AppBar from "../components/AppBar";
 import ClearFormButton from "../components/ClearFormButton";
 
