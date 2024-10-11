@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     {
-      name: "copy-404",
+      name: "copy-static-deps",
       closeBundle: () => {
         fs.copyFileSync("404.html", "dist/404.html");
       },
