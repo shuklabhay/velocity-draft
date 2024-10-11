@@ -18,6 +18,7 @@ Originally 3rd place submission at [2023 OneHacks III Hackathon,](https://devpos
 - [Install](https://docs.oracle.com/en/java/javase/20/install/overview-jdk-installation.html) Java JDK 11 or higher
   - Confirm installation by running `java --version` in the command line
 - In the repo run `npm run setup`
+- Create a `.env` file with `VITE_TRACKING_ID=YOUR_GOOGLE_ANALYTICS_TRACKING_ID`
 
 ## VSCode Setup
 

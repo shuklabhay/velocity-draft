@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ResponsiveTextField from "./ResponsiveTextField";
-import { useAppContext } from "./AppContext";
+import { useAppContext } from "../utils/AppContext";
 import { useMemo, useState } from "react";
 import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 

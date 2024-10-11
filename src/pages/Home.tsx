@@ -5,7 +5,7 @@ import { Stack } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ResponsiveTextField from "../components/ResponsiveTextField";
 import ApplicationTitle from "../components/ApplicationTitle";
-import { useAppContext } from "../components/AppContext";
+import { useAppContext } from "../utils/AppContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BubbleStack from "../components/BubbleStack";
 

@@ -10,7 +10,7 @@ import {
   DialogContentText,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAppContext } from "./AppContext";
+import { useAppContext } from "../utils/AppContext";
 import { emptyRow, isTableEntirelyEmpty } from "../utils/table";
 
 export default function ClearFormButton() {
