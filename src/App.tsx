@@ -15,17 +15,16 @@ import { AppProvider, useAppContext } from "./utils/AppContext.tsx";
 
 // Route Tracking
 const AnalyticsTrackingID = import.meta.env.VITE_TRACKING_ID;
-ReactGA.initialize(AnalyticsTrackingID);
 
 function RouteTracker() {
   const location = useLocation();
+  ReactGA.initialize(AnalyticsTrackingID);
 
   useEffect(() => {
     ReactGA.send({
       hitType: "pageview",
       page: location.pathname,
       title: location.pathname,
-      location: location.pathname,
     });
   }, [location]);
 
