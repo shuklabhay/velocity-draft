@@ -128,6 +128,7 @@ function AppContent() {
       <Container>
         <BrowserRouter basename="/velocity-draft/">
           <Suspense>
+            <RouteTracker />
             <Routes>
               <RouteTracker />
               <Route path="/" element={<Home />} />

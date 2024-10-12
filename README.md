@@ -1,7 +1,7 @@
 # VelocityDraft
 
 [![On Push](https://github.com/shuklabhay/velocity-draft/actions/workflows/push.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/push.yml/badge.svg)
-[![Deploy GitHub Page](https://github.com/shuklabhay/velocity-draft/actions/workflows/deploy-gh-page.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/deploy-gh-page.yml/badge.svg)
+[![Deploy GitHub Page](https://github.com/shuklabhay/velocity-draft/actions/workflows/deploy.yml/badge.svg)](https://github.com/shuklabhay/velocity-draft/actions/workflows/deploy.yml/badge.svg)
 
 ## App Info
 
