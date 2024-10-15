@@ -11,27 +11,6 @@ import {
 import Home from "./pages/Home.tsx";
 import Scheduler from "./pages/Scheduler.tsx";
 import { AppProvider, useAppContext } from "./utils/AppContext.tsx";
-import ReactGA from "react-ga4";
-
-const AnalyticsTrackingID = import.meta.env.VITE_TRACKING_ID;
-
-function RouteTracker() {
-  const location = useLocation();
-
-  useEffect(() => {
-    ReactGA.initialize(AnalyticsTrackingID);
-  }, [AnalyticsTrackingID]);
-
-  useEffect(() => {
-    ReactGA.send({
-      hitType: "pageview",
-      page: location.pathname,
-      title: location.pathname,
-    });
-  }, [location]);
-
-  return null;
-}
 
 declare module "@mui/material/styles" {
   interface PaletteOptions {
@@ -128,7 +107,6 @@ function AppContent() {
       <Container>
         <BrowserRouter basename="/velocity-draft/">
           <Suspense>
-            <RouteTracker />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/scheduler" element={<Scheduler />} />
