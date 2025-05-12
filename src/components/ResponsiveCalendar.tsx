@@ -6,6 +6,7 @@ import { CalendarEvent } from "../utils/types";
 import ResponsiveEvent from "./ResponsiveEvent";
 import { generatedColors } from "../utils/color";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useEffect } from "react";
 
 export default function ResponsiveCalendar({
   events,
@@ -83,6 +84,10 @@ export default function ResponsiveCalendar({
     };
   };
 
+  const CustomResponsiveToolbar = (toolbarProps: any) => (
+    <ResponsiveToolbar {...toolbarProps} calendarEvents={events} />
+  );
+
   return (
     <Stack
       spacing={0}
@@ -128,7 +133,7 @@ export default function ResponsiveCalendar({
           borderRadius: 50,
         }}
         components={{
-          toolbar: ResponsiveToolbar,
+          toolbar: CustomResponsiveToolbar,
           event: ResponsiveEvent,
         }}
         eventPropGetter={eventStyleGetter}

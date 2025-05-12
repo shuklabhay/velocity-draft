@@ -72,9 +72,9 @@ export function createWritingPlan({
   const deadlines: CalendarEvent[] = [];
   const maxReviewLength = 5;
 
-  const sortedTableData = [...tableData].sort((a, b) =>
-    dayjs(a.deadline).diff(dayjs(b.deadline))
-  );
+  const sortedTableData = tableData
+    .map((item) => ({ ...item, deadline: dayjs(item.deadline).toDate() }))
+    .sort((a, b) => dayjs(a.deadline).diff(dayjs(b.deadline)));
 
   sortedTableData.forEach(({ institution, essayCount, deadline }) => {
     deadlines.push({
@@ -131,7 +131,6 @@ export function createWritingPlan({
           end: finishedWritingDate,
         });
 
-        // Review
         let lastProcessedDate = finishedWritingDate;
 
         const reviewPeriodLength = Math.abs(
@@ -189,4 +188,94 @@ export function createWritingPlan({
   });
 
   return [...deadlines, ...outputEvents];
+}
+
+function escapeICSText(text: string): string {
+  return text
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n");
+}
+
+function generateUID(): string {
+  return (
+    "velocitydraft-" +
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15) +
+    "-" +
+    Date.now().toString()
+  );
+}
+
+export function generateICSContent(events: CalendarEvent[]): string {
+  const now = new Date();
+  const timestamp = dayjs(now).format("YYYYMMDDTHHmmss") + "Z";
+
+  let icsContent = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//VelocityDraft//Essay Planning Calendar//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+  ];
+
+  events.forEach((event) => {
+    if (
+      !event.start ||
+      !event.end ||
+      isNaN(event.start.getTime()) ||
+      isNaN(event.end.getTime())
+    ) {
+      console.error("Invalid date found for event:", event.title);
+      return;
+    }
+    const startDate = dayjs(event.start).format("YYYYMMDD");
+    const endDate = dayjs(event.end).format("YYYYMMDD");
+
+    const summary = escapeICSText(event.title);
+    const description = escapeICSText(`Institution: ${event.institution}`);
+    const uid = generateUID();
+
+    icsContent = icsContent.concat([
+      "BEGIN:VEVENT",
+      `UID:${uid}`,
+      `DTSTAMP:${timestamp}`,
+      `DTSTART;VALUE=DATE:${startDate}`,
+      `DTEND;VALUE=DATE:${endDate}`,
+      `SUMMARY:${summary}`,
+      `DESCRIPTION:${description}`,
+      "SEQUENCE:0",
+      "STATUS:CONFIRMED",
+      "TRANSP:TRANSPARENT",
+      "END:VEVENT",
+    ]);
+  });
+
+  icsContent.push("END:VCALENDAR");
+  return icsContent.join("\r\n");
+}
+
+export function downloadICSFile(events: CalendarEvent[]): void {
+  let startDate = new Date();
+  if (events && events.length > 0 && events[0]) {
+    startDate = events.reduce((earliest, event) => {
+      return event.start < earliest ? event.start : earliest;
+    }, events[0].start);
+  }
+  const startDateFormatted = dayjs(startDate).format("YYYY-MM-DD");
+
+  const fileName = `velocitydraft-schedule-${startDateFormatted}.ics`;
+
+  const icsContent = generateICSContent(events);
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
