@@ -1,26 +1,26 @@
 name: Push Checks
 
-on:
-  push:
-    branches:
-      - "main"
-  pull_request:
-    branches:
-      - "main"
+on: [push]
 
 jobs:
-  tests:
+  check-formatting:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: "npm"
-      - name: Install Dependencies
-        run: npm install prettier
-      - name: Check Formatting
-        run: npm run format-check
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Check formatting
+        working-directory: ./frontend
+        run: npm run lint

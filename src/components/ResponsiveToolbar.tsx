@@ -74,13 +74,10 @@ export default function ResponsiveToolbar(props: CustomToolbarProps) {
           <Button
             onClick={handleExport}
             variant="outlined"
-            sx={{
-              textTransform: "capitalize",
-            }}
             startIcon={<DownloadIcon />}
             disabled={calendarEvents && calendarEvents.length == 0}
           >
-            Export Calendar (ics)
+            Export Calendar (.ics)
           </Button>
         </Stack>
       </Grid>
